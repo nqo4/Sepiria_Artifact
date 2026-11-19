@@ -89,6 +89,9 @@ namespace SephiriaLive.Plugin
             // /tablets: 석판 효과 범위 정의(query)를 게임에서 직접 읽음 — 가방의 석판 + 로드된 전체 석판 카탈로그.
             server.Route("GET", "/tablets", ctx => RunOnMainThread(BuildTabletsResponse));
 
+            // /items: 아티팩트(ItemEntity type=Charm)·무기(WeaponEntity) 정의 덤프 — 위키 스크래핑 대체.
+            server.Route("GET", "/items", ctx => RunOnMainThread(BuildItemsResponse));
+
             server.Route("GET", "/", ctx => ServeCompanionPage());
             server.Route("GET", "/recommend.html", ctx => ServeCompanionPage());
 
@@ -221,6 +224,60 @@ namespace SephiriaLive.Plugin
             res["catalogCount"] = catalog.Count;
             res["errors"] = errors;
             return HttpResponseData.Json(res);
+        }
+
+        HttpResponseData BuildItemsResponse()
+        {
+            var errors = new List<object>();
+            var artifacts = new List<JObj>();
+            var weapons = new List<JObj>();
+
+            var entityType = ReflectionFinder.FindTypeByName("ItemEntity");
+            var charmType = ReflectionFinder.FindTypeByName("Charm_Basic");
+            if (entityType == null || charmType == null) errors.Add("ItemEntity/Charm_Basic 타입을 찾지 못했습니다.");
+            else
+            {
+                foreach (var entity in Resources.FindObjectsOfTypeAll(entityType))
+                {
+                    try
+                    {
+                        if (ReflectionFinder.GetMember(entity, "type")?.ToString() != "Charm") continue;
+                        var prefab = ReflectionFinder.GetMember(entity, "resourcePrefab") as GameObject;
+                        artifacts.Add(ItemReader.DescribeCharm(entity, prefab != null ? prefab.GetComponent(charmType) : null));
+                    }
+                    catch (Exception ex) { errors.Add($"{entity.name}: {ex.Message}"); }
+                }
+            }
+
+            var weaponType = ReflectionFinder.FindTypeByName("WeaponEntity");
+            var weaponBasicType = ReflectionFinder.FindTypeByName("WeaponBasic");
+            var weaponSimpleType = ReflectionFinder.FindTypeByName("WeaponSimple");
+            if (weaponType == null) errors.Add("WeaponEntity 타입을 찾지 못했습니다.");
+            else
+            {
+                foreach (var w in Resources.FindObjectsOfTypeAll(weaponType))
+                {
+                    try
+                    {
+                        var prefab = ReflectionFinder.GetMember(w, "mainWeaponPrefab") as GameObject;
+                        var basic = prefab != null && weaponBasicType != null ? prefab.GetComponentInChildren(weaponBasicType, true) : null;
+                        var simple = prefab != null && weaponSimpleType != null ? prefab.GetComponentInChildren(weaponSimpleType, true) : null;
+                        weapons.Add(ItemReader.DescribeWeapon(w, simple, basic));
+                    }
+                    catch (Exception ex) { errors.Add($"{w.name}: {ex.Message}"); }
+                }
+                ItemReader.AssignTiers(weapons);
+            }
+
+            return HttpResponseData.Json(new JObj
+            {
+                ["ok"] = true,
+                ["artifacts"] = artifacts.OrderBy(o => MiniJson.AsInt(o["id"])).Cast<object>().ToList(),
+                ["weapons"] = weapons.OrderBy(o => MiniJson.AsInt(o["id"])).Cast<object>().ToList(),
+                ["artifactCount"] = artifacts.Count,
+                ["weaponCount"] = weapons.Count,
+                ["errors"] = errors,
+            });
         }
 
         void Update()

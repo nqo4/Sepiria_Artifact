@@ -253,6 +253,31 @@ void Check(string name, bool ok, string detail = "")
     Check("TabletReader: 인벤토리 석판을 위치 순서로", list.Count == 2 && (int)list[0]["x"] == 1 && (int)list[1]["x"] == 3, MiniJson.Write(list));
 }
 
+// ---------- [추가] ItemReader: 아티팩트(ItemEntity+Charm_Basic) / 무기(WeaponEntity+WeaponSimple+WeaponBasic) ----------
+{
+    var entity = new FakeItemEntity { id = 1188, Name = "혈석 귀걸이", type = "Charm", rarity = "Legend", categories = new List<string> { "CURSE" } };
+    var a = ItemReader.DescribeCharm(entity, new FakeCharm { maxLevel = 3 });
+    var eff = MiniJson.AsList(a["effects"]);
+    Check("ItemReader: 아티팩트 기본 정보", (int)a["id"] == 1188 && (string)a["name"] == "혈석 귀걸이" && (int)a["maxLevel"] == 3 && (string)MiniJson.AsList(a["categories"])[0] == "CURSE", MiniJson.Write(a));
+    Check("ItemReader: BuildEffectString 줄 단위", eff.Count == 2 && (string)eff[1] == "HP 3" && a["effectsRaw"] == null, MiniJson.Write(eff));
+
+    var raw = ItemReader.DescribeCharm(entity, new FakeCharmRaw { maxLevel = 2 });
+    var reff = MiniJson.AsList(raw["effects"]);
+    Check("ItemReader: BuildEffectString 실패 시 GetEffectStringCount/GetEffectString", reff.Count == 2 && (string)reff[1] == "E1@2" && (bool)raw["effectsRaw"], MiniJson.Write(raw));
+
+    var e3 = new FakeWeaponEntity { id = 3, Name = "더 큰 검" };
+    var e2 = new FakeWeaponEntity { id = 2, Name = "큰 검", standardEnhancements = new() { new FakeEnhancement { enhanced = e3 } } };
+    var e1 = new FakeWeaponEntity { id = 1, Name = "검", standardEnhancements = new() { new FakeEnhancement { enhanced = e2 } } };
+    var simple = new FakeWeaponSimple { weaponType = "Sword", addons = new[] { new FakeWeaponAddon { text = "강화 A" }, new FakeWeaponAddon { text = " " } } };
+    var w1 = ItemReader.DescribeWeapon(e1, null, null);
+    var w2 = ItemReader.DescribeWeapon(e2, simple, new FakeWeaponBasic { hasUniqueEffect = true, uniqueEffectName = "U", uniqueEffectDescription = "D" });
+    var w3 = ItemReader.DescribeWeapon(e3, null, new FakeWeaponBasic());
+    ItemReader.AssignTiers(new List<JObj> { w3, w1, w2 });
+    Check("ItemReader: standardEnhancements로 tier/parentId", (int)w1["tier"] == 1 && (int)w2["tier"] == 2 && (int)w3["tier"] == 3 && (int)w3["parentId"] == 2 && w1["parentId"] == null, MiniJson.Write(w3));
+    var weff = MiniJson.AsList(w2["effects"]);
+    Check("ItemReader: 무기 강화 효과(addons) + 고유 효과", weff.Count == 1 && (string)weff[0] == "강화 A" && (string)w2["uniqueEffectDescription"] == "D" && w3["uniqueEffectName"] == null, MiniJson.Write(w2));
+}
+
 // ---------- [추가] MiniHttpServer: 외부 Origin(CSRF) 차단 ----------
 {
     var server = new MiniHttpServer(48766);
@@ -394,6 +419,25 @@ class FakeGameInventory
     public FakeStoneTablet TabletOf(string name) => inventoryMatrix.Values.First(i => i.Name == name).StoneTablet;
     public string Dump() => string.Join(" ", inventoryMatrix.Select(kv => $"{kv.Value.Name}@({kv.Key.x},{kv.Key.y})"));
 }
+
+class FakeItemEntity { public int id; public string Name, type, rarity; public List<string> categories; public string Context = "flavor"; }
+class FakeCharm
+{
+    public int maxLevel;
+    public string BuildEffectString(object avatar, string bullet, string endl, int level, int virtualLevelOffset, bool showAllLevel, bool ignoreAvatarStatus) => $"MP {level}{endl}HP {level}{endl}";
+}
+class FakeCharmRaw
+{
+    public int maxLevel;
+    public string BuildEffectString(object avatar, string bullet, string endl, int level, int virtualLevelOffset, bool showAllLevel, bool ignoreAvatarStatus) => throw new NullReferenceException();
+    public int GetEffectStringCount() => 2;
+    public string GetEffectString(int idx, int level, int virtualLevelOffset, bool showAllLevel) => $"E{idx}@{level}";
+}
+class FakeEnhancement { public bool enabled = true; public FakeWeaponEntity enhanced; }
+class FakeWeaponEntity { public int id; public string Name; public bool enabled = true, isDefaultWeapon; public List<FakeEnhancement> standardEnhancements = new(); }
+class FakeWeaponAddon { public string text; public string GetEffectText() => text; }
+class FakeWeaponSimple { public string weaponType; public FakeWeaponAddon[] addons; }
+class FakeWeaponBasic { public bool hasUniqueEffect; public string uniqueEffectName, uniqueEffectDescription; }
 
 // 실제 GridInventory.DoClickAction(ItemPosition pos): 그 칸 아이템의 클릭 동작(석판이면 Rotate)을 재계산과 함께 실행
 class FakeGameInventoryWithClick : FakeGameInventory

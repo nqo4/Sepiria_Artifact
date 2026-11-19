@@ -59,6 +59,10 @@ dotnet build Plugin -c Release -p:DeployToGame=true   # BepInEx/plugins/Sephiria
   `static ParseQuery(query, w, h, storage, origin, rotation, out human)`이 칸 목록을 만든다(순수 함수, 툴팁도 사용).
   석판 정의 = `ItemEntity.resourcePrefab`에 `StoneTablet` 컴포넌트가 붙은 것(`Resources.FindObjectsOfTypeAll`). 덤프: `/tablets` → `data/slabs_game.json`.
   회전 가능 여부 = 프리팹 `isRotatable`, 던전이 `DungeonManager.overrideTabletRotatable[instanceID]`로 덮어쓸 수 있음.
+- 아이템 정의: `ItemEntity`(ScriptableObject, `type`=Charm이 아티팩트, `categories` = 태그 키, `Name` 현지화) + 프리팹 `Charm_Basic`
+  (`maxLevel`, `BuildEffectString(null, "", "
+", level, 0, true, true)` = 툴팁 문장). 무기는 `WeaponEntity`
+  (`standardEnhancements` = 다음 강화 무기들, `enhanceFromId`는 -1) + 프리팹 `WeaponSimple.addons[].GetEffectText()`. 덤프: `/items` → `data/items_game.json`.
 - 게임 메타데이터 재조사: `BepInEx/core/Mono.Cecil.dll`을 스크래치로 복사 → `[Reflection.Assembly]::Load(bytes)` → `ModuleDefinition.ReadModule`.
   (게임 폴더에서 바로 Add-Type 하면 0x80131515로 막힘)
 - 게임 환경: Unity 6000.3, BepInEx 5.4.23.2, Mirror 네트워킹(싱글도 호스트).

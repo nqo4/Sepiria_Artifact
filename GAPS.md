@@ -21,20 +21,28 @@
   - 게임에만 있는 석판: 억압, 생장, 반향, 지옥, 천국, 저주(+내부용 3개 제외). 석판은 모두 한 칸 차지(`shape: [[0,0]]`).
   - `placement_db_OLD.json` 유실 문제 해소 — 구 스크립트(`build_slab_effectpattern.py`, `update_placement_db.py`)는 더 이상 필요 없음.
 
+- **아티팩트·무기 데이터를 게임에서 직접 읽기 완료 (3단계)** — `/items` 라우트(`Core/ItemReader.cs`) → `data/items_game.json`
+  (아티팩트 354, 무기 195). `scripts/prep_data_v2.py`가 위키 대신 게임 데이터로 `Plugin/companion/data.json` 생성(아티팩트 346·무기 190·석판 68).
+  - 효과 문장: 아티팩트 `Charm_Basic.BuildEffectString`(최대 레벨 툴팁), 무기 `WeaponSimple.addons[].GetEffectText()`.
+  - 무기 티어/상위 무기: `WeaponEntity.standardEnhancements`(부모→자식)로 계산(`enhanceFromId`는 실게임에서 -1).
+  - 식별자 `v` = 게임 에셋 이름(`1188_HPSteal`) — `/inv`의 `assetName`과 같아서 라이브 인벤토리와 바로 매칭.
+  - 태그 키가 게임 키(`STURDY`, `EMBER` …)로 바뀜. 한국어는 `TAG_KO`(기존 DB 태그와 다수결로 맞춤).
+  - 이미지(`img`)는 게임에서 URL로 못 가져와 비어 있음.
+
 ## ❌ 아직 남음 (우선순위 순)
 
-1. **위키 원본 데이터 재스크래핑 (아티팩트·무기)** — `data/artifacts_sephiria_wiki.json`(276), `weapons_sephiria_wiki.json`(161).
-   출처 `https://www.sephiria.wiki/artifact`, `/weapon` — Next.js RSC flight 페이로드(`self.__next_f.push`) 추출 방식.
-   이게 있어야 `scripts/prep_data_v2.py` → `Plugin/companion/data.json` 생성 가능.
-   대안: 석판처럼 게임 `ItemEntity`(Name, rarity, categories 등)를 플러그인에서 덤프.
-2. **`Plugin/companion/engine.js`** (시뮬레이티드 어닐링 배치 엔진) 재작성.
+1. **`Plugin/companion/engine.js`** (시뮬레이티드 어닐링 배치 엔진) 재작성.
    - `boardEffects`(HORIZONTAL, VERTICAL, TOP, BOTTOM, LEFTEND, RIGHTEND, *_RISING/*_FALLING, CHECKERBOARD/2)는 보드 크기 기준으로 계산해야 함 — 정확한 칸은 `/tablets`의 `cells`(게임 ParseQuery) 로 검증.
    - 석판도 다른 석판 효과로 레벨을 받음. 조건(`conditionQuery`: `TOP PLACED` 등)이 있는 석판 5개.
    - 게임에 `AutoArrangeInventoryForBestCharmLevels(maxIterations, allowTabletRotation)` 가 이미 있음 — 엔진 결과 비교 대상.
-3. **`recommend_template.html` 누락 부분** — 전역 상태 선언(`weapon, anchors, candidates, basket, pinnedTags, demoMode, candidateKind`), 라이브 폴링(`/inv`), `runPlacement`, `renderPlacementGrid`, `renderBasket`.
+2. **`recommend_template.html` 누락 부분** — 전역 상태 선언(`weapon, anchors, candidates, basket, pinnedTags, demoMode, candidateKind`), 라이브 폴링(`/inv`), `runPlacement`, `renderPlacementGrid`, `renderBasket`.
+   - `TIER_RANK`는 게임 등급 이름(`Common`, `Uncommon`, `Rare`, `Legend`) 기준으로 새로 정의해야 함.
+   - 아이템 이미지 없음 — 필요하면 게임 아이콘(Sprite)을 PNG로 뽑는 별도 작업.
+   - `placement_db.json`의 `artifacts`(267개, 한국어 태그·conditionType)는 아직 예전 데이터 — `data/items_game.json` 기준으로 맞출지 결정 필요.
 
 ## ⚠ 데이터 확인 필요
 
+- 아티팩트 4개는 효과 문장이 비어 있고, 5개 문장에는 `{DAMAGE}` 같은 자리표시자가 남음(`BuildEffectString` 대신 원문). 자리표시자 이름이 `Item_..._Name`인 개발용 항목은 `data.json`에서 제외.
 - 다른 사람 방(클라이언트)에서의 `CmdSwap`/`CmdDoClickAction` 동작은 미확인.
 - `mysticPositions`(GridInventory의 SyncList<ItemPosition>)의 의미 — 미확인.
 - 보드 키워드 중 `X_PLUS/X_MINUS/Y_PLUS/Y_MINUS`, `KNIGHT*_INVERT`, `IDX/RIDX`는 현재 석판 목록에서 거의/전혀 안 쓰임. 쓰이면 ParseQuery로 확인.

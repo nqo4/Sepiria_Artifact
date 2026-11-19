@@ -1,15 +1,19 @@
+"""게임 데이터(data/items_game.json, data/slabs_game.json) → Plugin/companion/data.json.
+두 입력은 플러그인 /items, /tablets 덤프(위키 스크래핑 대체, 2026-11-19).
+v(식별자)는 게임 에셋 이름(예: 1188_HPSteal) — /inv 의 assetName 과 같아서 라이브 인벤토리와 바로 매칭된다.
+"""
 import json, re
 
 from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
-ARTIFACTS_RAW = ROOT / "data" / "artifacts_sephiria_wiki.json"
-WEAPONS_RAW = ROOT / "data" / "weapons_sephiria_wiki.json"
-SLABS_RAW = ROOT / "data" / "slabs_sephiria_wiki.json"
+ITEMS_RAW = ROOT / "data" / "items_game.json"
+SLABS_RAW = ROOT / "data" / "slabs_game.json"
 OUT_PATH = ROOT / "Plugin" / "companion" / "data.json"
 
-artifacts = json.load(open(ARTIFACTS_RAW, encoding="utf-8"))
-weapons = json.load(open(WEAPONS_RAW, encoding="utf-8"))
-slabs = json.load(open(SLABS_RAW, encoding="utf-8"))
+items = json.load(open(ITEMS_RAW, encoding="utf-8"))
+artifacts = items["artifacts"]
+weapons = items["weapons"]
+slabs = json.load(open(SLABS_RAW, encoding="utf-8"))["tablets"]
 
 # ---------- 키워드 사전 (v2: 기존 12종 + 신규 6종) ----------
 KEYWORDS = {
@@ -42,13 +46,17 @@ KW_KO = {
     "perfect_guard": "퍼펙트가드", "lifesteal": "흡혈",
 }
 
+# 게임 ItemEntity.categories 키 → 한국어. 기존 placement_db.json 아티팩트 태그(한국어)와 이름으로 맞춰 다수결로 정함.
 TAG_KO = {
-    "firmness": "견고", "yinggalbul": "잉걸불", "spring_song": "봄의 노래", "precision": "정밀",
-    "glacier": "빙하", "academy": "마법공학", "lake": "호수", "extrium": "엑스트리움",
-    "magic_engineering": "마법공학2", "guardian": "수호", "shadow": "그림자", "colleague": "동료",
-    "sun_sword": "태양검", "ice_weapon": "얼음무기", "mystery": "신비", "planet": "행성",
-    "element": "원소", "curse": "저주", "alchemy": "연금술", "bargaining": "거래",
+    "STURDY": "견고", "EMBER": "잉걸불", "WINDSONG": "바람노래", "PRECISION": "정밀",
+    "GLACIER": "빙하", "ACADEMY": "아카데미", "LAKE": "호수", "MAGITECH": "마법공학",
+    "DARKCLOUD": "먹구름", "GUARDIAN": "수호", "SHADOW": "그림자", "COMPANION": "동료",
+    "FLAMESWORD": "태양검", "FROST": "얼음무구", "MYSTIC": "신비", "PLANET": "행성",
+    "ELEMENTAL": "원소", "CURSE": "저주", "ALCHEMY": "연금술", "SAVVY": "교섭",
 }
+
+# 개발용 자리표시자 이름(Item_..._Name, "...", "저주 아이템 이름")은 실제 아이템이 아님
+PLACEHOLDER_NAME = re.compile(r"^(Item_.*|\.\.\.|.*아이템 이름)$")
 
 # 어떤 문장에 키워드가 등장하고, 그 문장이 "그 키워드의 원래 동작을 바꾸거나/없애버린다"는
 # 신호 단어도 같이 있으면 '재정의/제거(redef)'로 간주한다.
@@ -86,58 +94,63 @@ def extract_redef(text):
 
 
 def clean_text(t):
-    # 위키가 $$x...$ 형태의 강조 마크업을 쓰는데(ex: $$s일반 공격$), 표시용으로는 걷어낸다.
+    # 게임 툴팁 문장의 Unity rich text 태그(<color=..>, <sprite=..>)를 걷어낸다.
     if not t:
         return t
-    t = re.sub(r"\$\$?([a-zA-Z]?)", "", t)
-    t = t.replace("$", "")
-    return t.strip()
+    return re.sub(r"<[^>]+>", "", t).strip()
 
 
 # ---------- 아티팩트 ----------
 out_artifacts = []
 for a in artifacts:
-    content = a.get("effect", {}).get("content", "") or ""
-    kw = extract_kw(content)
+    if not a.get("name") or PLACEHOLDER_NAME.match(a["name"]):
+        continue
+    content = "\n".join(clean_text(e) for e in a.get("effects") or [])
     out_artifacts.append({
-        "v": a["value"],
-        "k": a["label_kor"],
-        "t": a["tier"],
-        "l": a.get("level", 0),
-        "s": a.get("effect", {}).get("sets", []) or [],
-        "c": clean_text(content),
-        "img": a["image"],
-        "kw": kw,
+        "v": a["assetName"],
+        "k": a["name"],
+        "t": a["rarity"],
+        "l": a.get("maxLevel", 0),
+        "s": [c for c in a.get("categories") or [] if c],
+        "c": content,
+        "img": None,
+        "kw": extract_kw(content),
     })
 
 # ---------- 무기 ----------
+by_id = {w["id"]: w for w in weapons}
 out_weapons = []
 for w in weapons:
-    reward = w.get("effects", {}).get("reward", []) or []
-    texts = [r for r in reward if isinstance(r, str) and r.strip()]
+    if not w.get("name") or not w.get("enabled", True) or PLACEHOLDER_NAME.match(w["name"]):
+        continue
+    texts = [clean_text(e) for e in w.get("effects") or []]
+    if w.get("uniqueEffectDescription"):
+        texts.append(clean_text(w["uniqueEffectDescription"]))
     joined = " ".join(texts)
-    kw = extract_kw(joined)
-    redef = extract_redef(joined)
+    parent = by_id.get(w.get("parentId"))
     out_weapons.append({
-        "v": w["value"],
-        "k": w["value_kor"],
+        "v": w["assetName"],
+        "k": w["name"],
         "tier": w["tier"],
-        "parent": w.get("parent"),
-        "c": clean_text(joined),
-        "img": w["image"],
-        "kw": kw,
-        "redef": redef,
+        "type": w.get("weaponType"),
+        "parent": parent["assetName"] if parent else None,
+        "c": joined,
+        "img": None,
+        "kw": extract_kw(joined),
+        "redef": extract_redef(joined),
     })
 
-# ---------- 석판 (요약 목록 그대로, 효과 패턴은 placement_db.json 쪽에서 따로 관리) ----------
+# ---------- 석판 (요약 목록, 효과 패턴은 placement_db.json 쪽에서 관리) ----------
 out_slabs = []
 for s in slabs:
+    if not s.get("name") or PLACEHOLDER_NAME.match(s["name"]) or not (s.get("query") or "").strip():
+        continue
     out_slabs.append({
-        "v": s["value"],
-        "k": s["ko_label"],
-        "t": s["tier"],
-        "r": bool(s.get("rotate", False)),
-        "img": s["image"],
+        "v": s["assetName"],
+        "k": s["name"],
+        "t": s["rarity"],
+        "r": bool(s.get("rotatable")),
+        "img": None,
     })
 
 out = {

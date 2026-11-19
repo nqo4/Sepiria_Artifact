@@ -13,7 +13,7 @@
 | `Plugin/` (BepInEx 진입점) | ✅ 게임 안에서 로드·동작 확인 |
 | 실게임 연동 (`/health` → `/inv` → `/apply`) | ✅ 이동·회전·레벨 재계산 확인 (CLAUDE.md "실게임 검증 결과") |
 | 석판 데이터 | ✅ 게임에서 직접 읽음 (`/tablets` → `data/slabs_game.json`, 71개) |
-| 위키 데이터 (아티팩트 276·무기 161) | ❌ 유실, 다시 가져와야 함 |
+| 아티팩트·무기 데이터 | ✅ 게임에서 직접 읽음 (`/items` → `data/items_game.json` → `prep_data_v2.py` → `data.json`) |
 | 배치 엔진 `engine.js` | ❌ 유실, 다시 만들어야 함 |
 | 추천 페이지 `recommend_template.html` | ⚠ 일부만 남음 (CSS·점수 계산 O, 상태/폴링/배치 렌더링 X) |
 
@@ -187,7 +187,9 @@ $t.Methods | Where-Object Name -match 'Swap|Rotate' | ForEach-Object { $_.Name }
 - 결과를 `data/slabs_effectpattern_wiki.json`과 비교 → 특히 GAPS.md의 의심 항목(분배·헌정·배수진·방어수·기적의 회전 여부, 5×5 밖 범위 석판, 고양·이음 보라색 칸).
 - 맞으면 `placement_db.json`을 게임 데이터 기반으로 다시 생성하고 `confidence: game_data` 같은 새 등급 부여.
 
-### 3단계 — 위키 데이터 다시 가져오기 ← 지금 여기
+### 3단계 — 위키 데이터 다시 가져오기 ✅ 완료 (2026-11-19, 위키 대신 게임 ItemEntity/WeaponEntity에서 읽음)
+
+결과: `/items` 라우트 → `data/items_game.json` → `python scripts/prep_data_v2.py` → `Plugin/companion/data.json`. 아래는 원래 계획(위키 스크래핑) 기록.
 
 - 출처: `https://www.sephiria.wiki/artifact`, `/weapon`, `/large`.
 - 방법: Next.js RSC flight 페이로드 — 페이지 HTML의 `self.__next_f.push([1,"..."])` 조각들을 이어 붙여 JSON 배열 부분을 파싱.
@@ -200,7 +202,7 @@ $t.Methods | Where-Object Name -match 'Swap|Rotate' | ForEach-Object { $_.Name }
 - 스크래퍼 스크립트도 `scripts/`에 커밋 (다음에 다시 유실되지 않게).
 - 대안: 게임의 `ItemEntity` ScriptableObject를 플러그인에서 읽어 덤프하는 방식이 더 정확할 수 있음 (2단계와 같은 방식).
 
-### 4단계 — 배치 엔진 `engine.js`
+### 4단계 — 배치 엔진 `engine.js` ← 지금 여기
 
 - 시뮬레이티드 어닐링으로 석판 위치·회전과 아티팩트 위치를 바꿔가며 총 레벨 점수를 최대화.
 - 입력: `/inv` 스냅샷 + `placement_db.json` (석판 `effectPattern: [[dr, dc, level], ...]`, `rotatable`).
