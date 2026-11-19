@@ -187,6 +187,25 @@
       }
     }
 
+    // 정리: 점수에 도움이 안 되는 이동/회전은 되돌린다(어닐링이 레벨 0 아이템 등을 아무 데나 옮겨 두는 것 방지)
+    for (let changed = true; changed;) {
+      changed = false;
+      for (const it of best) {
+        if ((it.rotation || 0) !== it.originRot && it.kind === 'tablet') {
+          const r = it.rotation; it.rotation = it.originRot;
+          if (score(best) >= bestScore) changed = true; else it.rotation = r;
+        }
+        if (it.x === it.origin[0] && it.y === it.origin[1]) continue;
+        const occ = best.find(o => o !== it && o.x === it.origin[0] && o.y === it.origin[1]);
+        const [px, py] = [it.x, it.y];
+        if (occ) { occ.x = px; occ.y = py; }
+        it.x = it.origin[0]; it.y = it.origin[1];
+        if (score(best) >= bestScore) changed = true;
+        else { it.x = px; it.y = py; if (occ) { occ.x = it.origin[0]; occ.y = it.origin[1]; } }
+      }
+    }
+    bestScore = score(best);
+
     const placements = [];
     for (const it of best) {
       const moved = it.x !== it.origin[0] || it.y !== it.origin[1];

@@ -77,5 +77,16 @@ check('MUL/2 는 합산 후 곱함, maxLevel 로 자름',
 check('X 는 비활성(점수 0)',
   E.evaluate({ w: 3, h: 1, items: [{ x: 0, y: 0, kind: 'tablet', query: 'RIGHT 2' }, { x: 2, y: 0, kind: 'tablet', query: 'LEFT X' }, { x: 1, y: 0, kind: 'artifact', maxLevel: 3 }] }).score === 0);
 
+{
+  // 레벨 0(maxLevel 0) 아이템은 점수와 무관하니 옮기지 않아야 함
+  const b = { w: 4, h: 3, items: [
+    { x: 0, y: 0, kind: 'artifact', maxLevel: 0, name: 'zero' },
+    { x: 3, y: 2, kind: 'tablet', query: 'UP 1', rotatable: true, rotation: 0, name: 'up' },
+    { x: 0, y: 2, kind: 'artifact', maxLevel: 2, name: 'a' },
+  ] };
+  const o = E.optimize(b, { iterations: 3000, seed: 3 });
+  check('optimize: 점수 무관 이동은 되돌림', o.after === 1 && !o.placements.some(p => p.fromX === 0 && p.fromY === 0), JSON.stringify(o.placements));
+}
+
 console.log(`\n=== engine: ${pass} passed, ${fail} failed ===`);
 process.exit(fail ? 1 : 0);

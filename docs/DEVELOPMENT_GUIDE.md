@@ -15,7 +15,7 @@
 | 석판 데이터 | ✅ 게임에서 직접 읽음 (`/tablets` → `data/slabs_game.json`, 71개) |
 | 아티팩트·무기 데이터 | ✅ 게임에서 직접 읽음 (`/items` → `data/items_game.json` → `prep_data_v2.py` → `data.json`) |
 | 배치 엔진 `engine.js` | ✅ 재작성, 게임 ParseQuery 결과·실게임 레벨과 일치 (`node scripts/test_engine.js`) |
-| 추천 페이지 `recommend_template.html` | ⚠ 일부만 남음 (CSS·점수 계산 O, 상태/폴링/배치 렌더링 X) |
+| 추천 페이지 `recommend_template.html` | ✅ 재작성, 실게임에서 배치 계산 → 적용까지 확인 |
 
 남은 작업과 데이터 불확실성의 상세 목록은 루트의 [`GAPS.md`](../GAPS.md)에 있습니다.
 
@@ -214,7 +214,10 @@ $t.Methods | Where-Object Name -match 'Swap|Rotate' | ForEach-Object { $_.Name }
 - Node로 단독 테스트할 수 있게 순수 함수로 작성 (`module.exports`와 브라우저 전역 둘 다 지원).
 - 참고: 게임 자체 `AutoArrangeInventoryForBestCharmLevels`가 있으니, 결과 비교용 디버그 라우트를 만들어 두면 엔진 검증에 유용.
 
-### 5단계 — 추천 페이지 완성 ← 지금 여기
+### 5단계 — 추천 페이지 완성 ✅ 완료 (2026-11-19)
+
+결과: `python scripts/assemble_recommend.py` → `recommend.html`(커밋 안 함) → `dotnet build Plugin -c Release -p:DeployToGame=true`로 설치, 게임 켜고 `http://127.0.0.1:37788/`.
+페이지 파일은 요청마다 다시 읽으므로, 페이지만 바꿨을 때는 `recommend.html`을 `BepInEx/plugins/SephiriaLive/companion/`에 복사하면 게임 재시작 없이 반영된다. 남은 개선은 `GAPS.md`. 아래는 원래 계획.
 
 - `Plugin/companion/recommend_template.html`에서 빠진 것:
   - 전역 상태 선언: `weapon, anchors, candidates, basket, pinnedTags, demoMode, candidateKind`

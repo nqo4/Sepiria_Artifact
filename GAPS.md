@@ -33,13 +33,17 @@
   - 검증 `node scripts/test_engine.js`(CI 포함): 게임 `/tablets/fixtures` 결과(6×5·7×6 보드 × 회전 4 × 모든 칸, 39,168건)와 칸 단위 일치,
     실게임 스냅샷 levelMatrix 일치(`data/engine_fixtures/inv_*.json`).
 
+- **추천 페이지 완성 (5단계)** — `Plugin/companion/recommend_template.html` 재작성(`python scripts/assemble_recommend.py` → `recommend.html`, 빌드 시 플러그인 폴더로 복사).
+  - 게임 연결(같은 출처 → 후보 포트 4개, 2초 폴링), 데모 모드(실게임 스냅샷과 같은 가방), 게임 등급 기준 `TIER_RANK`, 게임 아이콘(`/icon`),
+    바구니(가방에 없는 아이템은 가상 배치), 배치 계산(`SephEngine.optimize` 시드 3개 중 최고 + 점수 무관 이동 되돌리기), 결과 그리드, "게임에 적용"(`/apply`).
+  - 실게임 확인(2026-11-19): 페이지에서 적용 → 방어수 (2,0)→(2,1) 이동, 베루트의 낫 Lv 0→2 — 엔진 예측과 일치.
+
 ## ❌ 아직 남음 (우선순위 순)
 
-1. **`recommend_template.html` 누락 부분** — 전역 상태 선언(`weapon, anchors, candidates, basket, pinnedTags, demoMode, candidateKind`), 라이브 폴링(`/inv`), `runPlacement`(→ `SephEngine.boardFromSnapshot` + `optimize`), `renderPlacementGrid`, `renderBasket`.
-   - `TIER_RANK`는 게임 등급 이름(`Common`, `Uncommon`, `Rare`, `Legend`) 기준으로 새로 정의해야 함.
-   - `img`는 `/icon?name=...` 상대 주소 — 페이지를 `file://`로 열면 연결된 플러그인 주소(`http://127.0.0.1:포트`)를 앞에 붙여야 함. 게임이 꺼져 있으면 아이콘 없음.
-   - `placement_db.json`의 `artifacts`(267개, 한국어 태그·conditionType)는 아직 예전 데이터 — `data/items_game.json` 기준으로 맞출지 결정 필요.
-2. **엔진 결과를 게임 자동 배치와 비교** — 게임 `AutoArrangeInventoryForBestCharmLevels(maxIterations, allowTabletRotation)` 결과와 점수 비교(가방에 석판·아티팩트가 있을 때).
+1. **엔진 결과를 게임 자동 배치와 비교** — 게임 `AutoArrangeInventoryForBestCharmLevels(maxIterations, allowTabletRotation)` 결과와 점수 비교(가방에 석판·아티팩트가 많을 때).
+2. **엔진 점수 개선** — 지금은 레벨 합만 최대화. 아티팩트별 레벨 가치, 아티팩트 자체 발동 조건(`IGNORECRITERIA`와 연결), 전역 보너스·각인 미반영.
+3. `placement_db.json`의 `artifacts`(267개, 한국어 태그·conditionType)는 예전 데이터이고 지금 페이지·엔진은 쓰지 않음 — 정리(삭제 또는 `data/items_game.json` 기준 재생성) 결정 필요.
+4. 페이지를 `file://`로 열 때는 아이콘이 연결된 플러그인 주소를 앞에 붙여 보임. 게임이 꺼져 있으면 아이콘 없음(이름만).
 
 ## ⚠ 데이터 확인 필요
 

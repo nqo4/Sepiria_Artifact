@@ -20,3 +20,6 @@ __pycache__/
 
 # 생성물 (scripts/assemble_recommend.py 출력)
 Plugin/companion/recommend.html
+
+# 로컬 미리보기 설정 (Claude Code 브라우저 창용)
+.claude/launch.json
