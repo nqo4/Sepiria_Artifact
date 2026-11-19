@@ -11,7 +11,8 @@ namespace SephiriaLive.Core
     ///
     /// 두 가지 모드:
     ///  1) game-api (실제 게임): 인벤토리에 Swap(x1,y1,x2,y2) 메서드가 있으면 그것으로 이동하고,
-    ///     석판 회전은 StoneTablet.Rotate()(rotation을 +1, 3 다음 0)를 목표 값이 될 때까지 호출한다.
+    ///     석판 회전은 GridInventory.DoClickAction(ItemPosition)(게임 클릭 경로, 레벨 재계산 포함)을,
+    ///     없으면 StoneTablet.Rotate()(rotation을 +1, 3 다음 0)를 목표 값이 될 때까지 호출한다.
     ///     GridInventory.Swap은 서버면 LocalSwap, 클라면 CmdSwap을 부르므로 Mirror 동기화/권한 체크를 게임이 처리한다.
     ///  2) field (테스트/폴백): 석판 리스트 원소의 xIdx/yIdx/rotation 필드를 직접 쓰고 재계산 메서드를 호출한다.
     ///
@@ -140,14 +141,23 @@ namespace SephiriaLive.Core
                         result.Errors.Add($"{cmd}: 회전 요청이 있지만 원래 위치에 석판이 없습니다.");
                         continue;
                     }
-                    RotateWithGameApi(tablet, cmd, result);
+                    RotateWithGameApi(inventory, tablet, cmd, result);
                 }
             }
         }
 
-        static void RotateWithGameApi(object tablet, PlacementCommand cmd, ApplyResult result)
+        static void RotateWithGameApi(object inventory, object tablet, PlacementCommand cmd, ApplyResult result)
         {
             int target = EngineToGameRotation(cmd.Rotation.Value);
+            // 실게임: StoneTablet.Rotate()만 부르면 레벨 재계산이 안 된다. 게임 UI 클릭 경로인
+            // GridInventory.DoClickAction(ItemPosition) → LocalDoClickAction이 Permission(Get/ReleasePermission)으로 감싸 재계산한다.
+            var click = FindClickAction(inventory.GetType());
+            object clickPos = null;
+            if (click != null && TryGetPos(tablet, out var tx, out var ty))
+            {
+                clickPos = Activator.CreateInstance(click.GetParameters()[0].ParameterType);
+                if (!(ReflectionFinder.SetMember(clickPos, "x", tx) && ReflectionFinder.SetMember(clickPos, "y", ty))) clickPos = null;
+            }
             var rotate = ReflectionFinder.FindMethod(tablet.GetType(), "Rotate", 0);
             if (!TryGetInt(tablet, RotationNames, out var rot, out _))
             {
@@ -155,14 +165,17 @@ namespace SephiriaLive.Core
                 return;
             }
             if (rot == target) return;
-            if (rotate == null)
+            if (clickPos == null && rotate == null)
             {
                 result.Errors.Add($"{cmd}: 석판에 Rotate() 메서드가 없습니다.");
                 return;
             }
             for (int i = 0; i < 4 && rot != target; i++)
             {
-                if (!ReflectionFinder.TryInvoke(tablet, rotate, new object[0], out _, out var err))
+                bool ok = clickPos != null
+                    ? ReflectionFinder.TryInvoke(inventory, click, new[] { clickPos }, out _, out var err)
+                    : ReflectionFinder.TryInvoke(tablet, rotate, new object[0], out _, out err);
+                if (!ok)
                 {
                     result.Errors.Add($"{cmd}: Rotate 실패 — {err}");
                     return;
@@ -175,8 +188,18 @@ namespace SephiriaLive.Core
                 }
                 rot = after;
             }
-            if (rot == target) { result.Rotated++; result.Log.Add($"{cmd}: 게임 rotation={target}"); }
+            if (rot == target) { result.Rotated++; result.Log.Add($"{cmd}: 게임 rotation={target} ({(clickPos != null ? "DoClickAction" : "Rotate")})"); }
             else result.Errors.Add($"{cmd}: 목표 rotation {target}에 도달하지 못했습니다(현재 {rot}).");
+        }
+
+        // DoClickAction(ItemPosition) — 인자가 x/y 필드를 가진 구조체일 때만.
+        static MethodInfo FindClickAction(Type t)
+        {
+            var m = ReflectionFinder.FindMethod(t, "DoClickAction", 1);
+            var pt = m?.GetParameters()[0].ParameterType;
+            if (pt == null || !pt.IsValueType) return null;
+            var inst = Activator.CreateInstance(pt);
+            return ReflectionFinder.HasMember(inst, "x") && ReflectionFinder.HasMember(inst, "y") ? m : null;
         }
 
         // ---------------- field 모드 ----------------

@@ -1,7 +1,7 @@
 # SephiriaLive 개발 가이드
 
 다른 PC(또는 새 Claude Code 세션)에서 이 프로젝트 개발을 이어가기 위한 안내서입니다.
-마지막 갱신: 2026-11-19 (커밋 `b135f03` 기준)
+마지막 갱신: 2026-11-19 (실게임 1단계 검증 완료 후)
 
 ---
 
@@ -9,9 +9,9 @@
 
 | 영역 | 상태 |
 |---|---|
-| `Core/` (JSON, HTTP 서버, 리플렉션, 인벤토리 읽기/쓰기) | ✅ 완성, 테스트 57개 통과, GitHub 자동 테스트 통과 |
-| `Plugin/` (BepInEx 진입점) | ✅ 실제 게임 DLL로 빌드됨, 게임 폴더에 설치함 — **게임 안에서 실행 확인은 아직** |
-| 실게임 연동 (`/health` → `/inv` → `/apply`) | ❌ 아직 시도 안 함 ← **다음 할 일** |
+| `Core/` (JSON, HTTP 서버, 리플렉션, 인벤토리 읽기/쓰기) | ✅ 완성, 테스트 59개 통과, GitHub 자동 테스트 통과 |
+| `Plugin/` (BepInEx 진입점) | ✅ 게임 안에서 로드·동작 확인 |
+| 실게임 연동 (`/health` → `/inv` → `/apply`) | ✅ 이동·회전·레벨 재계산 확인 (CLAUDE.md "실게임 검증 결과") |
 | 위키 데이터 (아티팩트 276·무기 161·석판 62) | ❌ 유실, 다시 가져와야 함 |
 | 배치 엔진 `engine.js` | ❌ 유실, 다시 만들어야 함 |
 | 추천 페이지 `recommend_template.html` | ⚠ 일부만 남음 (CSS·점수 계산 O, 상태/폴링/배치 렌더링 X) |
@@ -55,7 +55,7 @@ cd Sepiria_Artifact
 ### 2-4. 잘 되는지 확인
 
 ```powershell
-dotnet run --project Tests            # "=== 57 passed, 0 failed ===" 가 나와야 함
+dotnet run --project Tests            # "=== 59 passed, 0 failed ===" 가 나와야 함
 dotnet build Plugin -c Release        # "빌드했습니다." / 경고 0
 ```
 
@@ -104,7 +104,7 @@ docs/original/          클라우드에서 넘겨받은 원본 파일 (참고용
 1. **Core는 Unity/BepInEx를 참조하지 않는다.** Unity가 필요한 것(예: 씬에서 객체 찾기)은 Plugin이 델리게이트로 넣어준다 (`InventoryReader.InstanceFinder`).
 2. **방어적 리플렉션.** 필드 이름이 틀려도 크래시하지 않고 `errors`에 기록한다. 이름은 후보 배열로 관리한다 (`InventoryReader.*Names`, `InventoryWriter.*Names`).
 3. **게임 상태는 메인 스레드에서만 건드린다.** HTTP 요청은 백그라운드 스레드에서 오므로 `RunOnMainThread`로 `Update()`에 넘긴다 (타임아웃 3초 → 503).
-4. **쓰기는 게임 API를 우선 쓴다.** `GridInventory.Swap()` / `StoneTablet.Rotate()`가 있으면 그것으로 처리하고(Mirror 동기화·권한 체크를 게임이 처리), 없을 때만 필드에 직접 쓴다.
+4. **쓰기는 게임 API를 우선 쓴다.** `GridInventory.Swap()` / `GridInventory.DoClickAction(ItemPosition)`(석판 회전, 레벨 재계산 포함)이 있으면 그것으로 처리하고(Mirror 동기화·권한 체크를 게임이 처리), 없을 때만 필드에 직접 쓴다.
 5. **외부 웹사이트 요청 차단.** Origin 헤더가 로컬(`127.0.0.1:포트`, `localhost:포트`)이나 `null`(file://)이 아니면 403.
 6. **데이터 신뢰도는 솔직하게.** `confidence: wiki_scraped | estimated`, 모르는 건 `note`로 남기고 추측을 확정처럼 쓰지 않는다.
 7. **게임/BepInEx DLL은 절대 커밋하지 않는다.** 공개 저장소다. `.gitignore`가 `*.dll`을 막고 있다.
@@ -152,7 +152,7 @@ $t.Methods | Where-Object Name -match 'Swap|Rotate' | ForEach-Object { $_.Name }
 
 ## 7. 다음 작업 로드맵 (순서대로)
 
-### 1단계 — 실게임 첫 연동 확인 ← 지금 여기
+### 1단계 — 실게임 첫 연동 확인 ✅ 완료 (2026-11-19)
 
 세이브를 먼저 백업하세요.
 
@@ -169,8 +169,8 @@ $t.Methods | Where-Object Name -match 'Swap|Rotate' | ForEach-Object { $_.Name }
    Invoke-RestMethod -Method Post -Uri http://127.0.0.1:37788/apply -ContentType 'application/json' -Body '{"placements":[{"fromX":0,"fromY":0,"toX":1,"toY":0}]}'
    ```
 7. 회전 1건 (`"rotation":1` 추가) → 게임 화면에서 회전 방향 확인.
-   - 지금은 엔진 회전 r → 게임 rotation `(4 - r) % 4` 로 가정. 반대면 `InventoryWriter.EngineToGameRotation` 수정 + 테스트 갱신.
-8. 회전 후 아티팩트 레벨이 자동으로 다시 계산되는지 확인. 안 되면 재계산을 일으키는 메서드를 찾아야 함 (`StoneTablet.ApplyEffect/RemoveEffect`, `GridInventory` 의 OnItemUpdated 계열 등 후보).
+   - ✅ 확인: 엔진 회전 r → 게임 rotation `(4 - r) % 4` 맞음 (엔진 1 = 시계 방향).
+8. ✅ 확인: `Rotate()` 단독은 재계산이 안 돼서 `GridInventory.DoClickAction(ItemPosition)`(Permission으로 감싼 클릭 경로)으로 회전하도록 변경.
 
 확인된 사실은 `GAPS.md`와 `CLAUDE.md`의 "실제 게임 구조"에 반영.
 
@@ -178,7 +178,7 @@ $t.Methods | Where-Object Name -match 'Swap|Rotate' | ForEach-Object { $_.Name }
 - 게임이 새 Input System만 쓰면 F10 단축키가 동작하지 않음 (로그에 경고 1번 남기고 꺼짐 — 정상).
 - 클라이언트로 남의 방에 들어간 경우 `Swap`이 `CmdSwap`(서버 요청)이 되어 결과가 늦게 반영될 수 있음. 싱글(호스트)에서 먼저 테스트.
 
-### 2단계 — 석판 효과를 게임에서 직접 읽기 (위키보다 정확)
+### 2단계 — 석판 효과를 게임에서 직접 읽기 (위키보다 정확) ← 지금 여기
 
 - `StoneTablet.query` / `GetRotatedQuery` / `ParseQuery` 를 리플렉션으로 호출해서 석판별 실제 효과 범위를 뽑는 `/tablets` 디버그 라우트 추가.
 - 결과를 `data/slabs_effectpattern_wiki.json`과 비교 → 특히 GAPS.md의 의심 항목(분배·헌정·배수진·방어수·기적의 회전 여부, 5×5 밖 범위 석판, 고양·이음 보라색 칸).

@@ -39,6 +39,22 @@ dotnet build Plugin -c Release -p:DeployToGame=true   # BepInEx/plugins/Sephiria
   쓰기 API: `Swap(sbyte xL, sbyte yL, sbyte xR, sbyte yR)` (서버면 LocalSwap, 클라면 CmdSwap).
 - `StoneTablet` — `int rotation`, `bool isRotatable`, `sbyte xIdx, yIdx`, `string query`(효과 범위 정의), `Rotate()`(+1, 3→0).
 - `ItemPosition { sbyte x, y }`, `NewItemOwnInstance { InstanceID, EntityID, Quantity, XIdx, YIdx, StoneTablet, Entity, Name }`.
+- **레벨 재계산**: `GridInventory.Permission`(IDisposable) — 생성 시 `GetPermission`(효과 제거), `Dispose` 시 `ReleasePermission`(석판 효과 재적용·레벨 재계산).
+  게임의 쓰기 동작(`LocalSwap`, `LocalDoClickAction`, 아이템 추가 등)은 모두 이걸로 감싼다. `StoneTablet.Rotate()` 단독 호출은 **재계산 안 됨**.
+  → 회전은 `GridInventory.DoClickAction(ItemPosition)`(서버면 LocalDoClickAction, 클라면 CmdDoClickAction = 게임 UI 클릭 경로)로 한다.
+- 기타 필드: `mysticPositions`(SyncList<ItemPosition>, 특수 칸 후보), `ignoreCriteriaMatrix`, `charms`(SyncDictionary<ItemPosition, Charm_Basic>),
+  `engravings`, `subBagMatrix`(보조 가방), `writePermission`(Permission 진행 중 플래그 — false여도 Swap 가능).
+
+## 실게임 검증 결과 (2026-11-19, 싱글/호스트)
+
+- `/health`·`/inv`·`/debug` 정상. 6×5 가방, 인벤토리 인스턴스 1개.
+- 포션 칸은 `y=100`(가방 밖 별도 보관함) — 배치 엔진/`/apply` 대상에서 제외할 것.
+- `/inv`의 posDict 매트릭스는 `cells[y][x]`, 크기는 아이템이 있는 칸의 경계까지만(가방 전체 아님).
+- 이동 `Swap` 화면 반영 ✅. 회전 변환 `(4 - r) % 4` ✅ — 엔진 1 = 화면 시계 방향 90°(게임 rotation 3).
+- 회전 후 레벨 재계산 ✅ (`DoClickAction` 경로).
+- 위키 패턴 좌표: `dr`=y(위가 음수), `dc`=x. 적재(rotation 0/1/3) 실게임 레벨과 일치.
+- 석판도 다른 석판 효과로 레벨을 받는다(적재 → 배수진 +1). 석판 자신의 `level`은 -1로 나올 수 있음.
+- 배수진 `isRotatable = true`.
 - 게임 메타데이터 재조사: `BepInEx/core/Mono.Cecil.dll`을 스크래치로 복사 → `[Reflection.Assembly]::Load(bytes)` → `ModuleDefinition.ReadModule`.
   (게임 폴더에서 바로 Add-Type 하면 0x80131515로 막힘)
 - 게임 환경: Unity 6000.3, BepInEx 5.4.23.2, Mirror 네트워킹(싱글도 호스트).

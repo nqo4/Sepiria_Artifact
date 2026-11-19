@@ -215,6 +215,14 @@ void Check(string name, bool ok, string detail = "")
     Check("game-api: 회전 불가 석판은 에러로 기록", !result.Ok && result.Rotated == 0, string.Join(" | ", result.Errors));
 }
 {
+    // 실게임: DoClickAction(ItemPosition)이 있으면 Rotate() 대신 그걸로 회전(레벨 재계산 경로)
+    var inv = new FakeGameInventoryWithClick();
+    inv.Put(0, 0, "A", isTablet: true);
+    var result = InventoryWriter.Apply(inv, new List<InventoryWriter.PlacementCommand> { new() { FromX = 0, FromY = 0, ToX = 1, ToY = 0, Rotation = 1 } });
+    Check("game-api: DoClickAction으로 회전(rotation=3)", result.Ok && inv.TabletOf("A").rotation == 3, string.Join(" | ", result.Errors));
+    Check("game-api: DoClickAction은 이동 후 위치 (1,0)으로 3번 호출", inv.Clicks == "(1,0)(1,0)(1,0)", inv.Clicks);
+}
+{
     var cmds = new List<InventoryWriter.PlacementCommand>
     {
         new() { FromX = 0, FromY = 0, ToX = 1, ToY = 1 },
@@ -340,4 +348,15 @@ class FakeGameInventory
     public string NameAt(int x, int y) => inventoryMatrix.TryGetValue(new FakePos(x, y), out var i) ? i.Name : null;
     public FakeStoneTablet TabletOf(string name) => inventoryMatrix.Values.First(i => i.Name == name).StoneTablet;
     public string Dump() => string.Join(" ", inventoryMatrix.Select(kv => $"{kv.Value.Name}@({kv.Key.x},{kv.Key.y})"));
+}
+
+// 실제 GridInventory.DoClickAction(ItemPosition pos): 그 칸 아이템의 클릭 동작(석판이면 Rotate)을 재계산과 함께 실행
+class FakeGameInventoryWithClick : FakeGameInventory
+{
+    public string Clicks = "";
+    public void DoClickAction(FakePos pos)
+    {
+        Clicks += $"({pos.x},{pos.y})";
+        if (inventoryMatrix.TryGetValue(pos, out var item)) item.StoneTablet?.Rotate();
+    }
 }
