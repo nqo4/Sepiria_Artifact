@@ -1,0 +1,22 @@
+# 빌드 산출물
+bin/
+obj/
+*.user
+.vs/
+.vscode/
+
+# 게임/BepInEx 바이너리는 절대 커밋하지 않음 (재배포 금지, 공개 저장소)
+libs/
+*.dll
+*.pdb
+
+# 원본 개발문서 묶음 (내용은 저장소 구조로 옮겨둠)
+Sepiria_Artifac_기본개발문서/
+*.zip
+
+# 파이썬
+__pycache__/
+*.pyc
+
+# 생성물 (scripts/assemble_recommend.py 출력)
+Plugin/companion/recommend.html

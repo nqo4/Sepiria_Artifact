@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SephiriaLive.Core", "Core\SephiriaLive.Core.csproj", "{69215B92-7B6C-459D-98D2-29D190147BCF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SephiriaLive.Plugin", "Plugin\SephiriaLive.Plugin.csproj", "{DAB936C1-9F41-461E-88F5-BA244573FEAC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SephiriaLive.Tests", "Tests\SephiriaLive.Tests.csproj", "{DDB5D64C-59EA-450B-82E6-51D87A4BC94A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{69215B92-7B6C-459D-98D2-29D190147BCF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{69215B92-7B6C-459D-98D2-29D190147BCF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{69215B92-7B6C-459D-98D2-29D190147BCF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{69215B92-7B6C-459D-98D2-29D190147BCF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DAB936C1-9F41-461E-88F5-BA244573FEAC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DAB936C1-9F41-461E-88F5-BA244573FEAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DAB936C1-9F41-461E-88F5-BA244573FEAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DAB936C1-9F41-461E-88F5-BA244573FEAC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DDB5D64C-59EA-450B-82E6-51D87A4BC94A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DDB5D64C-59EA-450B-82E6-51D87A4BC94A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DDB5D64C-59EA-450B-82E6-51D87A4BC94A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DDB5D64C-59EA-450B-82E6-51D87A4BC94A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

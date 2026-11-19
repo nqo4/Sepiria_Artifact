@@ -1,0 +1,78 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- BepInEx 5.x 플러그인. 게임 폴더의 실제 DLL(BepInEx/core, Sephiria_Data/Managed)을 직접 참조한다.
+       게임 경로는 Directory.Build.props 의 SephiriaGameDir (기본: Steam 기본 경로).
+       게임 DLL은 저장소에 커밋하지 않는다(재배포 금지 + 공개 저장소).
+       빌드 후 게임에 바로 설치하려면:  dotnet build Plugin -c Release -p:DeployToGame=true -->
+  <PropertyGroup>
+    <TargetFramework>net472</TargetFramework>
+    <LangVersion>9.0</LangVersion>
+    <Nullable>disable</Nullable>
+    <AssemblyName>SephiriaLive</AssemblyName>
+    <RootNamespace>SephiriaLive.Plugin</RootNamespace>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- .NET Framework 레퍼런스 어셈블리(NuGet). 로컬에 Targeting Pack이 없어도 빌드되게. -->
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="all" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Core\SephiriaLive.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="BepInEx">
+      <HintPath>$(SephiriaBepInExCoreDir)\BepInEx.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine">
+      <HintPath>$(SephiriaManagedDir)\UnityEngine.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>$(SephiriaManagedDir)\UnityEngine.CoreModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.InputLegacyModule">
+      <HintPath>$(SephiriaManagedDir)\UnityEngine.InputLegacyModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="netstandard">
+      <HintPath>$(SephiriaManagedDir)\netstandard.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- 동반 웹페이지. 게임 폴더에선 DLL 옆 companion/recommend.html 로 놓여야 "/" 라우트가 서빙한다.
+         recommend.html 은 scripts/assemble_recommend.py 로 생성(아직 data.json/engine.js 재구축 전이면 없음). -->
+    <None Include="companion\recommend.html" Condition="Exists('companion\recommend.html')">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Link>companion\recommend.html</Link>
+    </None>
+  </ItemGroup>
+
+  <Target Name="CheckGameDir" BeforeTargets="ResolveAssemblyReferences">
+    <Error Condition="!Exists('$(SephiriaManagedDir)\UnityEngine.CoreModule.dll')"
+           Text="게임 DLL을 찾을 수 없습니다: $(SephiriaManagedDir). -p:SephiriaGameDir=&quot;게임 설치 폴더&quot; 로 지정하세요." />
+    <Error Condition="!Exists('$(SephiriaBepInExCoreDir)\BepInEx.dll')"
+           Text="BepInEx가 설치되어 있지 않습니다: $(SephiriaBepInExCoreDir)" />
+  </Target>
+
+  <Target Name="DeployToGame" AfterTargets="Build" Condition="'$(DeployToGame)'=='true'">
+    <PropertyGroup>
+      <SephiriaPluginDir>$(SephiriaGameDir)\BepInEx\plugins\SephiriaLive</SephiriaPluginDir>
+    </PropertyGroup>
+    <ItemGroup>
+      <_DeployFiles Include="$(OutDir)SephiriaLive.dll;$(OutDir)SephiriaLive.Core.dll" />
+      <_DeployCompanion Include="$(OutDir)companion\**\*" />
+    </ItemGroup>
+    <Copy SourceFiles="@(_DeployFiles)" DestinationFolder="$(SephiriaPluginDir)" />
+    <Copy SourceFiles="@(_DeployCompanion)" DestinationFolder="$(SephiriaPluginDir)\companion" />
+    <Message Importance="high" Text="SephiriaLive 설치 완료 → $(SephiriaPluginDir)" />
+  </Target>
+
+</Project>

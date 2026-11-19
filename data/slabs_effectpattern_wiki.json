@@ -1,0 +1,2364 @@
+[
+  {
+    "value": "chivalry",
+    "ko_label": "기사도",
+    "rotatable": true,
+    "oldRotateFlag": true,
+    "centerIdx": 12,
+    "effectCells": [
+      {
+        "dr": -2,
+        "dc": -1,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      }
+    ],
+    "source": "sephiria.wiki/large tooltip (scraped 2026-10-09)",
+    "confidence": "wiki_scraped"
+  },
+  {
+    "value": "dry",
+    "ko_label": "건조",
+    "rotatable": false,
+    "oldRotateFlag": false,
+    "centerIdx": 12,
+    "effectCells": [
+      {
+        "dr": -1,
+        "dc": 0,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": 1,
+        "dc": 0,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      }
+    ],
+    "source": "sephiria.wiki/large tooltip (scraped 2026-10-09)",
+    "confidence": "wiki_scraped"
+  },
+  {
+    "value": "approximation",
+    "ko_label": "근사",
+    "rotatable": true,
+    "oldRotateFlag": true,
+    "centerIdx": 12,
+    "effectCells": [
+      {
+        "dr": -1,
+        "dc": 0,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": 0,
+        "dc": 1,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      }
+    ],
+    "source": "sephiria.wiki/large tooltip (scraped 2026-10-09)",
+    "confidence": "wiki_scraped"
+  },
+  {
+    "value": "advent",
+    "ko_label": "도래",
+    "rotatable": true,
+    "oldRotateFlag": true,
+    "centerIdx": 12,
+    "effectCells": [
+      {
+        "dr": -2,
+        "dc": 0,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": -1,
+        "dc": 0,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": 1,
+        "dc": 0,
+        "level": -1,
+        "kind": "level",
+        "rawText": "-1",
+        "rawColor": "red500"
+      },
+      {
+        "dr": 2,
+        "dc": 0,
+        "level": -1,
+        "kind": "level",
+        "rawText": "-1",
+        "rawColor": "red500"
+      }
+    ],
+    "source": "sephiria.wiki/large tooltip (scraped 2026-10-09)",
+    "confidence": "wiki_scraped"
+  },
+  {
+    "value": "linear",
+    "ko_label": "선의",
+    "rotatable": false,
+    "oldRotateFlag": false,
+    "centerIdx": 22,
+    "effectCells": [
+      {
+        "dr": 0,
+        "dc": -1,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": 0,
+        "dc": 1,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      }
+    ],
+    "source": "sephiria.wiki/large tooltip (scraped 2026-10-09)",
+    "confidence": "wiki_scraped"
+  },
+  {
+    "value": "sight",
+    "ko_label": "시선",
+    "rotatable": true,
+    "oldRotateFlag": true,
+    "centerIdx": 12,
+    "effectCells": [
+      {
+        "dr": -1,
+        "dc": -1,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": 1,
+        "dc": 1,
+        "level": -1,
+        "kind": "level",
+        "rawText": "-1",
+        "rawColor": "red500"
+      }
+    ],
+    "source": "sephiria.wiki/large tooltip (scraped 2026-10-09)",
+    "confidence": "wiki_scraped"
+  },
+  {
+    "value": "handshake",
+    "ko_label": "악수",
+    "rotatable": true,
+    "oldRotateFlag": true,
+    "centerIdx": 12,
+    "effectCells": [
+      {
+        "dr": -1,
+        "dc": 0,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": 1,
+        "dc": 0,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      }
+    ],
+    "source": "sephiria.wiki/large tooltip (scraped 2026-10-09)",
+    "confidence": "wiki_scraped"
+  },
+  {
+    "value": "fate",
+    "ko_label": "운명",
+    "rotatable": false,
+    "oldRotateFlag": false,
+    "centerIdx": 12,
+    "effectCells": [
+      {
+        "dr": 1,
+        "dc": 0,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      }
+    ],
+    "source": "sephiria.wiki/large tooltip (scraped 2026-10-09)",
+    "confidence": "wiki_scraped"
+  },
+  {
+    "value": "wit",
+    "ko_label": "재치",
+    "rotatable": true,
+    "oldRotateFlag": true,
+    "centerIdx": 12,
+    "effectCells": [
+      {
+        "dr": -1,
+        "dc": -1,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      }
+    ],
+    "source": "sephiria.wiki/large tooltip (scraped 2026-10-09)",
+    "confidence": "wiki_scraped"
+  },
+  {
+    "value": "exploitation",
+    "ko_label": "착취",
+    "rotatable": true,
+    "oldRotateFlag": true,
+    "centerIdx": 12,
+    "effectCells": [
+      {
+        "dr": -1,
+        "dc": 0,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": 1,
+        "dc": 0,
+        "level": -1,
+        "kind": "level",
+        "rawText": "-1",
+        "rawColor": "red500"
+      }
+    ],
+    "source": "sephiria.wiki/large tooltip (scraped 2026-10-09)",
+    "confidence": "wiki_scraped"
+  },
+  {
+    "value": "unity",
+    "ko_label": "화합",
+    "rotatable": true,
+    "oldRotateFlag": true,
+    "centerIdx": 12,
+    "effectCells": [
+      {
+        "dr": -1,
+        "dc": 0,
+        "level": -1,
+        "kind": "level",
+        "rawText": "-1",
+        "rawColor": "red500"
+      },
+      {
+        "dr": 0,
+        "dc": -1,
+        "level": -1,
+        "kind": "level",
+        "rawText": "-1",
+        "rawColor": "red500"
+      },
+      {
+        "dr": 0,
+        "dc": 1,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": 1,
+        "dc": 0,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      }
+    ],
+    "source": "sephiria.wiki/large tooltip (scraped 2026-10-09)",
+    "confidence": "wiki_scraped"
+  },
+  {
+    "value": "cheer",
+    "ko_label": "환호",
+    "rotatable": false,
+    "oldRotateFlag": false,
+    "centerIdx": 12,
+    "effectCells": [
+      {
+        "dr": -1,
+        "dc": 0,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      }
+    ],
+    "source": "sephiria.wiki/large tooltip (scraped 2026-10-09)",
+    "confidence": "wiki_scraped"
+  },
+  {
+    "value": "hope",
+    "ko_label": "희망",
+    "rotatable": true,
+    "oldRotateFlag": true,
+    "centerIdx": 12,
+    "effectCells": [
+      {
+        "dr": 0,
+        "dc": 1,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      }
+    ],
+    "source": "sephiria.wiki/large tooltip (scraped 2026-10-09)",
+    "confidence": "wiki_scraped"
+  },
+  {
+    "value": "nurture",
+    "ko_label": "양육",
+    "rotatable": true,
+    "oldRotateFlag": true,
+    "centerIdx": 12,
+    "effectCells": [
+      {
+        "dr": -1,
+        "dc": -1,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": -1,
+        "dc": 0,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": -1,
+        "dc": 1,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": 1,
+        "dc": 0,
+        "level": -1,
+        "kind": "level",
+        "rawText": "-1",
+        "rawColor": "red500"
+      },
+      {
+        "dr": 2,
+        "dc": 0,
+        "level": -1,
+        "kind": "level",
+        "rawText": "-1",
+        "rawColor": "red500"
+      }
+    ],
+    "source": "sephiria.wiki/large tooltip (scraped 2026-10-09)",
+    "confidence": "wiki_scraped"
+  },
+  {
+    "value": "joke",
+    "ko_label": "장난",
+    "rotatable": true,
+    "oldRotateFlag": true,
+    "centerIdx": 12,
+    "effectCells": [
+      {
+        "dr": -1,
+        "dc": -1,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": -1,
+        "dc": 0,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": -1,
+        "dc": 1,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": 0,
+        "dc": -1,
+        "level": -1,
+        "kind": "level",
+        "rawText": "-1",
+        "rawColor": "red500"
+      },
+      {
+        "dr": 0,
+        "dc": 1,
+        "level": -1,
+        "kind": "level",
+        "rawText": "-1",
+        "rawColor": "red500"
+      }
+    ],
+    "source": "sephiria.wiki/large tooltip (scraped 2026-10-09)",
+    "confidence": "wiki_scraped"
+  },
+  {
+    "value": "compete",
+    "ko_label": "경쟁",
+    "rotatable": true,
+    "oldRotateFlag": true,
+    "centerIdx": 12,
+    "effectCells": [
+      {
+        "dr": -1,
+        "dc": -1,
+        "level": -1,
+        "kind": "level",
+        "rawText": "-1",
+        "rawColor": "red500"
+      },
+      {
+        "dr": -1,
+        "dc": 0,
+        "level": -1,
+        "kind": "level",
+        "rawText": "-1",
+        "rawColor": "red500"
+      },
+      {
+        "dr": 1,
+        "dc": 0,
+        "level": 3,
+        "kind": "level",
+        "rawText": "+3",
+        "rawColor": "green500"
+      }
+    ],
+    "source": "sephiria.wiki/large tooltip (scraped 2026-10-09)",
+    "confidence": "wiki_scraped"
+  },
+  {
+    "value": "beating",
+    "ko_label": "고동",
+    "rotatable": true,
+    "oldRotateFlag": true,
+    "centerIdx": 12,
+    "effectCells": [
+      {
+        "dr": -2,
+        "dc": 0,
+        "level": 2,
+        "kind": "level",
+        "rawText": "+2",
+        "rawColor": "green500"
+      }
+    ],
+    "source": "sephiria.wiki/large tooltip (scraped 2026-10-09)",
+    "confidence": "wiki_scraped"
+  },
+  {
+    "value": "home_town",
+    "ko_label": "고양",
+    "rotatable": true,
+    "oldRotateFlag": true,
+    "centerIdx": 12,
+    "effectCells": [
+      {
+        "dr": 0,
+        "dc": 1,
+        "level": null,
+        "kind": "special",
+        "rawText": "",
+        "rawColor": "purple600"
+      }
+    ],
+    "source": "sephiria.wiki/large tooltip (scraped 2026-10-09)",
+    "confidence": "wiki_scraped"
+  },
+  {
+    "value": "past",
+    "ko_label": "과거",
+    "rotatable": true,
+    "oldRotateFlag": true,
+    "centerIdx": 12,
+    "effectCells": [
+      {
+        "dr": -1,
+        "dc": -1,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": -1,
+        "dc": 0,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": -1,
+        "dc": 1,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": 0,
+        "dc": 1,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      }
+    ],
+    "source": "sephiria.wiki/large tooltip (scraped 2026-10-09)",
+    "confidence": "wiki_scraped"
+  },
+  {
+    "value": "future",
+    "ko_label": "미래",
+    "rotatable": true,
+    "oldRotateFlag": true,
+    "centerIdx": 12,
+    "effectCells": [
+      {
+        "dr": -1,
+        "dc": -1,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": -1,
+        "dc": 0,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": -1,
+        "dc": 1,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": 0,
+        "dc": -1,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      }
+    ],
+    "source": "sephiria.wiki/large tooltip (scraped 2026-10-09)",
+    "confidence": "wiki_scraped"
+  },
+  {
+    "value": "distribution",
+    "ko_label": "분배",
+    "rotatable": false,
+    "oldRotateFlag": true,
+    "centerIdx": 12,
+    "effectCells": [
+      {
+        "dr": -1,
+        "dc": 0,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": 0,
+        "dc": -1,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": 0,
+        "dc": 1,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": 1,
+        "dc": 0,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      }
+    ],
+    "source": "sephiria.wiki/large tooltip (scraped 2026-10-09)",
+    "confidence": "wiki_scraped"
+  },
+  {
+    "value": "triceps",
+    "ko_label": "삼두",
+    "rotatable": false,
+    "oldRotateFlag": false,
+    "centerIdx": 12,
+    "effectCells": [
+      {
+        "dr": -1,
+        "dc": 0,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": 0,
+        "dc": -1,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": 0,
+        "dc": 1,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      }
+    ],
+    "source": "sephiria.wiki/large tooltip (scraped 2026-10-09)",
+    "confidence": "wiki_scraped"
+  },
+  {
+    "value": "harvesting",
+    "ko_label": "수확",
+    "rotatable": true,
+    "oldRotateFlag": true,
+    "centerIdx": 12,
+    "effectCells": [
+      {
+        "dr": -1,
+        "dc": 0,
+        "level": 2,
+        "kind": "level",
+        "rawText": "+2",
+        "rawColor": "green500"
+      },
+      {
+        "dr": 1,
+        "dc": 0,
+        "level": 2,
+        "kind": "level",
+        "rawText": "+2",
+        "rawColor": "green500"
+      }
+    ],
+    "source": "sephiria.wiki/large tooltip (scraped 2026-10-09)",
+    "confidence": "wiki_scraped"
+  },
+  {
+    "value": "binary_star",
+    "ko_label": "쌍성",
+    "rotatable": true,
+    "oldRotateFlag": true,
+    "centerIdx": 12,
+    "effectCells": [
+      {
+        "dr": -2,
+        "dc": 0,
+        "level": 2,
+        "kind": "level",
+        "rawText": "+2",
+        "rawColor": "green500"
+      },
+      {
+        "dr": 2,
+        "dc": 0,
+        "level": 2,
+        "kind": "level",
+        "rawText": "+2",
+        "rawColor": "green500"
+      }
+    ],
+    "source": "sephiria.wiki/large tooltip (scraped 2026-10-09)",
+    "confidence": "wiki_scraped"
+  },
+  {
+    "value": "yearning",
+    "ko_label": "열망",
+    "rotatable": false,
+    "oldRotateFlag": false,
+    "centerIdx": 12,
+    "effectCells": [
+      {
+        "dr": -1,
+        "dc": 0,
+        "level": 2,
+        "kind": "level",
+        "rawText": "+2",
+        "rawColor": "green500"
+      }
+    ],
+    "source": "sephiria.wiki/large tooltip (scraped 2026-10-09)",
+    "confidence": "wiki_scraped"
+  },
+  {
+    "value": "agglutination",
+    "ko_label": "응집",
+    "rotatable": true,
+    "oldRotateFlag": true,
+    "centerIdx": 12,
+    "effectCells": [
+      {
+        "dr": -1,
+        "dc": 0,
+        "level": 3,
+        "kind": "level",
+        "rawText": "+3",
+        "rawColor": "green500"
+      },
+      {
+        "dr": 0,
+        "dc": -2,
+        "level": -1,
+        "kind": "level",
+        "rawText": "-1",
+        "rawColor": "red500"
+      },
+      {
+        "dr": 0,
+        "dc": -1,
+        "level": -1,
+        "kind": "level",
+        "rawText": "-1",
+        "rawColor": "red500"
+      },
+      {
+        "dr": 0,
+        "dc": 1,
+        "level": -1,
+        "kind": "level",
+        "rawText": "-1",
+        "rawColor": "red500"
+      },
+      {
+        "dr": 0,
+        "dc": 2,
+        "level": -1,
+        "kind": "level",
+        "rawText": "-1",
+        "rawColor": "red500"
+      }
+    ],
+    "source": "sephiria.wiki/large tooltip (scraped 2026-10-09)",
+    "confidence": "wiki_scraped"
+  },
+  {
+    "value": "entrance",
+    "ko_label": "입구",
+    "rotatable": false,
+    "oldRotateFlag": false,
+    "centerIdx": 12,
+    "effectCells": [
+      {
+        "dr": -1,
+        "dc": -1,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": -1,
+        "dc": 0,
+        "level": 2,
+        "kind": "level",
+        "rawText": "+2",
+        "rawColor": "green500"
+      },
+      {
+        "dr": -1,
+        "dc": 1,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      }
+    ],
+    "source": "sephiria.wiki/large tooltip (scraped 2026-10-09)",
+    "confidence": "wiki_scraped"
+  },
+  {
+    "value": "load",
+    "ko_label": "적재",
+    "rotatable": true,
+    "oldRotateFlag": true,
+    "centerIdx": 12,
+    "effectCells": [
+      {
+        "dr": -2,
+        "dc": -1,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": -2,
+        "dc": 0,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": -1,
+        "dc": -1,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": -1,
+        "dc": 0,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      }
+    ],
+    "source": "sephiria.wiki/large tooltip (scraped 2026-10-09)",
+    "confidence": "wiki_scraped"
+  },
+  {
+    "value": "transition",
+    "ko_label": "전이",
+    "rotatable": true,
+    "oldRotateFlag": true,
+    "centerIdx": 12,
+    "effectCells": [
+      {
+        "dr": -2,
+        "dc": 0,
+        "level": -1,
+        "kind": "level",
+        "rawText": "-1",
+        "rawColor": "red500"
+      },
+      {
+        "dr": -1,
+        "dc": 0,
+        "level": -1,
+        "kind": "level",
+        "rawText": "-1",
+        "rawColor": "red500"
+      },
+      {
+        "dr": 0,
+        "dc": -2,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": 0,
+        "dc": -1,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": 0,
+        "dc": 1,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": 0,
+        "dc": 2,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": 1,
+        "dc": 0,
+        "level": -1,
+        "kind": "level",
+        "rawText": "-1",
+        "rawColor": "red500"
+      },
+      {
+        "dr": 2,
+        "dc": 0,
+        "level": -1,
+        "kind": "level",
+        "rawText": "-1",
+        "rawColor": "red500"
+      }
+    ],
+    "source": "sephiria.wiki/large tooltip (scraped 2026-10-09)",
+    "confidence": "wiki_scraped"
+  },
+  {
+    "value": "advance",
+    "ko_label": "전진",
+    "rotatable": true,
+    "oldRotateFlag": true,
+    "centerIdx": 12,
+    "effectCells": [
+      {
+        "dr": -2,
+        "dc": 0,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": -1,
+        "dc": 0,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      }
+    ],
+    "source": "sephiria.wiki/large tooltip (scraped 2026-10-09)",
+    "confidence": "wiki_scraped"
+  },
+  {
+    "value": "justice",
+    "ko_label": "정의",
+    "rotatable": false,
+    "oldRotateFlag": false,
+    "centerIdx": 10,
+    "effectCells": [
+      {
+        "dr": -2,
+        "dc": 0,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": -1,
+        "dc": 0,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": 1,
+        "dc": 0,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": 2,
+        "dc": 0,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      }
+    ],
+    "source": "sephiria.wiki/large tooltip (scraped 2026-10-09)",
+    "confidence": "wiki_scraped"
+  },
+  {
+    "value": "preparation",
+    "ko_label": "준비",
+    "rotatable": true,
+    "oldRotateFlag": true,
+    "centerIdx": 12,
+    "effectCells": [
+      {
+        "dr": -1,
+        "dc": -1,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": 1,
+        "dc": 1,
+        "level": 2,
+        "kind": "level",
+        "rawText": "+2",
+        "rawColor": "green500"
+      }
+    ],
+    "source": "sephiria.wiki/large tooltip (scraped 2026-10-09)",
+    "confidence": "wiki_scraped"
+  },
+  {
+    "value": "exit",
+    "ko_label": "출구",
+    "rotatable": false,
+    "oldRotateFlag": false,
+    "centerIdx": 12,
+    "effectCells": [
+      {
+        "dr": 1,
+        "dc": -1,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": 1,
+        "dc": 0,
+        "level": 2,
+        "kind": "level",
+        "rawText": "+2",
+        "rawColor": "green500"
+      },
+      {
+        "dr": 1,
+        "dc": 1,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      }
+    ],
+    "source": "sephiria.wiki/large tooltip (scraped 2026-10-09)",
+    "confidence": "wiki_scraped"
+  },
+  {
+    "value": "tide",
+    "ko_label": "파도",
+    "rotatable": true,
+    "oldRotateFlag": true,
+    "centerIdx": 12,
+    "effectCells": [
+      {
+        "dr": -1,
+        "dc": 0,
+        "level": -1,
+        "kind": "level",
+        "rawText": "-1",
+        "rawColor": "red500"
+      },
+      {
+        "dr": -1,
+        "dc": 1,
+        "level": 3,
+        "kind": "level",
+        "rawText": "+3",
+        "rawColor": "green500"
+      },
+      {
+        "dr": 0,
+        "dc": 1,
+        "level": -1,
+        "kind": "level",
+        "rawText": "-1",
+        "rawColor": "red500"
+      }
+    ],
+    "source": "sephiria.wiki/large tooltip (scraped 2026-10-09)",
+    "confidence": "wiki_scraped"
+  },
+  {
+    "value": "dedication",
+    "ko_label": "헌정",
+    "rotatable": false,
+    "oldRotateFlag": true,
+    "centerIdx": 12,
+    "effectCells": [
+      {
+        "dr": -1,
+        "dc": -1,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": -1,
+        "dc": 1,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": 1,
+        "dc": -1,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": 1,
+        "dc": 1,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      }
+    ],
+    "source": "sephiria.wiki/large tooltip (scraped 2026-10-09)",
+    "confidence": "wiki_scraped"
+  },
+  {
+    "value": "honor",
+    "ko_label": "명예",
+    "rotatable": true,
+    "oldRotateFlag": true,
+    "centerIdx": 12,
+    "effectCells": [
+      {
+        "dr": -2,
+        "dc": -1,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": -1,
+        "dc": 0,
+        "level": 2,
+        "kind": "level",
+        "rawText": "+2",
+        "rawColor": "green500"
+      }
+    ],
+    "source": "sephiria.wiki/large tooltip (scraped 2026-10-09)",
+    "confidence": "wiki_scraped"
+  },
+  {
+    "value": "rally",
+    "ko_label": "집결",
+    "rotatable": true,
+    "oldRotateFlag": true,
+    "centerIdx": 12,
+    "effectCells": [
+      {
+        "dr": -1,
+        "dc": 0,
+        "level": 2,
+        "kind": "level",
+        "rawText": "+2",
+        "rawColor": "green500"
+      },
+      {
+        "dr": 0,
+        "dc": -1,
+        "level": 2,
+        "kind": "level",
+        "rawText": "+2",
+        "rawColor": "green500"
+      }
+    ],
+    "source": "sephiria.wiki/large tooltip (scraped 2026-10-09)",
+    "confidence": "wiki_scraped"
+  },
+  {
+    "value": "development",
+    "ko_label": "발전",
+    "rotatable": true,
+    "oldRotateFlag": true,
+    "centerIdx": 12,
+    "effectCells": [
+      {
+        "dr": -1,
+        "dc": -1,
+        "level": 2,
+        "kind": "level",
+        "rawText": "+2",
+        "rawColor": "green500"
+      },
+      {
+        "dr": -1,
+        "dc": 0,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": 0,
+        "dc": -1,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      }
+    ],
+    "source": "sephiria.wiki/large tooltip (scraped 2026-10-09)",
+    "confidence": "wiki_scraped"
+  },
+  {
+    "value": "base",
+    "ko_label": "기반",
+    "rotatable": false,
+    "oldRotateFlag": false,
+    "centerIdx": 12,
+    "effectCells": [
+      {
+        "dr": 0,
+        "dc": -2,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": 0,
+        "dc": -1,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": 0,
+        "dc": 1,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": 0,
+        "dc": 2,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      }
+    ],
+    "source": "sephiria.wiki/large tooltip (scraped 2026-10-09)",
+    "confidence": "wiki_scraped"
+  },
+  {
+    "value": "warrant",
+    "ko_label": "권능",
+    "rotatable": true,
+    "oldRotateFlag": true,
+    "centerIdx": 12,
+    "effectCells": [
+      {
+        "dr": -1,
+        "dc": 0,
+        "level": 3,
+        "kind": "level",
+        "rawText": "+3",
+        "rawColor": "green500"
+      }
+    ],
+    "source": "sephiria.wiki/large tooltip (scraped 2026-10-09)",
+    "confidence": "wiki_scraped"
+  },
+  {
+    "value": "disconnection",
+    "ko_label": "단절",
+    "rotatable": false,
+    "oldRotateFlag": false,
+    "centerIdx": 12,
+    "effectCells": [
+      {
+        "dr": -1,
+        "dc": 0,
+        "level": 3,
+        "kind": "level",
+        "rawText": "+3",
+        "rawColor": "green500"
+      },
+      {
+        "dr": 0,
+        "dc": -1,
+        "level": -1,
+        "kind": "level",
+        "rawText": "-1",
+        "rawColor": "red500"
+      },
+      {
+        "dr": 0,
+        "dc": 1,
+        "level": -1,
+        "kind": "level",
+        "rawText": "-1",
+        "rawColor": "red500"
+      },
+      {
+        "dr": 1,
+        "dc": 0,
+        "level": 3,
+        "kind": "level",
+        "rawText": "+3",
+        "rawColor": "green500"
+      }
+    ],
+    "source": "sephiria.wiki/large tooltip (scraped 2026-10-09)",
+    "confidence": "wiki_scraped"
+  },
+  {
+    "value": "concurrency",
+    "ko_label": "동시성",
+    "rotatable": false,
+    "oldRotateFlag": false,
+    "centerIdx": 12,
+    "effectCells": [
+      {
+        "dr": -2,
+        "dc": 0,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": -1,
+        "dc": 0,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": 1,
+        "dc": 0,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": 2,
+        "dc": 0,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      }
+    ],
+    "source": "sephiria.wiki/large tooltip (scraped 2026-10-09)",
+    "confidence": "wiki_scraped"
+  },
+  {
+    "value": "vow",
+    "ko_label": "맹세",
+    "rotatable": true,
+    "oldRotateFlag": true,
+    "centerIdx": 12,
+    "effectCells": [
+      {
+        "dr": -2,
+        "dc": 0,
+        "level": 2,
+        "kind": "level",
+        "rawText": "+2",
+        "rawColor": "green500"
+      },
+      {
+        "dr": -1,
+        "dc": 0,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": 0,
+        "dc": -1,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": 0,
+        "dc": 1,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": 1,
+        "dc": 0,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      }
+    ],
+    "source": "sephiria.wiki/large tooltip (scraped 2026-10-09)",
+    "confidence": "wiki_scraped"
+  },
+  {
+    "value": "rebellion",
+    "ko_label": "반항",
+    "rotatable": true,
+    "oldRotateFlag": true,
+    "centerIdx": 12,
+    "effectCells": [
+      {
+        "dr": -2,
+        "dc": 2,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": -1,
+        "dc": 1,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": 1,
+        "dc": -1,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": 2,
+        "dc": -2,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      }
+    ],
+    "source": "sephiria.wiki/large tooltip (scraped 2026-10-09)",
+    "confidence": "wiki_scraped"
+  },
+  {
+    "value": "connection",
+    "ko_label": "이음",
+    "rotatable": true,
+    "oldRotateFlag": true,
+    "centerIdx": 12,
+    "effectCells": [
+      {
+        "dr": -1,
+        "dc": 0,
+        "level": 2,
+        "kind": "level",
+        "rawText": "+2",
+        "rawColor": "green500"
+      },
+      {
+        "dr": 1,
+        "dc": 0,
+        "level": null,
+        "kind": "special",
+        "rawText": "",
+        "rawColor": "purple600"
+      }
+    ],
+    "source": "sephiria.wiki/large tooltip (scraped 2026-10-09)",
+    "confidence": "wiki_scraped"
+  },
+  {
+    "value": "junction",
+    "ko_label": "접합",
+    "rotatable": true,
+    "oldRotateFlag": true,
+    "centerIdx": 16,
+    "effectCells": [
+      {
+        "dr": -3,
+        "dc": 0,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": -2,
+        "dc": 0,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": -1,
+        "dc": 0,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": 0,
+        "dc": 1,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": 0,
+        "dc": 2,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": 0,
+        "dc": 3,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      }
+    ],
+    "source": "sephiria.wiki/large tooltip (scraped 2026-10-09)",
+    "confidence": "wiki_scraped"
+  },
+  {
+    "value": "last_stand",
+    "ko_label": "배수진",
+    "rotatable": false,
+    "oldRotateFlag": true,
+    "centerIdx": 12,
+    "effectCells": [
+      {
+        "dr": -1,
+        "dc": 0,
+        "level": 5,
+        "kind": "level",
+        "rawText": "+5",
+        "rawColor": "green500"
+      },
+      {
+        "dr": 0,
+        "dc": -1,
+        "level": -1,
+        "kind": "level",
+        "rawText": "-1",
+        "rawColor": "red500"
+      },
+      {
+        "dr": 0,
+        "dc": 1,
+        "level": -1,
+        "kind": "level",
+        "rawText": "-1",
+        "rawColor": "red500"
+      },
+      {
+        "dr": 1,
+        "dc": 0,
+        "level": -1,
+        "kind": "level",
+        "rawText": "-1",
+        "rawColor": "red500"
+      }
+    ],
+    "source": "sephiria.wiki/large tooltip (scraped 2026-10-09)",
+    "confidence": "wiki_scraped"
+  },
+  {
+    "value": "flag",
+    "ko_label": "깃발",
+    "rotatable": false,
+    "oldRotateFlag": false,
+    "centerIdx": 10,
+    "effectCells": [
+      {
+        "dr": -1,
+        "dc": 0,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": 0,
+        "dc": 1,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": 0,
+        "dc": 2,
+        "level": 2,
+        "kind": "level",
+        "rawText": "+2",
+        "rawColor": "green500"
+      },
+      {
+        "dr": 0,
+        "dc": 3,
+        "level": 3,
+        "kind": "level",
+        "rawText": "+3",
+        "rawColor": "green500"
+      },
+      {
+        "dr": 1,
+        "dc": 0,
+        "level": -1,
+        "kind": "level",
+        "rawText": "-1",
+        "rawColor": "red500"
+      }
+    ],
+    "source": "sephiria.wiki/large tooltip (scraped 2026-10-09)",
+    "confidence": "wiki_scraped"
+  },
+  {
+    "value": "defender",
+    "ko_label": "방어수",
+    "rotatable": false,
+    "oldRotateFlag": true,
+    "centerIdx": 12,
+    "effectCells": [
+      {
+        "dr": -1,
+        "dc": -1,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": -1,
+        "dc": 1,
+        "level": 2,
+        "kind": "level",
+        "rawText": "+2",
+        "rawColor": "green500"
+      },
+      {
+        "dr": 0,
+        "dc": -1,
+        "level": -1,
+        "kind": "level",
+        "rawText": "-1",
+        "rawColor": "red500"
+      },
+      {
+        "dr": 0,
+        "dc": 1,
+        "level": -1,
+        "kind": "level",
+        "rawText": "-1",
+        "rawColor": "red500"
+      },
+      {
+        "dr": 1,
+        "dc": -1,
+        "level": 2,
+        "kind": "level",
+        "rawText": "+2",
+        "rawColor": "green500"
+      },
+      {
+        "dr": 1,
+        "dc": 1,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      }
+    ],
+    "source": "sephiria.wiki/large tooltip (scraped 2026-10-09)",
+    "confidence": "wiki_scraped"
+  },
+  {
+    "value": "shade",
+    "ko_label": "차양",
+    "rotatable": false,
+    "oldRotateFlag": false,
+    "centerIdx": 2,
+    "effectCells": [
+      {
+        "dr": 4,
+        "dc": -2,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": 4,
+        "dc": -1,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": 4,
+        "dc": 0,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": 4,
+        "dc": 1,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": 4,
+        "dc": 2,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      }
+    ],
+    "source": "sephiria.wiki/large tooltip (scraped 2026-10-09)",
+    "confidence": "wiki_scraped"
+  },
+  {
+    "value": "wedge",
+    "ko_label": "쐐기",
+    "rotatable": true,
+    "oldRotateFlag": true,
+    "centerIdx": 12,
+    "effectCells": [
+      {
+        "dr": -1,
+        "dc": -1,
+        "level": 3,
+        "kind": "level",
+        "rawText": "+3",
+        "rawColor": "green500"
+      }
+    ],
+    "source": "sephiria.wiki/large tooltip (scraped 2026-10-09)",
+    "confidence": "wiki_scraped"
+  },
+  {
+    "value": "thorn",
+    "ko_label": "가시",
+    "rotatable": false,
+    "oldRotateFlag": false,
+    "centerIdx": 12,
+    "effectCells": [
+      {
+        "dr": -1,
+        "dc": -1,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": -1,
+        "dc": 0,
+        "level": 2,
+        "kind": "level",
+        "rawText": "+2",
+        "rawColor": "green500"
+      },
+      {
+        "dr": -1,
+        "dc": 1,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": 0,
+        "dc": -1,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": 0,
+        "dc": 1,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": 1,
+        "dc": -1,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": 1,
+        "dc": 0,
+        "level": 2,
+        "kind": "level",
+        "rawText": "+2",
+        "rawColor": "green500"
+      },
+      {
+        "dr": 1,
+        "dc": 1,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      }
+    ],
+    "source": "sephiria.wiki/large tooltip (scraped 2026-10-09)",
+    "confidence": "wiki_scraped"
+  },
+  {
+    "value": "boundary",
+    "ko_label": "경계",
+    "rotatable": false,
+    "oldRotateFlag": false,
+    "centerIdx": 12,
+    "effectCells": [
+      {
+        "dr": -2,
+        "dc": -2,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": -2,
+        "dc": -1,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": -2,
+        "dc": 0,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": -2,
+        "dc": 1,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": -2,
+        "dc": 2,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": 2,
+        "dc": -2,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": 2,
+        "dc": -1,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": 2,
+        "dc": 0,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": 2,
+        "dc": 1,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": 2,
+        "dc": 2,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      }
+    ],
+    "source": "sephiria.wiki/large tooltip (scraped 2026-10-09)",
+    "confidence": "wiki_scraped"
+  },
+  {
+    "value": "sheen",
+    "ko_label": "광휘",
+    "rotatable": true,
+    "oldRotateFlag": true,
+    "centerIdx": 12,
+    "effectCells": [
+      {
+        "dr": -1,
+        "dc": 0,
+        "level": 2,
+        "kind": "level",
+        "rawText": "+2",
+        "rawColor": "green500"
+      },
+      {
+        "dr": 0,
+        "dc": -2,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": 0,
+        "dc": -1,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": 0,
+        "dc": 1,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": 0,
+        "dc": 2,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": 1,
+        "dc": 0,
+        "level": 2,
+        "kind": "level",
+        "rawText": "+2",
+        "rawColor": "green500"
+      }
+    ],
+    "source": "sephiria.wiki/large tooltip (scraped 2026-10-09)",
+    "confidence": "wiki_scraped"
+  },
+  {
+    "value": "miracle",
+    "ko_label": "기적",
+    "rotatable": false,
+    "oldRotateFlag": true,
+    "centerIdx": 12,
+    "effectCells": [
+      {
+        "dr": -2,
+        "dc": 0,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": -1,
+        "dc": 0,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": 0,
+        "dc": -2,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": 0,
+        "dc": -1,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": 0,
+        "dc": 1,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": 0,
+        "dc": 2,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": 1,
+        "dc": 0,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": 2,
+        "dc": 0,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      }
+    ],
+    "source": "sephiria.wiki/large tooltip (scraped 2026-10-09)",
+    "confidence": "wiki_scraped"
+  },
+  {
+    "value": "daydream",
+    "ko_label": "백일몽",
+    "rotatable": true,
+    "oldRotateFlag": true,
+    "centerIdx": 12,
+    "effectCells": [
+      {
+        "dr": -1,
+        "dc": -1,
+        "level": 2,
+        "kind": "level",
+        "rawText": "+2",
+        "rawColor": "green500"
+      },
+      {
+        "dr": -1,
+        "dc": 1,
+        "level": 2,
+        "kind": "level",
+        "rawText": "+2",
+        "rawColor": "green500"
+      },
+      {
+        "dr": 1,
+        "dc": -1,
+        "level": 2,
+        "kind": "level",
+        "rawText": "+2",
+        "rawColor": "green500"
+      },
+      {
+        "dr": 1,
+        "dc": 1,
+        "level": 2,
+        "kind": "level",
+        "rawText": "+2",
+        "rawColor": "green500"
+      }
+    ],
+    "source": "sephiria.wiki/large tooltip (scraped 2026-10-09)",
+    "confidence": "wiki_scraped"
+  },
+  {
+    "value": "compression",
+    "ko_label": "압축",
+    "rotatable": true,
+    "oldRotateFlag": true,
+    "centerIdx": 17,
+    "effectCells": [
+      {
+        "dr": -3,
+        "dc": 0,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": -2,
+        "dc": 0,
+        "level": 2,
+        "kind": "level",
+        "rawText": "+2",
+        "rawColor": "green500"
+      },
+      {
+        "dr": -1,
+        "dc": 0,
+        "level": 3,
+        "kind": "level",
+        "rawText": "+3",
+        "rawColor": "green500"
+      }
+    ],
+    "source": "sephiria.wiki/large tooltip (scraped 2026-10-09)",
+    "confidence": "wiki_scraped"
+  },
+  {
+    "value": "certitude",
+    "ko_label": "확신",
+    "rotatable": true,
+    "oldRotateFlag": true,
+    "centerIdx": 12,
+    "effectCells": [
+      {
+        "dr": -1,
+        "dc": 0,
+        "level": 5,
+        "kind": "level",
+        "rawText": "+5",
+        "rawColor": "green500"
+      }
+    ],
+    "source": "sephiria.wiki/large tooltip (scraped 2026-10-09)",
+    "confidence": "wiki_scraped"
+  },
+  {
+    "value": "hospitality",
+    "ko_label": "환대",
+    "rotatable": false,
+    "oldRotateFlag": false,
+    "centerIdx": 12,
+    "effectCells": [
+      {
+        "dr": -1,
+        "dc": 0,
+        "level": 2,
+        "kind": "level",
+        "rawText": "+2",
+        "rawColor": "green500"
+      },
+      {
+        "dr": 0,
+        "dc": -1,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      }
+    ],
+    "source": "sephiria.wiki/large tooltip (scraped 2026-10-09)",
+    "confidence": "wiki_scraped"
+  },
+  {
+    "value": "courage",
+    "ko_label": "용기",
+    "rotatable": true,
+    "oldRotateFlag": true,
+    "centerIdx": 12,
+    "effectCells": [
+      {
+        "dr": -2,
+        "dc": -2,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": -1,
+        "dc": -1,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": -1,
+        "dc": 1,
+        "level": 2,
+        "kind": "level",
+        "rawText": "+2",
+        "rawColor": "green500"
+      },
+      {
+        "dr": 1,
+        "dc": -1,
+        "level": 2,
+        "kind": "level",
+        "rawText": "+2",
+        "rawColor": "green500"
+      },
+      {
+        "dr": 1,
+        "dc": 1,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      },
+      {
+        "dr": 2,
+        "dc": 2,
+        "level": 1,
+        "kind": "level",
+        "rawText": "+1",
+        "rawColor": "green500"
+      }
+    ],
+    "source": "sephiria.wiki/large tooltip (scraped 2026-10-09)",
+    "confidence": "wiki_scraped"
+  },
+  {
+    "value": "peace",
+    "ko_label": "평화",
+    "rotatable": true,
+    "oldRotateFlag": true,
+    "centerIdx": 12,
+    "effectCells": [
+      {
+        "dr": 0,
+        "dc": -1,
+        "level": 3,
+        "kind": "level",
+        "rawText": "+3",
+        "rawColor": "green500"
+      },
+      {
+        "dr": 0,
+        "dc": 1,
+        "level": 3,
+        "kind": "level",
+        "rawText": "+3",
+        "rawColor": "green500"
+      }
+    ],
+    "source": "sephiria.wiki/large tooltip (scraped 2026-10-09)",
+    "confidence": "wiki_scraped"
+  },
+  {
+    "value": "requital",
+    "ko_label": "보은",
+    "rotatable": true,
+    "oldRotateFlag": true,
+    "centerIdx": 12,
+    "effectCells": [
+      {
+        "dr": 0,
+        "dc": -2,
+        "level": 3,
+        "kind": "level",
+        "rawText": "+3",
+        "rawColor": "green500"
+      },
+      {
+        "dr": 0,
+        "dc": -1,
+        "level": 3,
+        "kind": "level",
+        "rawText": "+3",
+        "rawColor": "green500"
+      },
+      {
+        "dr": 0,
+        "dc": 1,
+        "level": 3,
+        "kind": "level",
+        "rawText": "+3",
+        "rawColor": "green500"
+      },
+      {
+        "dr": 0,
+        "dc": 2,
+        "level": 3,
+        "kind": "level",
+        "rawText": "+3",
+        "rawColor": "green500"
+      }
+    ],
+    "source": "sephiria.wiki/large tooltip (scraped 2026-10-09)",
+    "confidence": "wiki_scraped"
+  }
+]

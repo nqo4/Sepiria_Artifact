@@ -1,0 +1,9 @@
+<Project>
+  <!-- 게임 설치 폴더. 다른 경로에 설치했다면 빌드 시 -p:SephiriaGameDir="D:\...\Sephiria" 로 덮어쓰거나
+       환경변수 SephiriaGameDir 를 설정하세요. Plugin 빌드에만 필요하고 Core/Tests는 게임 없이 빌드됩니다. -->
+  <PropertyGroup>
+    <SephiriaGameDir Condition="'$(SephiriaGameDir)'==''">C:\Program Files (x86)\Steam\steamapps\common\Sephiria</SephiriaGameDir>
+    <SephiriaManagedDir>$(SephiriaGameDir)\Sephiria_Data\Managed</SephiriaManagedDir>
+    <SephiriaBepInExCoreDir>$(SephiriaGameDir)\BepInEx\core</SephiriaBepInExCoreDir>
+  </PropertyGroup>
+</Project>

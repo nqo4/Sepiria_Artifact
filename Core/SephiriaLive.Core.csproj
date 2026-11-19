@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- 순수 로직. BepInEx/Unity 의존성 0 — 게임 없이 빌드/테스트 가능해야 한다. -->
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <LangVersion>9.0</LangVersion>
+    <Nullable>disable</Nullable>
+    <AssemblyName>SephiriaLive.Core</AssemblyName>
+    <RootNamespace>SephiriaLive.Core</RootNamespace>
+  </PropertyGroup>
+
+</Project>

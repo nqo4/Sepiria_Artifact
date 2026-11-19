@@ -1,0 +1,403 @@
+<!--
+  ⚠ 이 파일은 완전한 recommend_template.html이 아닙니다.
+  이번 세션에서 Read/Edit로 실제로 다뤘던 조각들만 모아둔 것이고, 전체 578줄 중 상당 부분은
+  빠져 있습니다. GAPS.md에 뭐가 없는지 정리해뒀으니, 로컬 Claude Code가 이 조각들의 스타일/패턴을
+  참고해서 전체 파일을 다시 설계하면 됩니다. 이 파일 자체를 그대로 못 씁니다.
+-->
+
+<!-- ===================== CSS 조각 (대략 40~110번째 줄 근처 + 이번 세션에 추가한 compat 블록) ===================== -->
+<style>
+  /* ... 앞부분(색상 변수 :root, body, header, main 레이아웃, .panel 등)은 복구 안 됨 ... */
+  .search-row{display:flex;gap:6px;margin-bottom:8px}
+  .search-row input{flex:1;background:#140a1e;border:1px solid var(--border);color:var(--text);border-radius:8px;padding:7px 10px;font:inherit}
+  .search-results{max-height:220px;overflow:auto;border:1px solid var(--border);border-radius:8px;display:none;margin-bottom:10px}
+  .search-results div{padding:7px 10px;cursor:pointer;border-bottom:1px solid var(--border);font-size:12.5px;display:flex;justify-content:space-between;gap:8px}
+  .search-results div:last-child{border-bottom:none}
+  .search-results div:hover{background:var(--panel2)}
+  .search-results .tier{color:var(--muted);font-size:11px}
+  .weapon-box{background:var(--panel2);border:1px solid var(--border);border-radius:10px;padding:10px;margin-bottom:12px}
+  .weapon-box .wname{font-weight:700;font-size:13.5px;margin-bottom:3px}
+  .weapon-box .wtier{font-size:11px;color:var(--muted);margin-bottom:6px}
+  .weapon-box .wtext{font-size:12px;color:var(--muted);line-height:1.5;margin-bottom:6px}
+  .weapon-box .wkw{display:flex;flex-wrap:wrap;gap:5px}
+  .weapon-box .redef-warn{margin-top:6px;font-size:11.5px;color:var(--warn);background:#3b2f1d;border:1px solid #5c4a2e;border-radius:6px;padding:5px 8px}
+  .anchor-chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:6px}
+  .anchor-chip{font-size:11.5px;padding:4px 8px;border-radius:999px;background:var(--panel2);border:1px solid var(--accent);color:var(--text);display:flex;align-items:center;gap:6px}
+  .anchor-chip button{padding:0 2px;border:none;background:none;color:var(--muted);font-size:13px;line-height:1}
+  .cands{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
+  .cand{background:var(--panel2);border:1px solid var(--border);border-radius:12px;padding:12px;position:relative}
+  .cand .grade{position:absolute;top:10px;right:10px;width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px;color:#1a1022}
+  .cand .grade.S{background:var(--s)} .cand .grade.A{background:var(--a);color:#fff}
+  .cand .grade.B{background:var(--b);color:#fff} .cand .grade.C{background:var(--c);color:#06201b}
+  .cand .grade.D{background:var(--d);color:#fff}
+  .cand h3{margin:0 44px 2px 0;font-size:14px}
+  .cand .tier-lbl{font-size:11px;color:var(--muted);margin-bottom:8px}
+  .cand .why{font-size:12px;color:var(--muted);line-height:1.5;margin-bottom:6px;min-height:32px}
+  .cand .caution{font-size:11.5px;color:var(--warn);background:#3b2f1d;border:1px solid #5c4a2e;border-radius:6px;padding:5px 8px;margin-bottom:8px;line-height:1.4}
+  /* --- 이번 세션(호환성 점검 전용 블록)에 추가한 CSS --- */
+  .compat-block{border:1px solid var(--border);border-radius:8px;margin-bottom:8px;overflow:hidden}
+  .compat-head{font-size:10.5px;color:var(--muted);background:#140a1e;padding:4px 8px;border-bottom:1px solid var(--border);letter-spacing:.02em}
+  .compat-rows{display:flex;flex-direction:column}
+  .compat-row{display:flex;align-items:center;justify-content:space-between;gap:6px;padding:3px 8px;font-size:11px}
+  .compat-row .kwname{color:var(--text)}
+  .compat-row .verdict{font-size:10px;padding:1px 6px;border-radius:999px;white-space:nowrap}
+  .compat-row .verdict.conflict{background:#3b1d1d;color:#ff8a8a;border:1px solid #5c2e2e}
+  .compat-row .verdict.synergy{background:#1d3b24;color:var(--s);border:1px solid #2e5c3a}
+  .compat-row .verdict.neutral{background:#1a1a1a;color:var(--muted);border:1px solid var(--border)}
+  .compat-empty{font-size:11px;color:var(--muted);padding:5px 8px}
+  .cand .tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px}
+  .cand .tag{font-size:10.5px;padding:2px 7px;border-radius:999px;background:#140a1e;border:1px solid var(--border);color:var(--muted)}
+  .cand .tag.hit{color:var(--s);border-color:var(--s)}
+  .cand .tag.kw{color:#8ec9ff;border-color:#2a4a6e}
+  .cand .btnrow{display:flex;gap:6px;flex-wrap:wrap}
+  .cand .btnrow button{font-size:11px;padding:4px 8px}
+  .score-bar{height:5px;background:#140a1e;border-radius:999px;overflow:hidden;margin-bottom:8px}
+  .score-bar i{display:block;height:100%;background:linear-gradient(90deg,var(--b),var(--s))}
+  .note{font-size:11.5px;color:var(--muted);margin-top:14px;line-height:1.6;border-top:1px solid var(--border);padding-top:10px}
+  .kind-toggle{display:flex;gap:6px;margin-bottom:8px}
+  .kind-toggle button{flex:1;padding:5px}
+  .kind-toggle button.on{background:var(--accent);color:#1a1022;border-color:var(--accent);font-weight:700}
+  .basket-list{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+  .basket-chip{font-size:11.5px;padding:4px 9px;border-radius:999px;background:var(--panel2);border:1px solid var(--border);color:var(--text);display:flex;align-items:center;gap:6px}
+  .basket-chip.missing{border-color:var(--warn);color:var(--warn)}
+  .basket-chip button{padding:0 2px;border:none;background:none;color:var(--muted);font-size:13px;line-height:1}
+  .grid-view{display:inline-grid;gap:3px;background:#0e0716;padding:8px;border-radius:10px;border:1px solid var(--border)}
+  .grid-cell{width:62px;height:62px;background:#2c1d40;border:1px solid var(--border);border-radius:6px;font-size:9.5px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:2px;overflow:hidden;color:var(--text)}
+  .grid-cell.empty{opacity:.25}
+  .grid-cell .lv{color:var(--s);font-weight:700;font-size:11px}
+  .grid-cell.slab{background:#1d2c40;border-color:#2a4a6e}
+  .placement-summary{font-size:12.5px;color:var(--muted);margin-bottom:10px}
+  .confidence-note{font-size:11px;color:var(--warn);margin-top:8px}
+</style>
+
+<!-- ===================== HTML 조각 (왼쪽 패널 note + 배치 계산 패널 일부) ===================== -->
+<div class="note">
+  등급은 op.gg처럼 실전 승률 통계가 아니라, <b>선택한 무기/핵심 아이템과 겹치는 태그·키워드</b> + 희귀도를 섞은 휴리스틱입니다.
+  "무기 호환성 점검"은 등급 계산과 <b>별도 단계</b>로, 아이템이 의존하는 조건(일반공격/연격/탄환 등) 각각을
+  선택한 무기가 그대로 제공하는지(✓), 바꾸거나 없애버리는지(⚠ 충돌), 아니면 무기 텍스트에 아예 언급이 없는지(무관)
+  하나씩 대조해서 보여줍니다 — "교만의 금관 + 화약초 연성"처럼 콤보 태그만으론 안 보이는 충돌을 잡기 위한 것이고,
+  텍스트 키워드 매칭이라 완벽하지 않으니 ⚠가 붙은 조합은 꼭 직접 확인해주세요.
+  석판 후보의 등급은 효과 패턴 대신 희귀도만 반영하지만(선택 단계에선 아직 어디 놓일지 모르므로),
+  실제 배치 계산에는 아래처럼 위키 툴팁에서 직접 긁어온 석판 효과 패턴(레벨 부여 범위)을 사용합니다.
+</div>
+
+<!-- 배치 계산 패널 (일부) -->
+<div class="panel">
+  <h2>배치 계산 (담은 아이템 + 현재 인벤토리)</h2>
+  <div class="empty-hint" style="margin-bottom:8px">후보 카드에서 "배치 목록에 담기"를 누르면 여기 추가됩니다. 기존에 공개했던 배치 계산기와 같은 엔진을 그대로 재사용합니다.</div>
+  <div class="basket-list" id="basketList"></div>
+  <div style="display:flex;gap:8px;margin-bottom:10px">
+    <button class="primary" id="computeBtn">최적 배치 계산</button>
+    <label style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted)">
+      <input type="checkbox" id="includeLiveInv" checked> 현재 인벤토리 포함
+    </label>
+  </div>
+  <div id="placementStatus" class="placement-summary"></div>
+  <div id="placementGrid"></div>
+  <div class="confidence-note" id="slabConfidenceNote"></div>
+</div>
+
+<!-- ===================== JS 조각 (데이터 로드, 빌드 태그, 무기/앵커 검색, 호환성 점검, 점수, 렌더링) ===================== -->
+<script id="sephiria-data" type="application/json">__SEPHIRIA_DATA_JSON__</script>
+<script id="sephiria-placement-data" type="application/json">__SEPHIRIA_PLACEMENT_JSON__</script>
+<script>
+__SEPHIRIA_ENGINE_JS__
+
+(function () {
+  const DATA = JSON.parse(document.getElementById('sephiria-data').textContent);
+  const PLACEMENT = JSON.parse(document.getElementById('sephiria-placement-data').textContent);
+  const { artifacts: ARTIFACTS, slabs: SLABS, weapons: WEAPONS, tagKo: TAG_KO, kwKo: KW_KO } = DATA;
+  const byValue = new Map(ARTIFACTS.map(a => [a.v, a]));
+  const slabByValue = new Map(SLABS.map(s => [s.v, s]));
+  const weaponByValue = new Map(WEAPONS.map(w => [w.v, w]));
+  const placementArtByName = new Map(PLACEMENT.artifacts.map(a => [a.name, a]));
+  const placementSlabByName = new Map(PLACEMENT.slabs.map(s => [s.name, s]));
+
+  // ⚠ 아래 변수들/함수들의 선언부(let weapon, anchors, candidates, basket, pinnedTags, demoMode,
+  // DEMO_SNAPSHOT_IDS, TIER_RANK, onSnapshot/tryConnect/buildValuesFromSnapshot, 폴링 로직 등)는
+  // 이번 세션에서 직접 다루지 않아서 복구 안 됨. 아래부터는 실제로 Read/Edit 했던 부분만 그대로 옮긴 것.
+
+  function currentBuildValues() {
+    if (demoMode || !lastSnapshot) return DEMO_SNAPSHOT_IDS.filter(v => byValue.has(v));
+    return buildValuesFromSnapshot(lastSnapshot);
+  }
+
+  // ---------- 빌드 태그 집계: 앵커(가중치 2) + 현재 인벤토리(가중치 1) ----------
+  function buildTagCounts() {
+    const counts = {};
+    for (const a of anchors) for (const tag of (a.s || [])) counts[tag] = (counts[tag] || 0) + 2;
+    for (const v of currentBuildValues()) {
+      const def = byValue.get(v); if (!def) continue;
+      for (const tag of (def.s || [])) counts[tag] = (counts[tag] || 0) + 1;
+    }
+    return counts;
+  }
+
+  function renderBuildTags() {
+    const counts = buildTagCounts();
+    const entries = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+    const el = document.getElementById('buildTags');
+    if (entries.length === 0) {
+      el.innerHTML = '<div class="empty-hint">아직 집계할 태그가 없습니다. 핵심 아이템을 고르거나 게임/데모와 연결해보세요.</div>';
+    } else {
+      const max = entries[0][1];
+      el.innerHTML = entries.map(([tag, cnt]) => `
+        <div class="tagbar-row ${pinnedTags.has(tag) ? 'pinned' : ''}">
+          <span class="name">${TAG_KO[tag] || tag}</span>
+          <span class="track"><span class="fill" style="width:${Math.max(8, cnt / max * 100)}%"></span></span>
+          <span class="cnt">${cnt}</span>
+        </div>`).join('');
+    }
+    renderPinList(entries.map(e => e[0]));
+  }
+
+  function renderPinList(knownTags) {
+    const all = new Set([...knownTags, ...Object.keys(TAG_KO)]);
+    const el = document.getElementById('pinList');
+    el.innerHTML = [...all].map(tag => `<span class="pin-chip ${pinnedTags.has(tag) ? 'on' : ''}" data-tag="${tag}">${TAG_KO[tag] || tag}</span>`).join('');
+    el.querySelectorAll('.pin-chip').forEach(chip => chip.addEventListener('click', () => {
+      const tag = chip.dataset.tag;
+      pinnedTags.has(tag) ? pinnedTags.delete(tag) : pinnedTags.add(tag);
+      renderBuildTags(); renderCandidates();
+    }));
+  }
+
+  // ---------- 무기 선택 ----------
+  function renderWeaponBox() {
+    const el = document.getElementById('weaponBox');
+    if (!weapon) {
+      el.innerHTML = '<div class="empty-hint">무기를 고르면 효과 텍스트와 키워드가 여기 표시됩니다. 안 골라도 추천은 작동하지만, 무기 특성과 충돌하는 아이템을 걸러주지 못합니다.</div>';
+      return;
+    }
+    const kwHtml = (weapon.kw || []).map(k => `<span class="tag kw">${KW_KO[k] || k}</span>`).join('');
+    const redefHtml = (weapon.redef || []).length
+      ? `<div class="redef-warn">⚠ 이 무기는 ${weapon.redef.map(k => KW_KO[k] || k).join(', ')} 방식을 바꿉니다 — 거기 의존하는 효과는 의도대로 안 터질 수 있어요.</div>`
+      : '';
+    el.innerHTML = `
+      <div class="weapon-box">
+        <div class="wname">${weapon.k} <span style="color:var(--muted);font-weight:400">(${weapon.tier}티어)</span></div>
+        <div class="wtext">${weapon.c || '효과 텍스트 없음'}</div>
+        <div class="wkw">${kwHtml}</div>
+        ${redefHtml}
+      </div>`;
+  }
+
+  function doWeaponSearch(q) {
+    const results = document.getElementById('weaponResults');
+    if (!q.trim()) { results.style.display = 'none'; results.innerHTML = ''; return; }
+    const ql = q.trim().toLowerCase();
+    const hits = WEAPONS.filter(w => (w.k || '').includes(q.trim()) || (w.v || '').toLowerCase().includes(ql)).slice(0, 25);
+    results.style.display = 'block';
+    results.innerHTML = hits.length === 0 ? '<div>검색 결과 없음</div>' : hits.map(w => `<div data-v="${w.v}"><span>${w.k}</span><span class="tier">${w.tier}티어</span></div>`).join('');
+    results.querySelectorAll('div[data-v]').forEach(row => row.addEventListener('click', () => {
+      weapon = weaponByValue.get(row.dataset.v);
+      renderWeaponBox(); renderCandidates();
+      document.getElementById('weaponSearch').value = ''; results.style.display = 'none';
+    }));
+  }
+
+  // ---------- 핵심 아이템(앵커) ----------
+  function renderAnchorChips() {
+    const el = document.getElementById('anchorChips');
+    if (anchors.length === 0) { el.innerHTML = ''; return; }
+    el.innerHTML = anchors.map((a, i) => `<span class="anchor-chip">${a.k}<button data-i="${i}">✕</button></span>`).join('');
+    el.querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
+      anchors.splice(Number(btn.dataset.i), 1);
+      renderAnchorChips(); renderBuildTags(); renderCandidates();
+    }));
+  }
+
+  function doAnchorSearch(q) {
+    const results = document.getElementById('anchorResults');
+    if (!q.trim()) { results.style.display = 'none'; results.innerHTML = ''; return; }
+    const ql = q.trim().toLowerCase();
+    const hits = ARTIFACTS.filter(a => (a.k || '').includes(q.trim()) || (a.v || '').toLowerCase().includes(ql)).slice(0, 25);
+    results.style.display = 'block';
+    results.innerHTML = hits.length === 0 ? '<div>검색 결과 없음</div>' : hits.map(a => `<div data-v="${a.v}"><span>${a.k}</span><span class="tier">${a.t}</span></div>`).join('');
+    results.querySelectorAll('div[data-v]').forEach(row => row.addEventListener('click', () => {
+      const def = byValue.get(row.dataset.v);
+      if (def && !anchors.some(x => x.v === def.v)) anchors.push(def);
+      renderAnchorChips(); renderBuildTags(); renderCandidates();
+      document.getElementById('anchorSearch').value = ''; results.style.display = 'none';
+    }));
+  }
+
+  // ---------- 무기 호환성 점검 (별도 단계, 이번 세션에 신규 추가) ----------
+  // 콤보 태그(엑스트리움 세트) 겹침만으로는 "이 아이템이 지금 무기에서 실제로 작동하는가"를
+  // 판단할 수 없다 (예: 교만의 금관은 '일반 공격 마지막 연격'에 의존하는데, 화약초 연성처럼
+  // 일반 공격 자체를 다른 판정으로 바꿔버리는 무기에서는 조건이 성립하지 않을 수 있음).
+  // 그래서 "점수에 섞인 캡션 한 줄"이 아니라, 아이템의 키워드 하나하나를 무기의 kw(제공)/
+  // redef(재정의·제거) 목록과 대조해서 충돌/시너지/무관을 따로 보여주는 전용 점검 단계를 둔다.
+  function checkCompatibility(def) {
+    const itemKw = def.kw || [];
+    if (!weapon || itemKw.length === 0) {
+      return { verdicts: itemKw.map(k => ({ kw: k, status: 'neutral' })), hasConflict: false, conflictKw: [] };
+    }
+    const verdicts = itemKw.map(k => {
+      if ((weapon.redef || []).includes(k)) return { kw: k, status: 'conflict' };
+      if ((weapon.kw || []).includes(k)) return { kw: k, status: 'synergy' };
+      return { kw: k, status: 'neutral' };
+    });
+    const conflictKw = verdicts.filter(v => v.status === 'conflict').map(v => v.kw);
+    return { verdicts, hasConflict: conflictKw.length > 0, conflictKw };
+  }
+
+  function renderCompatBlock(compat, kind) {
+    if (kind !== 'artifact') return '';
+    if (!compat.verdicts.length) return '';
+    const rows = compat.verdicts.map(v => {
+      const label = v.status === 'conflict' ? '⚠ 충돌 의심' : v.status === 'synergy' ? '✓ 무기가 지원' : '무기 언급 없음';
+      return `<div class="compat-row"><span class="kwname">${KW_KO[v.kw] || v.kw}</span><span class="verdict ${v.status}">${label}</span></div>`;
+    }).join('');
+    return `<div class="compat-block"><div class="compat-head">무기 호환성 점검${weapon ? '' : ' (무기 미선택 — 전부 무관 처리)'}</div><div class="compat-rows">${rows}</div></div>`;
+  }
+
+  // ---------- 후보 점수 ----------
+  function scoreArtifactCandidate(def) {
+    const counts = buildTagCounts();
+    let synergy = 0; const hitTags = [];
+    for (const tag of (def.s || [])) {
+      const c = counts[tag] || 0;
+      const pinBonus = pinnedTags.has(tag) ? 3 : 0;
+      if (c > 0 || pinBonus > 0) hitTags.push(tag);
+      synergy += c + pinBonus;
+    }
+    const tierRank = TIER_RANK[def.t] ?? 1;
+    const base = tierRank * 1.4 + Math.min(def.l || 0, 8) * 0.5;
+
+    const compat = checkCompatibility(def);
+    let weaponBonus = 0; const kwHits = [];
+    if (weapon) {
+      for (const v of compat.verdicts) {
+        if (v.status === 'synergy') { kwHits.push(v.kw); weaponBonus += 1.5; }
+      }
+      if (compat.hasConflict) {
+        weaponBonus = Math.min(weaponBonus, 0.5); // 충돌 의심되면 무기 가점은 거의 주지 않음
+      }
+    }
+    const caution = compat.hasConflict
+      ? `⚠ 선택한 무기가 ${compat.conflictKw.map(k => KW_KO[k] || k).join(', ')} 방식을 바꾸거나 없앱니다 — 아래 "무기 호환성 점검"에서 어느 조건이 걸리는지 확인하세요.`
+      : null;
+
+    const total = synergy * 3 + base + weaponBonus;
+    return { total, hitTags, synergy, base, kwHits, caution, compat };
+  }
+
+  function scoreSlabCandidate(def) {
+    const tierRank = TIER_RANK[def.t] ?? 1;
+    const total = tierRank * 3 + (def.r ? 1 : 0);
+    return { total, hitTags: [], synergy: 0, base: total, kwHits: [], caution: null, compat: { verdicts: [], hasConflict: false, conflictKw: [] } };
+  }
+
+  function gradeFor(total, maxPossible) {
+    const pct = maxPossible > 0 ? total / maxPossible : 0;
+    if (pct >= 0.85) return 'S'; if (pct >= 0.62) return 'A'; if (pct >= 0.4) return 'B'; if (pct >= 0.2) return 'C'; return 'D';
+  }
+
+  const GRADE_ORDER = ['S', 'A', 'B', 'C', 'D'];
+  // 무기 충돌 경고(caution)가 붙은 후보는 다른 후보가 적어서 상대 점수가 높게 나와도
+  // S/A처럼 "강추" 느낌을 주면 안 되므로 등급을 C 이하로 강제 하향한다.
+  function capGradeForCaution(grade, hasCaution) {
+    if (!hasCaution) return grade;
+    const gi = GRADE_ORDER.indexOf(grade), ci = GRADE_ORDER.indexOf('C');
+    return gi < ci ? 'C' : grade;
+  }
+
+  function renderCandidates() {
+    const el = document.getElementById('cands');
+    if (candidates.length === 0) { el.innerHTML = '<div class="empty-hint">위 검색창에서 지금 화면에 뜬 후보를 추가해보세요.</div>'; return; }
+    const scored = candidates.map(c => ({ ...c, ...(c.kind === 'artifact' ? scoreArtifactCandidate(c.def) : scoreSlabCandidate(c.def)) }));
+    const maxTotal = Math.max(...scored.map(s => s.total), 1);
+    scored.sort((a, b) => b.total - a.total);
+
+    el.innerHTML = scored.map((c, i) => {
+      const grade = capGradeForCaution(gradeFor(c.total, maxTotal * 1.05), !!c.caution);
+      const def = c.def;
+      const tagsHtml = c.kind === 'artifact'
+        ? (def.s || []).map(t => `<span class="tag ${c.hitTags.includes(t) ? 'hit' : ''}">${TAG_KO[t] || t}</span>`).join('')
+          + (c.kwHits || []).map(k => `<span class="tag kw">${KW_KO[k] || k}</span>`).join('')
+        : '<span class="tag">패턴 정보 없음</span>';
+      const whyParts = [];
+      if (c.synergy > 0) whyParts.push(`빌드/앵커의 ${c.hitTags.map(t => TAG_KO[t] || t).join(', ')} 태그와 겹침`);
+      if (c.kwHits && c.kwHits.length) whyParts.push(`무기 텍스트와 ${c.kwHits.map(k => KW_KO[k] || k).join(', ')} 키워드 겹침`);
+      const why = whyParts.length ? whyParts.join(' · ') + '.' : (c.kind === 'artifact' ? '지금 방향과 겹치는 게 없습니다 — 새 방향을 열거나 범용 전력으로만 활용.' : '석판은 희귀도 기준으로만 비교했습니다.');
+      const pct = Math.round(Math.max(5, c.total / maxTotal * 100));
+      const inBasket = basket.some(b => b.kind === c.kind && b.def.v === def.v);
+      return `
+        <div class="cand">
+          <span class="grade ${grade}">${grade}</span>
+          <h3>${def.k || def.v}</h3>
+          <div class="tier-lbl">${def.t || '?'}${c.kind === 'artifact' ? ' · 레벨 ' + (def.l ?? '?') : (def.r ? ' · 회전가능' : ' · 회전불가')}</div>
+          <div class="score-bar"><i style="width:${pct}%"></i></div>
+          ${c.caution ? `<div class="caution">${c.caution}</div>` : ''}
+          ${renderCompatBlock(c.compat, c.kind)}
+          <div class="why">${why}</div>
+          <div class="tags">${tagsHtml}</div>
+          <div class="btnrow">
+            <button class="small remove" data-i="${i}">후보에서 빼기</button>
+            <button class="small basket-add" data-i="${i}" ${inBasket ? 'disabled' : ''}>${inBasket ? '담김' : '배치 목록에 담기'}</button>
+          </div>
+        </div>`;
+    }).join('');
+
+    el.querySelectorAll('.remove').forEach(btn => btn.addEventListener('click', () => {
+      const target = scored[Number(btn.dataset.i)];
+      candidates = candidates.filter(c => !(c.kind === target.kind && c.def.v === target.def.v));
+      renderCandidates();
+    }));
+    el.querySelectorAll('.basket-add').forEach(btn => btn.addEventListener('click', () => {
+      const target = scored[Number(btn.dataset.i)];
+      if (!basket.some(b => b.kind === target.kind && b.def.v === target.def.v)) basket.push({ kind: target.kind, def: target.def });
+      renderCandidates(); renderBasket();
+    }));
+  }
+
+  function doSearch(q) {
+    const pool = candidateKind === 'artifact' ? ARTIFACTS : SLABS;
+    const results = document.getElementById('searchResults');
+    if (!q.trim()) { results.style.display = 'none'; results.innerHTML = ''; return; }
+    const ql = q.trim().toLowerCase();
+    const hits = pool.filter(d => (d.k || '').includes(q.trim()) || (d.v || '').toLowerCase().includes(ql)).slice(0, 25);
+    results.style.display = 'block';
+    results.innerHTML = hits.length === 0 ? '<div>검색 결과 없음</div>' : hits.map(d => `<div data-v="${d.v}"><span>${d.k}</span><span class="tier">${d.t}</span></div>`).join('');
+    results.querySelectorAll('div[data-v]').forEach(row => row.addEventListener('click', () => {
+      const v = row.dataset.v;
+      const def = candidateKind === 'artifact' ? byValue.get(v) : slabByValue.get(v);
+      if (!def) return;
+      if (!candidates.some(c => c.kind === candidateKind && c.def.v === v)) { candidates.push({ kind: candidateKind, def }); renderCandidates(); }
+      document.getElementById('searchBox').value = ''; results.style.display = 'none';
+    }));
+  }
+
+  // ⚠ 아래부터 (renderBasket, runPlacement, renderPlacementGrid 의 구현 본문)은 복구 안 됨 — GAPS.md 참고.
+  // renderBasket()은 basket 배열을 칩으로 그리고, 라이브 인벤토리에 없는 담은 아이템은
+  // .basket-chip.missing 클래스로 경고 표시했었음 (이름만 기억나고 본문은 못 가져옴).
+  // runPlacement()은 includeLiveInv 체크 여부에 따라 보드를 만들고 SephEngine.optimize()를 불러
+  // basket + (옵션) 현재 인벤토리를 배치, renderPlacementGrid()로 결과를 그렸음.
+
+  // ---------- 석판 데이터 출처/신뢰도 안내 (이번 세션에 추가, 정적 문구 대신 placement_db.json 메타데이터로 생성) ----------
+  function renderSlabConfidenceNote() {
+    const el = document.getElementById('slabConfidenceNote');
+    const scraped = PLACEMENT.slabs.filter(s => s.confidence === 'wiki_scraped');
+    const estimated = PLACEMENT.slabs.filter(s => s.confidence !== 'wiki_scraped');
+    const specialUnknown = PLACEMENT.slabs.filter(s => (s.specialCells || []).length > 0);
+    const meta = PLACEMENT._slabMeta;
+    let html = `석판 ${scraped.length}/${PLACEMENT.slabs.length}개는 ${meta ? meta.scrapedFrom : '위키'} 툴팁에서 직접 긁어온 실측 효과 패턴입니다(confidence: wiki_scraped).`;
+    if (estimated.length > 0) {
+      html += ` 나머지 ${estimated.length}개(${estimated.map(s => s.name).join(', ')})는 위키 목록에서 못 찾아 기존 추정치를 그대로 유지했으니 믿지 마세요.`;
+    }
+    if (specialUnknown.length > 0) {
+      html += ` ${specialUnknown.map(s => s.name).join(', ')}는 보라색 표시 칸이 있는데 텍스트/아이콘이 전혀 없어 무슨 효과인지 위키만으로는 알 수 없습니다 — 레벨 계산에서 제외했으니 실제 게임에서 직접 확인하세요.`;
+    }
+    if (meta && meta.limitations) {
+      html += ' ' + meta.limitations.join(' ');
+    }
+    el.innerHTML = '⚠ ' + html;
+  }
+  renderSlabConfidenceNote();
+
+  // ⚠ 이벤트 리스너 등록부(demoBtn/refreshBtn/kindArtifact/kindSlab/computeBtn)와
+  // renderWeaponBox(); renderAnchorChips(); renderCandidates(); renderBasket();
+  // tryConnect(); setInterval(tryConnect, 2000); 호출부는 본문 흐름만 알고 있고 정확한 코드는 복구 안 됨.
+})();
+</script>
