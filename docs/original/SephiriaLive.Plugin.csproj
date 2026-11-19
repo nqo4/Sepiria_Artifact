@@ -1,0 +1,61 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <!-- 실제 배포 타겟: BepInEx 5.x(구버전 Mono 런타임)가 로드하는 플러그인 DLL.
+         오프라인 빌드용 NETStandard.Library.Ref 직접 참조는 Core.csproj와 동일하게 처리. -->
+    <DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
+    <Nullable>disable</Nullable>
+    <LangVersion>9.0</LangVersion>
+    <AssemblyName>SephiriaLive</AssemblyName>
+    <!-- 이 스텁으로 빌드한 결과물은 "컴파일 통과 확인용"이다.
+         실제 게임에 넣을 최종 DLL은 사용자 PC의 Sephiria_Data/Managed/UnityEngine*.dll 을
+         레퍼런스로 바꿔서 다시 빌드해야 한다 (UnityStub/Stub.cs 상단 주석 참고). -->
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <!-- libs/BepInEx.dll은 구버전 .NET Framework(3.5, mscorlib v2.0.0.0) 어셈블리라서
+         System.Attribute 등 기본 타입을 "mscorlib"/"System"/"System.Core"/"System.Runtime" 등
+         여러 개의 개별 어셈블리 이름으로 직접 참조한다. netstandard.dll 레퍼런스 어셈블리 하나로는
+         그 이름들이 안 채워져서 CS0012가 하나씩 튀어나온다(mscorlib 추가 -> System.Runtime 요구 -> ...).
+         하나씩 땜질하는 대신, .NET SDK가 이미 로컬에 들고 있는 Microsoft.NETCore.App.Ref 팩 전체
+         (순수 "레퍼런스/타입 포워딩 전용" DLL들, 실제 구현 없음)를 통째로 참조에 넣어 한 번에 해결한다 —
+         네트워크 전혀 불필요, 실제 실행에는 전혀 쓰이지 않음(Private=false), 컴파일러 이름 해소 전용. -->
+    <SephiriaRefPackDir>$(NetCoreTargetingPackRoot)/Microsoft.NETCore.App.Ref/$(BundledNETCoreAppPackageVersion)/ref/net8.0</SephiriaRefPackDir>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(DisableImplicitFrameworkReferences)'=='true'">
+    <ReferencePath Include="$(SephiriaRefPackDir)/*.dll" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Core\SephiriaLive.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- 추천 UI 동반 HTML. 게임 폴더에선 DLL과 같은 폴더에 companion/recommend.html 로 떨어져야
+         SephiriaLivePlugin의 "/" 라우트가 디스크에서 그대로 읽어 서빙할 수 있다. -->
+    <Content Include="companion\recommend.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- 실제 BepInEx/Harmony 바이너리 (사용자가 올려준 풀패키지 BepInEx/core 폴더에서 그대로 복사해온 것) -->
+    <Reference Include="BepInEx">
+      <HintPath>..\libs\BepInEx.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="0Harmony">
+      <HintPath>..\libs\0Harmony.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <!-- UnityEngine 자리에 쓰는 스텁. 실제 게임 PC에서 재빌드할 때
+         이 Reference를 Sephiria_Data/Managed/UnityEngine.dll(및 필요시 UnityEngine.CoreModule.dll)로 교체. -->
+    <Reference Include="UnityEngine">
+      <HintPath>..\UnityStub\bin\Debug\netstandard2.0\UnityEngine.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+
+</Project>
