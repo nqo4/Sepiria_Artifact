@@ -12,7 +12,8 @@
 | `Core/` (JSON, HTTP 서버, 리플렉션, 인벤토리 읽기/쓰기) | ✅ 완성, 테스트 59개 통과, GitHub 자동 테스트 통과 |
 | `Plugin/` (BepInEx 진입점) | ✅ 게임 안에서 로드·동작 확인 |
 | 실게임 연동 (`/health` → `/inv` → `/apply`) | ✅ 이동·회전·레벨 재계산 확인 (CLAUDE.md "실게임 검증 결과") |
-| 위키 데이터 (아티팩트 276·무기 161·석판 62) | ❌ 유실, 다시 가져와야 함 |
+| 석판 데이터 | ✅ 게임에서 직접 읽음 (`/tablets` → `data/slabs_game.json`, 71개) |
+| 위키 데이터 (아티팩트 276·무기 161) | ❌ 유실, 다시 가져와야 함 |
 | 배치 엔진 `engine.js` | ❌ 유실, 다시 만들어야 함 |
 | 추천 페이지 `recommend_template.html` | ⚠ 일부만 남음 (CSS·점수 계산 O, 상태/폴링/배치 렌더링 X) |
 
@@ -178,13 +179,15 @@ $t.Methods | Where-Object Name -match 'Swap|Rotate' | ForEach-Object { $_.Name }
 - 게임이 새 Input System만 쓰면 F10 단축키가 동작하지 않음 (로그에 경고 1번 남기고 꺼짐 — 정상).
 - 클라이언트로 남의 방에 들어간 경우 `Swap`이 `CmdSwap`(서버 요청)이 되어 결과가 늦게 반영될 수 있음. 싱글(호스트)에서 먼저 테스트.
 
-### 2단계 — 석판 효과를 게임에서 직접 읽기 (위키보다 정확) ← 지금 여기
+### 2단계 — 석판 효과를 게임에서 직접 읽기 (위키보다 정확) ✅ 완료 (2026-11-19)
+
+결과: `/tablets` 라우트, `data/slabs_game.json`, `python scripts/build_placement_from_game.py` → `placement_db.json` 재생성. 위키 비교 결과는 `GAPS.md`.
 
 - `StoneTablet.query` / `GetRotatedQuery` / `ParseQuery` 를 리플렉션으로 호출해서 석판별 실제 효과 범위를 뽑는 `/tablets` 디버그 라우트 추가.
 - 결과를 `data/slabs_effectpattern_wiki.json`과 비교 → 특히 GAPS.md의 의심 항목(분배·헌정·배수진·방어수·기적의 회전 여부, 5×5 밖 범위 석판, 고양·이음 보라색 칸).
 - 맞으면 `placement_db.json`을 게임 데이터 기반으로 다시 생성하고 `confidence: game_data` 같은 새 등급 부여.
 
-### 3단계 — 위키 데이터 다시 가져오기
+### 3단계 — 위키 데이터 다시 가져오기 ← 지금 여기
 
 - 출처: `https://www.sephiria.wiki/artifact`, `/weapon`, `/large`.
 - 방법: Next.js RSC flight 페이로드 — 페이지 HTML의 `self.__next_f.push([1,"..."])` 조각들을 이어 붙여 JSON 배열 부분을 파싱.
@@ -218,7 +221,7 @@ $t.Methods | Where-Object Name -match 'Swap|Rotate' | ForEach-Object { $_.Name }
 
 ### 그 밖에
 
-- `scripts/build_slab_effectpattern.py`, `update_placement_db.py`는 유실된 `placement_db_OLD.json`을 입력으로 받아서 지금은 실행 불가. 2단계를 하면 필요 없어짐.
+- `scripts/build_slab_effectpattern.py`, `update_placement_db.py`는 유실된 `placement_db_OLD.json`을 입력으로 받는 구 스크립트 — 2단계 완료로 필요 없음. 석판 DB는 `build_placement_from_game.py`로 만든다.
 - 자동 스캔 루프(1초마다 스냅샷 캐시)는 아직 없음 — `/inv` 요청 때마다 메인 스레드에서 새로 읽음.
 
 ---

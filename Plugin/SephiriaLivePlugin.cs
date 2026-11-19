@@ -86,6 +86,9 @@ namespace SephiriaLive.Plugin
             server.Route("GET", "/debug", ctx => RunOnMainThread(() => BuildSnapshotResponse(true)));
             server.Route("GET", "/inv", ctx => RunOnMainThread(() => BuildSnapshotResponse(false)));
 
+            // /tablets: 석판 효과 범위 정의(query)를 게임에서 직접 읽음 — 가방의 석판 + 로드된 전체 석판 카탈로그.
+            server.Route("GET", "/tablets", ctx => RunOnMainThread(BuildTabletsResponse));
+
             server.Route("GET", "/", ctx => ServeCompanionPage());
             server.Route("GET", "/recommend.html", ctx => ServeCompanionPage());
 
@@ -180,6 +183,44 @@ namespace SephiriaLive.Plugin
             if (inv != null) _cachedInventoryInstance = inv; // /apply가 재사용
             snapshot["plugin"] = new JObj { ["version"] = PluginVersion, ["port"] = _port };
             return HttpResponseData.Json(snapshot);
+        }
+
+        HttpResponseData BuildTabletsResponse()
+        {
+            var errors = new List<object>();
+            var res = new JObj { ["ok"] = true };
+
+            InventoryReader.BuildSnapshot(out var inv);
+            if (inv != null) { _cachedInventoryInstance = inv; res["inventory"] = TabletReader.DescribeInventory(inv); }
+            else errors.Add("인벤토리 없음 — 가방 석판은 생략");
+
+            // ItemEntity(ScriptableObject).resourcePrefab 에 StoneTablet 컴포넌트가 붙은 것 = 석판 아이템 정의
+            var entityType = ReflectionFinder.FindTypeByName("ItemEntity");
+            var tabletType = ReflectionFinder.FindTypeByName("StoneTablet");
+            var catalog = new List<object>();
+            if (entityType == null || tabletType == null) errors.Add("ItemEntity/StoneTablet 타입을 찾지 못했습니다.");
+            else
+            {
+                foreach (var entity in Resources.FindObjectsOfTypeAll(entityType))
+                {
+                    try
+                    {
+                        if (!(ReflectionFinder.GetMember(entity, "resourcePrefab") is GameObject prefab) || prefab == null) continue;
+                        var tablet = prefab.GetComponent(tabletType);
+                        if (tablet == null) continue;
+                        var o = TabletReader.DescribeEntity(entity, tablet);
+                        // 게임 해석기로 칸 계산: 9×9 가상 보드 중앙(4,4), 회전 0. 보드 기준 키워드는 이 크기 기준.
+                        o["cells"] = TabletReader.ParseCells(tablet, o["query"] as string, 9, 9, 4, 4, 0, out var perr);
+                        if (perr != null) o["parseError"] = perr;
+                        catalog.Add(o);
+                    }
+                    catch (Exception ex) { errors.Add($"{entity.name}: {ex.Message}"); }
+                }
+            }
+            res["catalog"] = catalog.OrderBy(o => MiniJson.AsInt(((JObj)o)["entityId"])).ToList();
+            res["catalogCount"] = catalog.Count;
+            res["errors"] = errors;
+            return HttpResponseData.Json(res);
         }
 
         void Update()

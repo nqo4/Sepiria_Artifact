@@ -37,6 +37,7 @@ dotnet build Plugin -c Release -p:SephiriaGameDir="D:\Games\Sephiria"   # 게임
 | `GET /health` | 플러그인 동작 확인 (게임 상태 접근 없음) |
 | `GET /debug` | 인벤토리 스냅샷 + 멤버 덤프 (진단용) |
 | `GET /inv` | 인벤토리 스냅샷 (폴링용) |
+| `GET /tablets` | 석판 효과 범위(query, 게임 ParseQuery 칸) — 가방 석판 + 전체 석판 카탈로그 |
 | `POST /apply` | `{"placements":[{"fromX","fromY","toX","toY","rotation"?}]}` 배치 적용 |
 | `GET /` | 동반 추천 페이지 |
 

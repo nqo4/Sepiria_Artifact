@@ -13,25 +13,29 @@
 - **실게임 첫 연동 검증 완료** — `/health`·`/inv`·`/apply` 이동·회전 모두 화면 반영 확인. 상세는 `CLAUDE.md` "실게임 검증 결과".
   - 회전 변환 `(4 - r) % 4` 맞음(엔진 1 = 시계 방향).
   - `StoneTablet.Rotate()` 단독은 레벨 재계산이 안 됨 → `DoClickAction`(Permission으로 감싼 게임 클릭 경로)으로 변경해 해결.
+- **석판 효과를 게임에서 직접 읽기 완료** — `/tablets` 라우트(`Core/TabletReader.cs`). 석판 71개의 `query`와 게임 `ParseQuery` 칸 → `data/slabs_game.json`.
+  - `Plugin/companion/placement_db.json`의 slabs를 게임 데이터로 재생성(`scripts/build_placement_from_game.py`, 68개, `confidence: game_data`).
+  - 위키 대비: 45개 일치, 11개는 위키가 5×5까지만 기록(HORIZONTAL/VERTICAL/대각선 줄/UPUPUP — 큰 보드에서도 줄 전체 적용),
+    차양·경계는 보드 맨 위/아래 줄 기준(TOP/BOTTOM), 고양·이음·환대의 보라색 칸 = `IGNORECRITERIA`(조건 무시), **착취는 위키가 90° 돌아가 있었음**.
+  - 회전 가능 여부: 기적/헌정/분배/배수진/방어수 모두 게임 프리팹 `isRotatable = true`(위키 false는 오류). 던전이 석판별로 덮어쓸 수 있음(`DungeonManager.overrideTabletRotatable`).
+  - 게임에만 있는 석판: 억압, 생장, 반향, 지옥, 천국, 저주(+내부용 3개 제외). 석판은 모두 한 칸 차지(`shape: [[0,0]]`).
+  - `placement_db_OLD.json` 유실 문제 해소 — 구 스크립트(`build_slab_effectpattern.py`, `update_placement_db.py`)는 더 이상 필요 없음.
 
 ## ❌ 아직 남음 (우선순위 순)
 
-1. **석판 효과를 게임에서 직접 읽기** — `/tablets` 라우트(`StoneTablet.query` / `GetRotatedQuery`)로 위키 패턴과 비교.
-   - 게임에 `AutoArrangeInventoryForBestCharmLevels(maxIterations, allowTabletRotation)` 가 이미 있음 — 엔진 결과 비교 대상.
-   - 다른 사람 방(클라이언트)에서의 `CmdSwap`/`CmdDoClickAction` 동작은 미확인.
-2. **위키 원본 데이터 재스크래핑** — `data/artifacts_sephiria_wiki.json`(276), `weapons_sephiria_wiki.json`(161), `slabs_sephiria_wiki.json`(62).
-   출처 `https://www.sephiria.wiki/artifact`, `/weapon`, `/large` — Next.js RSC flight 페이로드(`self.__next_f.push`) 추출 방식.
+1. **위키 원본 데이터 재스크래핑 (아티팩트·무기)** — `data/artifacts_sephiria_wiki.json`(276), `weapons_sephiria_wiki.json`(161).
+   출처 `https://www.sephiria.wiki/artifact`, `/weapon` — Next.js RSC flight 페이로드(`self.__next_f.push`) 추출 방식.
    이게 있어야 `scripts/prep_data_v2.py` → `Plugin/companion/data.json` 생성 가능.
-3. **`Plugin/companion/engine.js`** (시뮬레이티드 어닐링 배치 엔진) 재작성.
-4. **`recommend_template.html` 누락 부분** — 전역 상태 선언(`weapon, anchors, candidates, basket, pinnedTags, demoMode, candidateKind`), 라이브 폴링(`/inv`), `runPlacement`, `renderPlacementGrid`, `renderBasket`.
-5. **`placement_db_OLD.json` 유실** — `scripts/build_slab_effectpattern.py`, `update_placement_db.py` 는 이 파일을 입력으로 받으므로 그대로는 실행 불가. 현재 `Plugin/companion/placement_db.json` 이 최종 산출물로 남아 있음.
+   대안: 석판처럼 게임 `ItemEntity`(Name, rarity, categories 등)를 플러그인에서 덤프.
+2. **`Plugin/companion/engine.js`** (시뮬레이티드 어닐링 배치 엔진) 재작성.
+   - `boardEffects`(HORIZONTAL, VERTICAL, TOP, BOTTOM, LEFTEND, RIGHTEND, *_RISING/*_FALLING, CHECKERBOARD/2)는 보드 크기 기준으로 계산해야 함 — 정확한 칸은 `/tablets`의 `cells`(게임 ParseQuery) 로 검증.
+   - 석판도 다른 석판 효과로 레벨을 받음. 조건(`conditionQuery`: `TOP PLACED` 등)이 있는 석판 5개.
+   - 게임에 `AutoArrangeInventoryForBestCharmLevels(maxIterations, allowTabletRotation)` 가 이미 있음 — 엔진 결과 비교 대상.
+3. **`recommend_template.html` 누락 부분** — 전역 상태 선언(`weapon, anchors, candidates, basket, pinnedTags, demoMode, candidateKind`), 라이브 폴링(`/inv`), `runPlacement`, `renderPlacementGrid`, `renderBasket`.
 
 ## ⚠ 데이터 확인 필요
 
-- 배수진은 실게임 `isRotatable = true` 확인(2026-11-19). 나머지 4개는 미확인.
-- `mysticPositions`(GridInventory의 SyncList<ItemPosition>)가 고양·이음 보라색 칸과 관련 있을 가능성 — 미확인.
-- 분배/헌정/배수진/방어수/기적 5개 석판의 회전 가능 여부가 이전 검증 결과와 다름(재타이핑 오타 의심) → `sephiria.wiki/large` 재확인.
-  실게임의 `StoneTablet.isRotatable` 값을 `/inv`의 `rotatable`로 바로 볼 수 있으니 그걸로 교차검증하는 게 가장 확실.
-- 석판 "저주": 위키 62개 목록에 없음. "고양"(home_town), "이음"(connection): 보라색 특수 칸, 의미 불명.
-- 5×5 윈도우 밖 효과(정의/기반/동시성/반항/차양/경계)가 큰 보드에서도 적용되는지 미확인.
-  실게임 `StoneTablet.query` / `GetRotatedQuery` / `ParseQuery` 에 효과 범위 정의가 문자열로 있음 — 위키 대신 이걸 읽으면 정확한 패턴을 얻을 수 있을 가능성.
+- 다른 사람 방(클라이언트)에서의 `CmdSwap`/`CmdDoClickAction` 동작은 미확인.
+- `mysticPositions`(GridInventory의 SyncList<ItemPosition>)의 의미 — 미확인.
+- 보드 키워드 중 `X_PLUS/X_MINUS/Y_PLUS/Y_MINUS`, `KNIGHT*_INVERT`, `IDX/RIDX`는 현재 석판 목록에서 거의/전혀 안 쓰임. 쓰이면 ParseQuery로 확인.
+- `MUL/2`(레벨 배수)·`X`(비활성) 값이 레벨 계산에 정확히 어떻게 반영되는지(순서, 중첩)는 미확인.

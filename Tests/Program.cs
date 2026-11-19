@@ -232,6 +232,27 @@ void Check(string name, bool ok, string detail = "")
     Check("같은 목표 칸 중복 명령은 거부", !result.Ok && result.Moved == 0);
 }
 
+// ---------- [추가] TabletReader: 석판 query / 회전 query / 적용 범위 ----------
+{
+    var t = new FakeStoneTablet { xIdx = 2, yIdx = 0, rotation = 1, query = "Q" };
+    t.EffectRange.Add(new FakeEffectData { position = new FakePos(0, 0), effectType = FakeEffectType.IncreaseConstLevel, levelParam = 1 });
+    var o = TabletReader.Describe(t);
+    var rotated = MiniJson.AsList(o["rotatedQueries"]);
+    var eff = MiniJson.AsList(o["effectRange"]).Select(MiniJson.AsObj).ToList();
+    Check("TabletReader: query/좌표/회전", (string)o["query"] == "Q" && (int)o["x"] == 2 && (int)o["rotation"] == 1, MiniJson.Write(o));
+    Check("TabletReader: GetRotatedQuery 0~3", rotated.Count == 4 && (string)rotated[3] == "Q@3", MiniJson.Write(rotated));
+    Check("TabletReader: EffectRange 칸·종류·레벨", eff.Count == 1 && (int)eff[0]["x"] == 0 && (string)eff[0]["type"] == "IncreaseConstLevel" && (int)eff[0]["level"] == 1, MiniJson.Write(eff));
+
+    var cells = TabletReader.ParseCells(t, "UP 1", 6, 5, 2, 2, 0, out var perr).Select(MiniJson.AsObj).ToList();
+    Check("TabletReader: ParseQuery → 상대 좌표", perr == null && cells.Count == 1 && (int)cells[0]["dx"] == 0 && (int)cells[0]["dy"] == -1 && (string)cells[0]["value"] == "1", perr + MiniJson.Write(cells));
+
+    var inv = new FakeGameInventory();
+    inv.Put(3, 1, "B", isTablet: true);
+    inv.Put(1, 0, "A", isTablet: true);
+    var list = TabletReader.DescribeInventory(inv).Select(MiniJson.AsObj).ToList();
+    Check("TabletReader: 인벤토리 석판을 위치 순서로", list.Count == 2 && (int)list[0]["x"] == 1 && (int)list[1]["x"] == 3, MiniJson.Write(list));
+}
+
 // ---------- [추가] MiniHttpServer: 외부 Origin(CSRF) 차단 ----------
 {
     var server = new MiniHttpServer(48766);
@@ -308,6 +329,30 @@ class FakeStoneTablet
     public bool isRotatable = true;
     public sbyte xIdx, yIdx;
     public void Rotate() { if (!isRotatable) return; rotation = (rotation + 1) % 4; }
+    public string query, conditionQuery;
+    public List<FakeEffectData> EffectRange = new();
+    public string GetRotatedQuery(string q, int r) => r == 0 ? q : $"{q}@{r}";
+    // 실제: static List<AdditionMetadata> ParseQuery(string, int w, int h, int storage, ItemPosition origin, int rotation, out List<HumanReadableAddition>)
+    public static List<FakeMeta> ParseQuery(string q, int w, int h, int storage, FakePos origin, int rotation, out List<string> human)
+    {
+        human = new List<string>();
+        var parts = q.Split(' ');
+        return parts[0] == "UP" ? new List<FakeMeta> { new() { position = new FakePos(origin.x, origin.y - 1), value = parts[1] } } : new List<FakeMeta>();
+    }
+}
+
+struct FakeMeta
+{
+    public FakePos position;
+    public string value;
+}
+
+enum FakeEffectType { None, IncreaseConstLevel }
+struct FakeEffectData
+{
+    public FakePos position;
+    public FakeEffectType effectType;
+    public int levelParam;
 }
 
 class FakeItem

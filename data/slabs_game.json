@@ -1,0 +1,3888 @@
+{
+ "_meta": {
+  "source": "SephiriaLive /tablets (StoneTablet prefab query + StoneTablet.ParseQuery)",
+  "board": "9x9 virtual board, origin (4,4), rotation 0; cells are dx/dy relative to origin; xWorld/yWorld = board-absolute row/col",
+  "rotation": "game rotation r: UP->LEFT for r=1 (screen counterclockwise); engine CW 1 = game 3",
+  "captured": "2026-11-19",
+  "confidence": "game_data"
+ },
+ "tablets": [
+  {
+   "entityId": 2000,
+   "name": "억압",
+   "assetName": "2000_Repression",
+   "rarity": "Uncommon",
+   "rotatable": true,
+   "query": "RIGHT X",
+   "conditionQuery": "",
+   "rotatedQueries": [
+    "RIGHT X",
+    "UP X",
+    "LEFT X",
+    "DOWN X"
+   ],
+   "cells": [
+    {
+     "dx": 1,
+     "dy": 0,
+     "value": "X"
+    }
+   ]
+  },
+  {
+   "entityId": 2001,
+   "name": "희망",
+   "assetName": "2001_Hope",
+   "rarity": "Common",
+   "rotatable": true,
+   "query": "RIGHT 1",
+   "conditionQuery": "",
+   "rotatedQueries": [
+    "RIGHT 1",
+    "UP 1",
+    "LEFT 1",
+    "DOWN 1"
+   ],
+   "cells": [
+    {
+     "dx": 1,
+     "dy": 0,
+     "value": "1"
+    }
+   ]
+  },
+  {
+   "entityId": 2002,
+   "name": "고양",
+   "assetName": "2002_Surge",
+   "rarity": "Uncommon",
+   "rotatable": true,
+   "query": "RIGHT IGNORECRITERIA",
+   "conditionQuery": "",
+   "rotatedQueries": [
+    "RIGHT IGNORECRITERIA",
+    "UP IGNORECRITERIA",
+    "LEFT IGNORECRITERIA",
+    "DOWN IGNORECRITERIA"
+   ],
+   "cells": [
+    {
+     "dx": 1,
+     "dy": 0,
+     "value": "IGNORECRITERIA"
+    }
+   ]
+  },
+  {
+   "entityId": 2003,
+   "name": "기적",
+   "assetName": "2003_Miracle",
+   "rarity": "Legend",
+   "rotatable": true,
+   "query": "HORIZONTAL 1\nVERTICAL 1",
+   "conditionQuery": "",
+   "rotatedQueries": [
+    "HORIZONTAL 1\nVERTICAL 1",
+    "VERTICAL 1\nHORIZONTAL 1",
+    "HORIZONTAL 1\nVERTICAL 1",
+    "VERTICAL 1\nHORIZONTAL 1"
+   ],
+   "cells": [
+    {
+     "dx": -4,
+     "dy": 0,
+     "value": "1"
+    },
+    {
+     "dx": -3,
+     "dy": 0,
+     "value": "1"
+    },
+    {
+     "dx": -2,
+     "dy": 0,
+     "value": "1"
+    },
+    {
+     "dx": -1,
+     "dy": 0,
+     "value": "1"
+    },
+    {
+     "dx": 1,
+     "dy": 0,
+     "value": "1"
+    },
+    {
+     "dx": 2,
+     "dy": 0,
+     "value": "1"
+    },
+    {
+     "dx": 3,
+     "dy": 0,
+     "value": "1"
+    },
+    {
+     "dx": 4,
+     "dy": 0,
+     "value": "1"
+    },
+    {
+     "dx": 0,
+     "dy": -4,
+     "value": "1"
+    },
+    {
+     "dx": 0,
+     "dy": -3,
+     "value": "1"
+    },
+    {
+     "dx": 0,
+     "dy": -2,
+     "value": "1"
+    },
+    {
+     "dx": 0,
+     "dy": -1,
+     "value": "1"
+    },
+    {
+     "dx": 0,
+     "dy": 1,
+     "value": "1"
+    },
+    {
+     "dx": 0,
+     "dy": 2,
+     "value": "1"
+    },
+    {
+     "dx": 0,
+     "dy": 3,
+     "value": "1"
+    },
+    {
+     "dx": 0,
+     "dy": 4,
+     "value": "1"
+    }
+   ]
+  },
+  {
+   "entityId": 2004,
+   "name": "전이",
+   "assetName": "2004_Translate",
+   "rarity": "Uncommon",
+   "rotatable": true,
+   "query": "HORIZONTAL +1\nVERTICAL -1",
+   "conditionQuery": "",
+   "rotatedQueries": [
+    "HORIZONTAL +1\nVERTICAL -1",
+    "VERTICAL +1\nHORIZONTAL -1",
+    "HORIZONTAL +1\nVERTICAL -1",
+    "VERTICAL +1\nHORIZONTAL -1"
+   ],
+   "cells": [
+    {
+     "dx": -4,
+     "dy": 0,
+     "value": "+1"
+    },
+    {
+     "dx": -3,
+     "dy": 0,
+     "value": "+1"
+    },
+    {
+     "dx": -2,
+     "dy": 0,
+     "value": "+1"
+    },
+    {
+     "dx": -1,
+     "dy": 0,
+     "value": "+1"
+    },
+    {
+     "dx": 1,
+     "dy": 0,
+     "value": "+1"
+    },
+    {
+     "dx": 2,
+     "dy": 0,
+     "value": "+1"
+    },
+    {
+     "dx": 3,
+     "dy": 0,
+     "value": "+1"
+    },
+    {
+     "dx": 4,
+     "dy": 0,
+     "value": "+1"
+    },
+    {
+     "dx": 0,
+     "dy": -4,
+     "value": "-1"
+    },
+    {
+     "dx": 0,
+     "dy": -3,
+     "value": "-1"
+    },
+    {
+     "dx": 0,
+     "dy": -2,
+     "value": "-1"
+    },
+    {
+     "dx": 0,
+     "dy": -1,
+     "value": "-1"
+    },
+    {
+     "dx": 0,
+     "dy": 1,
+     "value": "-1"
+    },
+    {
+     "dx": 0,
+     "dy": 2,
+     "value": "-1"
+    },
+    {
+     "dx": 0,
+     "dy": 3,
+     "value": "-1"
+    },
+    {
+     "dx": 0,
+     "dy": 4,
+     "value": "-1"
+    }
+   ]
+  },
+  {
+   "entityId": 2005,
+   "name": "착취",
+   "assetName": "2005_Exploitation",
+   "rarity": "Common",
+   "rotatable": true,
+   "query": "RIGHT 1\nLEFT -1",
+   "conditionQuery": "",
+   "rotatedQueries": [
+    "RIGHT 1\nLEFT -1",
+    "UP 1\nDOWN -1",
+    "LEFT 1\nRIGHT -1",
+    "DOWN 1\nUP -1"
+   ],
+   "cells": [
+    {
+     "dx": 1,
+     "dy": 0,
+     "value": "1"
+    },
+    {
+     "dx": -1,
+     "dy": 0,
+     "value": "-1"
+    }
+   ]
+  },
+  {
+   "entityId": 2006,
+   "name": "응집",
+   "assetName": "2006_Aggregation",
+   "rarity": "Uncommon",
+   "rotatable": true,
+   "query": "HORIZONTAL -1\nUP +3",
+   "conditionQuery": "",
+   "rotatedQueries": [
+    "HORIZONTAL -1\nUP +3",
+    "VERTICAL -1\nLEFT +3",
+    "HORIZONTAL -1\nDOWN +3",
+    "VERTICAL -1\nRIGHT +3"
+   ],
+   "cells": [
+    {
+     "dx": -4,
+     "dy": 0,
+     "value": "-1"
+    },
+    {
+     "dx": -3,
+     "dy": 0,
+     "value": "-1"
+    },
+    {
+     "dx": -2,
+     "dy": 0,
+     "value": "-1"
+    },
+    {
+     "dx": -1,
+     "dy": 0,
+     "value": "-1"
+    },
+    {
+     "dx": 1,
+     "dy": 0,
+     "value": "-1"
+    },
+    {
+     "dx": 2,
+     "dy": 0,
+     "value": "-1"
+    },
+    {
+     "dx": 3,
+     "dy": 0,
+     "value": "-1"
+    },
+    {
+     "dx": 4,
+     "dy": 0,
+     "value": "-1"
+    },
+    {
+     "dx": 0,
+     "dy": -1,
+     "value": "+3"
+    }
+   ]
+  },
+  {
+   "entityId": 2007,
+   "name": "선의",
+   "assetName": "2007_Favor",
+   "rarity": "Common",
+   "rotatable": false,
+   "query": "RIGHT 1\nLEFT 1",
+   "conditionQuery": "BOTTOM PLACED",
+   "rotatedQueries": [
+    "RIGHT 1\nLEFT 1",
+    "UP 1\nDOWN 1",
+    "LEFT 1\nRIGHT 1",
+    "DOWN 1\nUP 1"
+   ],
+   "cells": [
+    {
+     "dx": 1,
+     "dy": 0,
+     "value": "1"
+    },
+    {
+     "dx": -1,
+     "dy": 0,
+     "value": "1"
+    }
+   ]
+  },
+  {
+   "entityId": 2008,
+   "name": "정의",
+   "assetName": "2008_Justice",
+   "rarity": "Uncommon",
+   "rotatable": false,
+   "query": "VERTICAL +1",
+   "conditionQuery": "LEFTEND PLACED\nRIGHTEND PLACED",
+   "rotatedQueries": [
+    "VERTICAL +1",
+    "HORIZONTAL +1",
+    "VERTICAL +1",
+    "HORIZONTAL +1"
+   ],
+   "cells": [
+    {
+     "dx": 0,
+     "dy": -4,
+     "value": "+1"
+    },
+    {
+     "dx": 0,
+     "dy": -3,
+     "value": "+1"
+    },
+    {
+     "dx": 0,
+     "dy": -2,
+     "value": "+1"
+    },
+    {
+     "dx": 0,
+     "dy": -1,
+     "value": "+1"
+    },
+    {
+     "dx": 0,
+     "dy": 1,
+     "value": "+1"
+    },
+    {
+     "dx": 0,
+     "dy": 2,
+     "value": "+1"
+    },
+    {
+     "dx": 0,
+     "dy": 3,
+     "value": "+1"
+    },
+    {
+     "dx": 0,
+     "dy": 4,
+     "value": "+1"
+    }
+   ]
+  },
+  {
+   "entityId": 2009,
+   "name": "화합",
+   "assetName": "2009_Unity",
+   "rarity": "Common",
+   "rotatable": true,
+   "query": "UP -1\nRIGHT +1\nLEFT -1\nDOWN +1",
+   "conditionQuery": "",
+   "rotatedQueries": [
+    "UP -1\nRIGHT +1\nLEFT -1\nDOWN +1",
+    "LEFT -1\nUP +1\nDOWN -1\nRIGHT +1",
+    "DOWN -1\nLEFT +1\nRIGHT -1\nUP +1",
+    "RIGHT -1\nDOWN +1\nUP -1\nLEFT +1"
+   ],
+   "cells": [
+    {
+     "dx": 0,
+     "dy": -1,
+     "value": "-1"
+    },
+    {
+     "dx": 1,
+     "dy": 0,
+     "value": "+1"
+    },
+    {
+     "dx": -1,
+     "dy": 0,
+     "value": "-1"
+    },
+    {
+     "dx": 0,
+     "dy": 1,
+     "value": "+1"
+    }
+   ]
+  },
+  {
+   "entityId": 2010,
+   "name": "운명",
+   "assetName": "2010_Destiny",
+   "rarity": "Common",
+   "rotatable": false,
+   "query": "DOWN +1",
+   "conditionQuery": "",
+   "rotatedQueries": [
+    "DOWN +1",
+    "RIGHT +1",
+    "UP +1",
+    "LEFT +1"
+   ],
+   "cells": [
+    {
+     "dx": 0,
+     "dy": 1,
+     "value": "+1"
+    }
+   ]
+  },
+  {
+   "entityId": 2011,
+   "name": "기사도",
+   "assetName": "2011_Chivalry",
+   "rarity": "Common",
+   "rotatable": true,
+   "query": "KNIGHTUPLEFT 1\n",
+   "conditionQuery": "",
+   "rotatedQueries": [
+    "KNIGHTUPLEFT 1",
+    "KNIGHTDOWNLEFT 1",
+    "KNIGHTDOWNRIGHT 1",
+    "KNIGHTUPRIGHT 1"
+   ],
+   "cells": [
+    {
+     "dx": -1,
+     "dy": -2,
+     "value": "1"
+    }
+   ]
+  },
+  {
+   "entityId": 2012,
+   "name": "재치",
+   "assetName": "2012_Wit",
+   "rarity": "Common",
+   "rotatable": true,
+   "query": "DIAUPLEFT 1",
+   "conditionQuery": "",
+   "rotatedQueries": [
+    "DIAUPLEFT 1",
+    "DIADOWNLEFT 1",
+    "DIADOWNRIGHT 1",
+    "DIAUPRIGHT 1"
+   ],
+   "cells": [
+    {
+     "dx": -1,
+     "dy": -1,
+     "value": "1"
+    }
+   ]
+  },
+  {
+   "entityId": 2013,
+   "name": "시선",
+   "assetName": "2013_Gaze",
+   "rarity": "Common",
+   "rotatable": true,
+   "query": "DIAUPLEFT 1\nDIADOWNRIGHT -1",
+   "conditionQuery": "",
+   "rotatedQueries": [
+    "DIAUPLEFT 1\nDIADOWNRIGHT -1",
+    "DIADOWNLEFT 1\nDIAUPRIGHT -1",
+    "DIADOWNRIGHT 1\nDIAUPLEFT -1",
+    "DIAUPRIGHT 1\nDIADOWNLEFT -1"
+   ],
+   "cells": [
+    {
+     "dx": -1,
+     "dy": -1,
+     "value": "1"
+    },
+    {
+     "dx": 1,
+     "dy": 1,
+     "value": "-1"
+    }
+   ]
+  },
+  {
+   "entityId": 2014,
+   "name": "고동",
+   "assetName": "2014_Beat",
+   "rarity": "Uncommon",
+   "rotatable": true,
+   "query": "UPUP 2",
+   "conditionQuery": "",
+   "rotatedQueries": [
+    "UPUP 2",
+    "LEFTLEFT 2",
+    "DOWNDOWN 2",
+    "RIGHTRIGHT 2"
+   ],
+   "cells": [
+    {
+     "dx": 0,
+     "dy": -2,
+     "value": "2"
+    }
+   ]
+  },
+  {
+   "entityId": 2015,
+   "name": "양육",
+   "assetName": "2015_Nurture",
+   "rarity": "Common",
+   "rotatable": true,
+   "query": "DIAUPLEFT 1\nDIAUPRIGHT 1\nUP 1\nDOWN -1\nDOWNDOWN -1",
+   "conditionQuery": "",
+   "rotatedQueries": [
+    "DIAUPLEFT 1\nDIAUPRIGHT 1\nUP 1\nDOWN -1\nDOWNDOWN -1",
+    "DIADOWNLEFT 1\nDIAUPLEFT 1\nLEFT 1\nRIGHT -1\nRIGHTRIGHT -1",
+    "DIADOWNRIGHT 1\nDIADOWNLEFT 1\nDOWN 1\nUP -1\nUPUP -1",
+    "DIAUPRIGHT 1\nDIADOWNRIGHT 1\nRIGHT 1\nLEFT -1\nLEFTLEFT -1"
+   ],
+   "cells": [
+    {
+     "dx": -1,
+     "dy": -1,
+     "value": "1"
+    },
+    {
+     "dx": 1,
+     "dy": -1,
+     "value": "1"
+    },
+    {
+     "dx": 0,
+     "dy": -1,
+     "value": "1"
+    },
+    {
+     "dx": 0,
+     "dy": 1,
+     "value": "-1"
+    },
+    {
+     "dx": 0,
+     "dy": 2,
+     "value": "-1"
+    }
+   ]
+  },
+  {
+   "entityId": 2016,
+   "name": "차양",
+   "assetName": "2016_Shade",
+   "rarity": "Rare",
+   "rotatable": false,
+   "query": "BOTTOM 1\n",
+   "conditionQuery": "TOP PLACED",
+   "rotatedQueries": [
+    "BOTTOM 1",
+    "RIGHTEND 1",
+    "TOP 1",
+    "LEFTEND 1"
+   ],
+   "cells": [
+    {
+     "dx": 4,
+     "dy": 4,
+     "value": "1",
+     "yWorld": true
+    },
+    {
+     "dx": 3,
+     "dy": 4,
+     "value": "1",
+     "yWorld": true
+    },
+    {
+     "dx": 2,
+     "dy": 4,
+     "value": "1",
+     "yWorld": true
+    },
+    {
+     "dx": 1,
+     "dy": 4,
+     "value": "1",
+     "yWorld": true
+    },
+    {
+     "dx": 0,
+     "dy": 4,
+     "value": "1",
+     "yWorld": true
+    },
+    {
+     "dx": -1,
+     "dy": 4,
+     "value": "1",
+     "yWorld": true
+    },
+    {
+     "dx": -2,
+     "dy": 4,
+     "value": "1",
+     "yWorld": true
+    },
+    {
+     "dx": -3,
+     "dy": 4,
+     "value": "1",
+     "yWorld": true
+    },
+    {
+     "dx": -4,
+     "dy": 4,
+     "value": "1",
+     "yWorld": true
+    }
+   ]
+  },
+  {
+   "entityId": 2017,
+   "name": "쌍성",
+   "assetName": "2017_BinaryStar",
+   "rarity": "Uncommon",
+   "rotatable": true,
+   "query": "UPUP 2\nDOWNDOWN 2",
+   "conditionQuery": "",
+   "rotatedQueries": [
+    "UPUP 2\nDOWNDOWN 2",
+    "LEFTLEFT 2\nRIGHTRIGHT 2",
+    "DOWNDOWN 2\nUPUP 2",
+    "RIGHTRIGHT 2\nLEFTLEFT 2"
+   ],
+   "cells": [
+    {
+     "dx": 0,
+     "dy": -2,
+     "value": "2"
+    },
+    {
+     "dx": 0,
+     "dy": 2,
+     "value": "2"
+    }
+   ]
+  },
+  {
+   "entityId": 2018,
+   "name": "이음",
+   "assetName": "2018_Joint",
+   "rarity": "Rare",
+   "rotatable": true,
+   "query": "UP 2\nDOWN IGNORECRITERIA",
+   "conditionQuery": "",
+   "rotatedQueries": [
+    "UP 2\nDOWN IGNORECRITERIA",
+    "LEFT 2\nRIGHT IGNORECRITERIA",
+    "DOWN 2\nUP IGNORECRITERIA",
+    "RIGHT 2\nLEFT IGNORECRITERIA"
+   ],
+   "cells": [
+    {
+     "dx": 0,
+     "dy": -1,
+     "value": "2"
+    },
+    {
+     "dx": 0,
+     "dy": 1,
+     "value": "IGNORECRITERIA"
+    }
+   ]
+  },
+  {
+   "entityId": 2019,
+   "name": "경쟁",
+   "assetName": "2019_Compete",
+   "rarity": "Uncommon",
+   "rotatable": true,
+   "query": "DIAUPLEFT -1\nUP -1\nDOWN +3",
+   "conditionQuery": "",
+   "rotatedQueries": [
+    "DIAUPLEFT -1\nUP -1\nDOWN +3",
+    "DIADOWNLEFT -1\nLEFT -1\nRIGHT +3",
+    "DIADOWNRIGHT -1\nDOWN -1\nUP +3",
+    "DIAUPRIGHT -1\nRIGHT -1\nLEFT +3"
+   ],
+   "cells": [
+    {
+     "dx": -1,
+     "dy": -1,
+     "value": "-1"
+    },
+    {
+     "dx": 0,
+     "dy": -1,
+     "value": "-1"
+    },
+    {
+     "dx": 0,
+     "dy": 1,
+     "value": "+3"
+    }
+   ]
+  },
+  {
+   "entityId": 2020,
+   "name": "열망",
+   "assetName": "2020_Hanker",
+   "rarity": "Uncommon",
+   "rotatable": false,
+   "query": "UP 2",
+   "conditionQuery": "",
+   "rotatedQueries": [
+    "UP 2",
+    "LEFT 2",
+    "DOWN 2",
+    "RIGHT 2"
+   ],
+   "cells": [
+    {
+     "dx": 0,
+     "dy": -1,
+     "value": "2"
+    }
+   ]
+  },
+  {
+   "entityId": 2021,
+   "name": "도래",
+   "assetName": "2021_Visit",
+   "rarity": "Common",
+   "rotatable": true,
+   "query": "UP 1\nUPUP 1\nDOWN -1\nDOWNDOWN -1",
+   "conditionQuery": "",
+   "rotatedQueries": [
+    "UP 1\nUPUP 1\nDOWN -1\nDOWNDOWN -1",
+    "LEFT 1\nLEFTLEFT 1\nRIGHT -1\nRIGHTRIGHT -1",
+    "DOWN 1\nDOWNDOWN 1\nUP -1\nUPUP -1",
+    "RIGHT 1\nRIGHTRIGHT 1\nLEFT -1\nLEFTLEFT -1"
+   ],
+   "cells": [
+    {
+     "dx": 0,
+     "dy": -1,
+     "value": "1"
+    },
+    {
+     "dx": 0,
+     "dy": -2,
+     "value": "1"
+    },
+    {
+     "dx": 0,
+     "dy": 1,
+     "value": "-1"
+    },
+    {
+     "dx": 0,
+     "dy": 2,
+     "value": "-1"
+    }
+   ]
+  },
+  {
+   "entityId": 2022,
+   "name": "경계",
+   "assetName": "2022_Border",
+   "rarity": "Legend",
+   "rotatable": false,
+   "query": "TOP 1\nBOTTOM 1",
+   "conditionQuery": "",
+   "rotatedQueries": [
+    "TOP 1\nBOTTOM 1",
+    "LEFTEND 1\nRIGHTEND 1",
+    "BOTTOM 1\nTOP 1",
+    "RIGHTEND 1\nLEFTEND 1"
+   ],
+   "cells": [
+    {
+     "dx": -4,
+     "dy": -4,
+     "value": "1",
+     "yWorld": true
+    },
+    {
+     "dx": -3,
+     "dy": -4,
+     "value": "1",
+     "yWorld": true
+    },
+    {
+     "dx": -2,
+     "dy": -4,
+     "value": "1",
+     "yWorld": true
+    },
+    {
+     "dx": -1,
+     "dy": -4,
+     "value": "1",
+     "yWorld": true
+    },
+    {
+     "dx": 0,
+     "dy": -4,
+     "value": "1",
+     "yWorld": true
+    },
+    {
+     "dx": 1,
+     "dy": -4,
+     "value": "1",
+     "yWorld": true
+    },
+    {
+     "dx": 2,
+     "dy": -4,
+     "value": "1",
+     "yWorld": true
+    },
+    {
+     "dx": 3,
+     "dy": -4,
+     "value": "1",
+     "yWorld": true
+    },
+    {
+     "dx": 4,
+     "dy": -4,
+     "value": "1",
+     "yWorld": true
+    },
+    {
+     "dx": 4,
+     "dy": 4,
+     "value": "1",
+     "yWorld": true
+    },
+    {
+     "dx": 3,
+     "dy": 4,
+     "value": "1",
+     "yWorld": true
+    },
+    {
+     "dx": 2,
+     "dy": 4,
+     "value": "1",
+     "yWorld": true
+    },
+    {
+     "dx": 1,
+     "dy": 4,
+     "value": "1",
+     "yWorld": true
+    },
+    {
+     "dx": 0,
+     "dy": 4,
+     "value": "1",
+     "yWorld": true
+    },
+    {
+     "dx": -1,
+     "dy": 4,
+     "value": "1",
+     "yWorld": true
+    },
+    {
+     "dx": -2,
+     "dy": 4,
+     "value": "1",
+     "yWorld": true
+    },
+    {
+     "dx": -3,
+     "dy": 4,
+     "value": "1",
+     "yWorld": true
+    },
+    {
+     "dx": -4,
+     "dy": 4,
+     "value": "1",
+     "yWorld": true
+    }
+   ]
+  },
+  {
+   "entityId": 2023,
+   "name": "파도",
+   "assetName": "2023_Wave",
+   "rarity": "Uncommon",
+   "rotatable": true,
+   "query": "DIAUPRIGHT 3\nUP -1\nRIGHT -1",
+   "conditionQuery": "",
+   "rotatedQueries": [
+    "DIAUPRIGHT 3\nUP -1\nRIGHT -1",
+    "DIAUPLEFT 3\nLEFT -1\nUP -1",
+    "DIADOWNLEFT 3\nDOWN -1\nLEFT -1",
+    "DIADOWNRIGHT 3\nRIGHT -1\nDOWN -1"
+   ],
+   "cells": [
+    {
+     "dx": 1,
+     "dy": -1,
+     "value": "3"
+    },
+    {
+     "dx": 0,
+     "dy": -1,
+     "value": "-1"
+    },
+    {
+     "dx": 1,
+     "dy": 0,
+     "value": "-1"
+    }
+   ]
+  },
+  {
+   "entityId": 2024,
+   "name": "장난",
+   "assetName": "2024_Trick",
+   "rarity": "Common",
+   "rotatable": true,
+   "query": "UP 1\nDIAUPLEFT 1\nDIAUPRIGHT 1\nLEFT -1\nRIGHT -1",
+   "conditionQuery": "",
+   "rotatedQueries": [
+    "UP 1\nDIAUPLEFT 1\nDIAUPRIGHT 1\nLEFT -1\nRIGHT -1",
+    "LEFT 1\nDIADOWNLEFT 1\nDIAUPLEFT 1\nDOWN -1\nUP -1",
+    "DOWN 1\nDIADOWNRIGHT 1\nDIADOWNLEFT 1\nRIGHT -1\nLEFT -1",
+    "RIGHT 1\nDIAUPRIGHT 1\nDIADOWNRIGHT 1\nUP -1\nDOWN -1"
+   ],
+   "cells": [
+    {
+     "dx": 0,
+     "dy": -1,
+     "value": "1"
+    },
+    {
+     "dx": -1,
+     "dy": -1,
+     "value": "1"
+    },
+    {
+     "dx": 1,
+     "dy": -1,
+     "value": "1"
+    },
+    {
+     "dx": -1,
+     "dy": 0,
+     "value": "-1"
+    },
+    {
+     "dx": 1,
+     "dy": 0,
+     "value": "-1"
+    }
+   ]
+  },
+  {
+   "entityId": 2025,
+   "name": "헌정",
+   "assetName": "2025_Tribute",
+   "rarity": "Uncommon",
+   "rotatable": true,
+   "query": "DIAUPLEFT 1\nDIAUPRIGHT 1\nDIADOWNLEFT 1\nDIADOWNRIGHT 1",
+   "conditionQuery": "",
+   "rotatedQueries": [
+    "DIAUPLEFT 1\nDIAUPRIGHT 1\nDIADOWNLEFT 1\nDIADOWNRIGHT 1",
+    "DIADOWNLEFT 1\nDIAUPLEFT 1\nDIADOWNRIGHT 1\nDIAUPRIGHT 1",
+    "DIADOWNRIGHT 1\nDIADOWNLEFT 1\nDIAUPRIGHT 1\nDIAUPLEFT 1",
+    "DIAUPRIGHT 1\nDIADOWNRIGHT 1\nDIAUPLEFT 1\nDIADOWNLEFT 1"
+   ],
+   "cells": [
+    {
+     "dx": -1,
+     "dy": -1,
+     "value": "1"
+    },
+    {
+     "dx": 1,
+     "dy": -1,
+     "value": "1"
+    },
+    {
+     "dx": -1,
+     "dy": 1,
+     "value": "1"
+    },
+    {
+     "dx": 1,
+     "dy": 1,
+     "value": "1"
+    }
+   ]
+  },
+  {
+   "entityId": 2026,
+   "name": "환호",
+   "assetName": "2026_Cheer",
+   "rarity": "Common",
+   "rotatable": false,
+   "query": "UP 1",
+   "conditionQuery": "",
+   "rotatedQueries": [
+    "UP 1",
+    "LEFT 1",
+    "DOWN 1",
+    "RIGHT 1"
+   ],
+   "cells": [
+    {
+     "dx": 0,
+     "dy": -1,
+     "value": "1"
+    }
+   ]
+  },
+  {
+   "entityId": 2027,
+   "name": "수확",
+   "assetName": "2027_Harvest",
+   "rarity": "Uncommon",
+   "rotatable": true,
+   "query": "UP 2\nDOWN 2",
+   "conditionQuery": "",
+   "rotatedQueries": [
+    "UP 2\nDOWN 2",
+    "LEFT 2\nRIGHT 2",
+    "DOWN 2\nUP 2",
+    "RIGHT 2\nLEFT 2"
+   ],
+   "cells": [
+    {
+     "dx": 0,
+     "dy": -1,
+     "value": "2"
+    },
+    {
+     "dx": 0,
+     "dy": 1,
+     "value": "2"
+    }
+   ]
+  },
+  {
+   "entityId": 2028,
+   "name": "전진",
+   "assetName": "2028_Advance",
+   "rarity": "Uncommon",
+   "rotatable": true,
+   "query": "UP 1\nUPUP 1\nUPUPUP 1",
+   "conditionQuery": "",
+   "rotatedQueries": [
+    "UP 1\nUPUP 1\nUPUPUP 1",
+    "LEFT 1\nLEFTLEFT 1\nLEFTLEFTLEFT 1",
+    "DOWN 1\nDOWNDOWN 1\nDOWNDOWNDOWN 1",
+    "RIGHT 1\nRIGHTRIGHT 1\nRIGHTRIGHTRIGHT 1"
+   ],
+   "cells": [
+    {
+     "dx": 0,
+     "dy": -1,
+     "value": "1"
+    },
+    {
+     "dx": 0,
+     "dy": -2,
+     "value": "1"
+    },
+    {
+     "dx": 0,
+     "dy": -3,
+     "value": "1"
+    }
+   ]
+  },
+  {
+   "entityId": 2029,
+   "name": "기반",
+   "assetName": "2029_Foundation",
+   "rarity": "Rare",
+   "rotatable": false,
+   "query": "HORIZONTAL 1",
+   "conditionQuery": "",
+   "rotatedQueries": [
+    "HORIZONTAL 1",
+    "VERTICAL 1",
+    "HORIZONTAL 1",
+    "VERTICAL 1"
+   ],
+   "cells": [
+    {
+     "dx": -4,
+     "dy": 0,
+     "value": "1"
+    },
+    {
+     "dx": -3,
+     "dy": 0,
+     "value": "1"
+    },
+    {
+     "dx": -2,
+     "dy": 0,
+     "value": "1"
+    },
+    {
+     "dx": -1,
+     "dy": 0,
+     "value": "1"
+    },
+    {
+     "dx": 1,
+     "dy": 0,
+     "value": "1"
+    },
+    {
+     "dx": 2,
+     "dy": 0,
+     "value": "1"
+    },
+    {
+     "dx": 3,
+     "dy": 0,
+     "value": "1"
+    },
+    {
+     "dx": 4,
+     "dy": 0,
+     "value": "1"
+    }
+   ]
+  },
+  {
+   "entityId": 2030,
+   "name": "분배",
+   "assetName": "2030_Distribution",
+   "rarity": "Uncommon",
+   "rotatable": true,
+   "query": "UP 1\nDOWN 1\nLEFT 1\nRIGHT 1",
+   "conditionQuery": "",
+   "rotatedQueries": [
+    "UP 1\nDOWN 1\nLEFT 1\nRIGHT 1",
+    "LEFT 1\nRIGHT 1\nDOWN 1\nUP 1",
+    "DOWN 1\nUP 1\nRIGHT 1\nLEFT 1",
+    "RIGHT 1\nLEFT 1\nUP 1\nDOWN 1"
+   ],
+   "cells": [
+    {
+     "dx": 0,
+     "dy": -1,
+     "value": "1"
+    },
+    {
+     "dx": 0,
+     "dy": 1,
+     "value": "1"
+    },
+    {
+     "dx": -1,
+     "dy": 0,
+     "value": "1"
+    },
+    {
+     "dx": 1,
+     "dy": 0,
+     "value": "1"
+    }
+   ]
+  },
+  {
+   "entityId": 2031,
+   "name": "준비",
+   "assetName": "2031_Preparation",
+   "rarity": "Uncommon",
+   "rotatable": true,
+   "query": "DIADOWNRIGHT 2\nDIAUPLEFT 1",
+   "conditionQuery": "",
+   "rotatedQueries": [
+    "DIADOWNRIGHT 2\nDIAUPLEFT 1",
+    "DIAUPRIGHT 2\nDIADOWNLEFT 1",
+    "DIAUPLEFT 2\nDIADOWNRIGHT 1",
+    "DIADOWNLEFT 2\nDIAUPRIGHT 1"
+   ],
+   "cells": [
+    {
+     "dx": 1,
+     "dy": 1,
+     "value": "2"
+    },
+    {
+     "dx": -1,
+     "dy": -1,
+     "value": "1"
+    }
+   ]
+  },
+  {
+   "entityId": 2032,
+   "name": "입구",
+   "assetName": "2032_Entrance",
+   "rarity": "Uncommon",
+   "rotatable": false,
+   "query": "DIAUPRIGHT 1\nDIAUPLEFT 1\nUP 2",
+   "conditionQuery": "",
+   "rotatedQueries": [
+    "DIAUPRIGHT 1\nDIAUPLEFT 1\nUP 2",
+    "DIAUPLEFT 1\nDIADOWNLEFT 1\nLEFT 2",
+    "DIADOWNLEFT 1\nDIADOWNRIGHT 1\nDOWN 2",
+    "DIADOWNRIGHT 1\nDIAUPRIGHT 1\nRIGHT 2"
+   ],
+   "cells": [
+    {
+     "dx": 1,
+     "dy": -1,
+     "value": "1"
+    },
+    {
+     "dx": -1,
+     "dy": -1,
+     "value": "1"
+    },
+    {
+     "dx": 0,
+     "dy": -1,
+     "value": "2"
+    }
+   ]
+  },
+  {
+   "entityId": 2033,
+   "name": "백일몽",
+   "assetName": "2033_Daydream",
+   "rarity": "Legend",
+   "rotatable": true,
+   "query": "DIAUPRIGHT 2\nDIAUPLEFT 2\nDIADOWNRIGHT 2\nDIADOWNLEFT 2",
+   "conditionQuery": "",
+   "rotatedQueries": [
+    "DIAUPRIGHT 2\nDIAUPLEFT 2\nDIADOWNRIGHT 2\nDIADOWNLEFT 2",
+    "DIAUPLEFT 2\nDIADOWNLEFT 2\nDIAUPRIGHT 2\nDIADOWNRIGHT 2",
+    "DIADOWNLEFT 2\nDIADOWNRIGHT 2\nDIAUPLEFT 2\nDIAUPRIGHT 2",
+    "DIADOWNRIGHT 2\nDIAUPRIGHT 2\nDIADOWNLEFT 2\nDIAUPLEFT 2"
+   ],
+   "cells": [
+    {
+     "dx": 1,
+     "dy": -1,
+     "value": "2"
+    },
+    {
+     "dx": -1,
+     "dy": -1,
+     "value": "2"
+    },
+    {
+     "dx": 1,
+     "dy": 1,
+     "value": "2"
+    },
+    {
+     "dx": -1,
+     "dy": 1,
+     "value": "2"
+    }
+   ]
+  },
+  {
+   "entityId": 2034,
+   "name": "맹세",
+   "assetName": "2034_Oaths",
+   "rarity": "Rare",
+   "rotatable": true,
+   "query": "LEFT 1\nRIGHT 1\nDOWN 1\nUP 1\nUPUP 2",
+   "conditionQuery": "",
+   "rotatedQueries": [
+    "LEFT 1\nRIGHT 1\nDOWN 1\nUP 1\nUPUP 2",
+    "DOWN 1\nUP 1\nRIGHT 1\nLEFT 1\nLEFTLEFT 2",
+    "RIGHT 1\nLEFT 1\nUP 1\nDOWN 1\nDOWNDOWN 2",
+    "UP 1\nDOWN 1\nLEFT 1\nRIGHT 1\nRIGHTRIGHT 2"
+   ],
+   "cells": [
+    {
+     "dx": -1,
+     "dy": 0,
+     "value": "1"
+    },
+    {
+     "dx": 1,
+     "dy": 0,
+     "value": "1"
+    },
+    {
+     "dx": 0,
+     "dy": 1,
+     "value": "1"
+    },
+    {
+     "dx": 0,
+     "dy": -1,
+     "value": "1"
+    },
+    {
+     "dx": 0,
+     "dy": -2,
+     "value": "2"
+    }
+   ]
+  },
+  {
+   "entityId": 2035,
+   "name": "가시",
+   "assetName": "2035_Spike",
+   "rarity": "Legend",
+   "rotatable": false,
+   "query": "LEFT 1\nRIGHT 1\nDOWN 2\nUP 2\nDIAUPRIGHT 1\nDIAUPLEFT 1\nDIADOWNRIGHT 1\nDIADOWNLEFT 1",
+   "conditionQuery": "",
+   "rotatedQueries": [
+    "LEFT 1\nRIGHT 1\nDOWN 2\nUP 2\nDIAUPRIGHT 1\nDIAUPLEFT 1\nDIADOWNRIGHT 1\nDIADOWNLEFT 1",
+    "DOWN 1\nUP 1\nRIGHT 2\nLEFT 2\nDIAUPLEFT 1\nDIADOWNLEFT 1\nDIAUPRIGHT 1\nDIADOWNRIGHT 1",
+    "RIGHT 1\nLEFT 1\nUP 2\nDOWN 2\nDIADOWNLEFT 1\nDIADOWNRIGHT 1\nDIAUPLEFT 1\nDIAUPRIGHT 1",
+    "UP 1\nDOWN 1\nLEFT 2\nRIGHT 2\nDIADOWNRIGHT 1\nDIAUPRIGHT 1\nDIADOWNLEFT 1\nDIAUPLEFT 1"
+   ],
+   "cells": [
+    {
+     "dx": -1,
+     "dy": 0,
+     "value": "1"
+    },
+    {
+     "dx": 1,
+     "dy": 0,
+     "value": "1"
+    },
+    {
+     "dx": 0,
+     "dy": 1,
+     "value": "2"
+    },
+    {
+     "dx": 0,
+     "dy": -1,
+     "value": "2"
+    },
+    {
+     "dx": 1,
+     "dy": -1,
+     "value": "1"
+    },
+    {
+     "dx": -1,
+     "dy": -1,
+     "value": "1"
+    },
+    {
+     "dx": 1,
+     "dy": 1,
+     "value": "1"
+    },
+    {
+     "dx": -1,
+     "dy": 1,
+     "value": "1"
+    }
+   ]
+  },
+  {
+   "entityId": 2036,
+   "name": "접합",
+   "assetName": "2036_Junction",
+   "rarity": "Rare",
+   "rotatable": true,
+   "query": "UP 1\nUPUP 1\nUPUPUP 1\nRIGHT 1\nRIGHTRIGHT 1\nRIGHTRIGHTRIGHT 1",
+   "conditionQuery": "",
+   "rotatedQueries": [
+    "UP 1\nUPUP 1\nUPUPUP 1\nRIGHT 1\nRIGHTRIGHT 1\nRIGHTRIGHTRIGHT 1",
+    "LEFT 1\nLEFTLEFT 1\nLEFTLEFTLEFT 1\nUP 1\nUPUP 1\nUPUPUP 1",
+    "DOWN 1\nDOWNDOWN 1\nDOWNDOWNDOWN 1\nLEFT 1\nLEFTLEFT 1\nLEFTLEFTLEFT 1",
+    "RIGHT 1\nRIGHTRIGHT 1\nRIGHTRIGHTRIGHT 1\nDOWN 1\nDOWNDOWN 1\nDOWNDOWNDOWN 1"
+   ],
+   "cells": [
+    {
+     "dx": 0,
+     "dy": -1,
+     "value": "1"
+    },
+    {
+     "dx": 0,
+     "dy": -2,
+     "value": "1"
+    },
+    {
+     "dx": 0,
+     "dy": -3,
+     "value": "1"
+    },
+    {
+     "dx": 1,
+     "dy": 0,
+     "value": "1"
+    },
+    {
+     "dx": 2,
+     "dy": 0,
+     "value": "1"
+    },
+    {
+     "dx": 3,
+     "dy": 0,
+     "value": "1"
+    }
+   ]
+  },
+  {
+   "entityId": 2037,
+   "name": "반항",
+   "assetName": "2037_Rebellion",
+   "rarity": "Rare",
+   "rotatable": true,
+   "query": "RIGHT_RISING 1\nLEFT_FALLING 1",
+   "conditionQuery": "",
+   "rotatedQueries": [
+    "RIGHT_RISING 1\nLEFT_FALLING 1",
+    "LEFT_RISING 1\nRIGHT_FALLING 1",
+    "LEFT_FALLING 1\nRIGHT_RISING 1",
+    "RIGHT_FALLING 1\nLEFT_RISING 1"
+   ],
+   "cells": [
+    {
+     "dx": 1,
+     "dy": -1,
+     "value": "1"
+    },
+    {
+     "dx": 2,
+     "dy": -2,
+     "value": "1"
+    },
+    {
+     "dx": 3,
+     "dy": -3,
+     "value": "1"
+    },
+    {
+     "dx": 4,
+     "dy": -4,
+     "value": "1"
+    },
+    {
+     "dx": -1,
+     "dy": 1,
+     "value": "1"
+    },
+    {
+     "dx": -2,
+     "dy": 2,
+     "value": "1"
+    },
+    {
+     "dx": -3,
+     "dy": 3,
+     "value": "1"
+    },
+    {
+     "dx": -4,
+     "dy": 4,
+     "value": "1"
+    }
+   ]
+  },
+  {
+   "entityId": 2038,
+   "name": "삼두",
+   "assetName": "2038_Threeheaded",
+   "rarity": "Uncommon",
+   "rotatable": false,
+   "query": "UP 1\nLEFT 1\nRIGHT 1",
+   "conditionQuery": "",
+   "rotatedQueries": [
+    "UP 1\nLEFT 1\nRIGHT 1",
+    "LEFT 1\nDOWN 1\nUP 1",
+    "DOWN 1\nRIGHT 1\nLEFT 1",
+    "RIGHT 1\nUP 1\nDOWN 1"
+   ],
+   "cells": [
+    {
+     "dx": 0,
+     "dy": -1,
+     "value": "1"
+    },
+    {
+     "dx": -1,
+     "dy": 0,
+     "value": "1"
+    },
+    {
+     "dx": 1,
+     "dy": 0,
+     "value": "1"
+    }
+   ]
+  },
+  {
+   "entityId": 2039,
+   "name": "과거",
+   "assetName": "2039_Past",
+   "rarity": "Uncommon",
+   "rotatable": true,
+   "query": "UP 1\nRIGHT 1\nDIAUPLEFT 1\nDIAUPRIGHT 1",
+   "conditionQuery": "",
+   "rotatedQueries": [
+    "UP 1\nRIGHT 1\nDIAUPLEFT 1\nDIAUPRIGHT 1",
+    "LEFT 1\nUP 1\nDIADOWNLEFT 1\nDIAUPLEFT 1",
+    "DOWN 1\nLEFT 1\nDIADOWNRIGHT 1\nDIADOWNLEFT 1",
+    "RIGHT 1\nDOWN 1\nDIAUPRIGHT 1\nDIADOWNRIGHT 1"
+   ],
+   "cells": [
+    {
+     "dx": 0,
+     "dy": -1,
+     "value": "1"
+    },
+    {
+     "dx": 1,
+     "dy": 0,
+     "value": "1"
+    },
+    {
+     "dx": -1,
+     "dy": -1,
+     "value": "1"
+    },
+    {
+     "dx": 1,
+     "dy": -1,
+     "value": "1"
+    }
+   ]
+  },
+  {
+   "entityId": 2040,
+   "name": "미래",
+   "assetName": "2040_Future",
+   "rarity": "Uncommon",
+   "rotatable": true,
+   "query": "UP 1\nLEFT 1\nDIAUPLEFT 1\nDIAUPRIGHT 1",
+   "conditionQuery": "",
+   "rotatedQueries": [
+    "UP 1\nLEFT 1\nDIAUPLEFT 1\nDIAUPRIGHT 1",
+    "LEFT 1\nDOWN 1\nDIADOWNLEFT 1\nDIAUPLEFT 1",
+    "DOWN 1\nRIGHT 1\nDIADOWNRIGHT 1\nDIADOWNLEFT 1",
+    "RIGHT 1\nUP 1\nDIAUPRIGHT 1\nDIADOWNRIGHT 1"
+   ],
+   "cells": [
+    {
+     "dx": 0,
+     "dy": -1,
+     "value": "1"
+    },
+    {
+     "dx": -1,
+     "dy": 0,
+     "value": "1"
+    },
+    {
+     "dx": -1,
+     "dy": -1,
+     "value": "1"
+    },
+    {
+     "dx": 1,
+     "dy": -1,
+     "value": "1"
+    }
+   ]
+  },
+  {
+   "entityId": 2041,
+   "name": "적재",
+   "assetName": "2041_Stack",
+   "rarity": "Uncommon",
+   "rotatable": true,
+   "query": "UP 1\nDIAUPLEFT 1\nKNIGHTUPLEFT 1\nUPUP 1",
+   "conditionQuery": "",
+   "rotatedQueries": [
+    "UP 1\nDIAUPLEFT 1\nKNIGHTUPLEFT 1\nUPUP 1",
+    "LEFT 1\nDIADOWNLEFT 1\nKNIGHTDOWNLEFT 1\nLEFTLEFT 1",
+    "DOWN 1\nDIADOWNRIGHT 1\nKNIGHTDOWNRIGHT 1\nDOWNDOWN 1",
+    "RIGHT 1\nDIAUPRIGHT 1\nKNIGHTUPRIGHT 1\nRIGHTRIGHT 1"
+   ],
+   "cells": [
+    {
+     "dx": 0,
+     "dy": -1,
+     "value": "1"
+    },
+    {
+     "dx": -1,
+     "dy": -1,
+     "value": "1"
+    },
+    {
+     "dx": -1,
+     "dy": -2,
+     "value": "1"
+    },
+    {
+     "dx": 0,
+     "dy": -2,
+     "value": "1"
+    }
+   ]
+  },
+  {
+   "entityId": 2042,
+   "name": "광휘",
+   "assetName": "2042_Brilliance",
+   "rarity": "Legend",
+   "rotatable": true,
+   "query": "HORIZONTAL 1\nUP 2\nDOWN 2",
+   "conditionQuery": "",
+   "rotatedQueries": [
+    "HORIZONTAL 1\nUP 2\nDOWN 2",
+    "VERTICAL 1\nLEFT 2\nRIGHT 2",
+    "HORIZONTAL 1\nDOWN 2\nUP 2",
+    "VERTICAL 1\nRIGHT 2\nLEFT 2"
+   ],
+   "cells": [
+    {
+     "dx": -4,
+     "dy": 0,
+     "value": "1"
+    },
+    {
+     "dx": -3,
+     "dy": 0,
+     "value": "1"
+    },
+    {
+     "dx": -2,
+     "dy": 0,
+     "value": "1"
+    },
+    {
+     "dx": -1,
+     "dy": 0,
+     "value": "1"
+    },
+    {
+     "dx": 1,
+     "dy": 0,
+     "value": "1"
+    },
+    {
+     "dx": 2,
+     "dy": 0,
+     "value": "1"
+    },
+    {
+     "dx": 3,
+     "dy": 0,
+     "value": "1"
+    },
+    {
+     "dx": 4,
+     "dy": 0,
+     "value": "1"
+    },
+    {
+     "dx": 0,
+     "dy": -1,
+     "value": "2"
+    },
+    {
+     "dx": 0,
+     "dy": 1,
+     "value": "2"
+    }
+   ]
+  },
+  {
+   "entityId": 2043,
+   "name": "악수",
+   "assetName": "2043_Handshake",
+   "rarity": "Common",
+   "rotatable": true,
+   "query": "UP 1\nDOWN 1",
+   "conditionQuery": "",
+   "rotatedQueries": [
+    "UP 1\nDOWN 1",
+    "LEFT 1\nRIGHT 1",
+    "DOWN 1\nUP 1",
+    "RIGHT 1\nLEFT 1"
+   ],
+   "cells": [
+    {
+     "dx": 0,
+     "dy": -1,
+     "value": "1"
+    },
+    {
+     "dx": 0,
+     "dy": 1,
+     "value": "1"
+    }
+   ]
+  },
+  {
+   "entityId": 2044,
+   "name": "근사",
+   "assetName": "2044_Approximation",
+   "rarity": "Common",
+   "rotatable": true,
+   "query": "UP 1\nRIGHT 1",
+   "conditionQuery": "",
+   "rotatedQueries": [
+    "UP 1\nRIGHT 1",
+    "LEFT 1\nUP 1",
+    "DOWN 1\nLEFT 1",
+    "RIGHT 1\nDOWN 1"
+   ],
+   "cells": [
+    {
+     "dx": 0,
+     "dy": -1,
+     "value": "1"
+    },
+    {
+     "dx": 1,
+     "dy": 0,
+     "value": "1"
+    }
+   ]
+  },
+  {
+   "entityId": 2045,
+   "name": "권능",
+   "assetName": "2045_Power",
+   "rarity": "Rare",
+   "rotatable": true,
+   "query": "UP 3",
+   "conditionQuery": "",
+   "rotatedQueries": [
+    "UP 3",
+    "LEFT 3",
+    "DOWN 3",
+    "RIGHT 3"
+   ],
+   "cells": [
+    {
+     "dx": 0,
+     "dy": -1,
+     "value": "3"
+    }
+   ]
+  },
+  {
+   "entityId": 2046,
+   "name": "압축",
+   "assetName": "2046_Compression",
+   "rarity": "Legend",
+   "rotatable": true,
+   "query": "UP 3\nUPUP 2\nUPUPUP 1",
+   "conditionQuery": "",
+   "rotatedQueries": [
+    "UP 3\nUPUP 2\nUPUPUP 1",
+    "LEFT 3\nLEFTLEFT 2\nLEFTLEFTLEFT 1",
+    "DOWN 3\nDOWNDOWN 2\nDOWNDOWNDOWN 1",
+    "RIGHT 3\nRIGHTRIGHT 2\nRIGHTRIGHTRIGHT 1"
+   ],
+   "cells": [
+    {
+     "dx": 0,
+     "dy": -1,
+     "value": "3"
+    },
+    {
+     "dx": 0,
+     "dy": -2,
+     "value": "2"
+    },
+    {
+     "dx": 0,
+     "dy": -3,
+     "value": "1"
+    }
+   ]
+  },
+  {
+   "entityId": 2047,
+   "name": "건조",
+   "assetName": "2047_Dry",
+   "rarity": "Common",
+   "rotatable": false,
+   "query": "DOWN 1\nUP 1",
+   "conditionQuery": "",
+   "rotatedQueries": [
+    "DOWN 1\nUP 1",
+    "RIGHT 1\nLEFT 1",
+    "UP 1\nDOWN 1",
+    "LEFT 1\nRIGHT 1"
+   ],
+   "cells": [
+    {
+     "dx": 0,
+     "dy": 1,
+     "value": "1"
+    },
+    {
+     "dx": 0,
+     "dy": -1,
+     "value": "1"
+    }
+   ]
+  },
+  {
+   "entityId": 2048,
+   "name": "동시성",
+   "assetName": "2048_Simultaneity",
+   "rarity": "Rare",
+   "rotatable": false,
+   "query": "VERTICAL 1",
+   "conditionQuery": "",
+   "rotatedQueries": [
+    "VERTICAL 1",
+    "HORIZONTAL 1",
+    "VERTICAL 1",
+    "HORIZONTAL 1"
+   ],
+   "cells": [
+    {
+     "dx": 0,
+     "dy": -4,
+     "value": "1"
+    },
+    {
+     "dx": 0,
+     "dy": -3,
+     "value": "1"
+    },
+    {
+     "dx": 0,
+     "dy": -2,
+     "value": "1"
+    },
+    {
+     "dx": 0,
+     "dy": -1,
+     "value": "1"
+    },
+    {
+     "dx": 0,
+     "dy": 1,
+     "value": "1"
+    },
+    {
+     "dx": 0,
+     "dy": 2,
+     "value": "1"
+    },
+    {
+     "dx": 0,
+     "dy": 3,
+     "value": "1"
+    },
+    {
+     "dx": 0,
+     "dy": 4,
+     "value": "1"
+    }
+   ]
+  },
+  {
+   "entityId": 2049,
+   "name": "단절",
+   "assetName": "2049_Disconnect",
+   "rarity": "Rare",
+   "rotatable": false,
+   "query": "UP 3\nDOWN 3\nLEFT -1\nRIGHT -1",
+   "conditionQuery": "",
+   "rotatedQueries": [
+    "UP 3\nDOWN 3\nLEFT -1\nRIGHT -1",
+    "LEFT 3\nRIGHT 3\nDOWN -1\nUP -1",
+    "DOWN 3\nUP 3\nRIGHT -1\nLEFT -1",
+    "RIGHT 3\nLEFT 3\nUP -1\nDOWN -1"
+   ],
+   "cells": [
+    {
+     "dx": 0,
+     "dy": -1,
+     "value": "3"
+    },
+    {
+     "dx": 0,
+     "dy": 1,
+     "value": "3"
+    },
+    {
+     "dx": -1,
+     "dy": 0,
+     "value": "-1"
+    },
+    {
+     "dx": 1,
+     "dy": 0,
+     "value": "-1"
+    }
+   ]
+  },
+  {
+   "entityId": 2050,
+   "name": "출구",
+   "assetName": "2050_Exit",
+   "rarity": "Uncommon",
+   "rotatable": false,
+   "query": "DIADOWNLEFT 1\nDOWN 2\nDIADOWNRIGHT 1",
+   "conditionQuery": "",
+   "rotatedQueries": [
+    "DIADOWNLEFT 1\nDOWN 2\nDIADOWNRIGHT 1",
+    "DIADOWNRIGHT 1\nRIGHT 2\nDIAUPRIGHT 1",
+    "DIAUPRIGHT 1\nUP 2\nDIAUPLEFT 1",
+    "DIAUPLEFT 1\nLEFT 2\nDIADOWNLEFT 1"
+   ],
+   "cells": [
+    {
+     "dx": -1,
+     "dy": 1,
+     "value": "1"
+    },
+    {
+     "dx": 0,
+     "dy": 1,
+     "value": "2"
+    },
+    {
+     "dx": 1,
+     "dy": 1,
+     "value": "1"
+    }
+   ]
+  },
+  {
+   "entityId": 2051,
+   "name": "확신",
+   "assetName": "2051_Confident",
+   "rarity": "Legend",
+   "rotatable": true,
+   "query": "UP 5",
+   "conditionQuery": "",
+   "rotatedQueries": [
+    "UP 5",
+    "LEFT 5",
+    "DOWN 5",
+    "RIGHT 5"
+   ],
+   "cells": [
+    {
+     "dx": 0,
+     "dy": -1,
+     "value": "5"
+    }
+   ]
+  },
+  {
+   "entityId": 2052,
+   "name": "집결",
+   "assetName": "2052_Rally",
+   "rarity": "Uncommon",
+   "rotatable": true,
+   "query": "UP 2\nLEFT 2",
+   "conditionQuery": "",
+   "rotatedQueries": [
+    "UP 2\nLEFT 2",
+    "LEFT 2\nDOWN 2",
+    "DOWN 2\nRIGHT 2",
+    "RIGHT 2\nUP 2"
+   ],
+   "cells": [
+    {
+     "dx": 0,
+     "dy": -1,
+     "value": "2"
+    },
+    {
+     "dx": -1,
+     "dy": 0,
+     "value": "2"
+    }
+   ]
+  },
+  {
+   "entityId": 2053,
+   "name": "발전",
+   "assetName": "2053_Progress",
+   "rarity": "Uncommon",
+   "rotatable": true,
+   "query": "DIAUPLEFT 2\nUP 1\nLEFT 1",
+   "conditionQuery": "",
+   "rotatedQueries": [
+    "DIAUPLEFT 2\nUP 1\nLEFT 1",
+    "DIADOWNLEFT 2\nLEFT 1\nDOWN 1",
+    "DIADOWNRIGHT 2\nDOWN 1\nRIGHT 1",
+    "DIAUPRIGHT 2\nRIGHT 1\nUP 1"
+   ],
+   "cells": [
+    {
+     "dx": -1,
+     "dy": -1,
+     "value": "2"
+    },
+    {
+     "dx": 0,
+     "dy": -1,
+     "value": "1"
+    },
+    {
+     "dx": -1,
+     "dy": 0,
+     "value": "1"
+    }
+   ]
+  },
+  {
+   "entityId": 2054,
+   "name": "평화",
+   "assetName": "2054_Peace",
+   "rarity": "Legend",
+   "rotatable": true,
+   "query": "LEFT 3\nRIGHT 3\n",
+   "conditionQuery": "",
+   "rotatedQueries": [
+    "LEFT 3\nRIGHT 3",
+    "DOWN 3\nUP 3",
+    "RIGHT 3\nLEFT 3",
+    "UP 3\nDOWN 3"
+   ],
+   "cells": [
+    {
+     "dx": -1,
+     "dy": 0,
+     "value": "3"
+    },
+    {
+     "dx": 1,
+     "dy": 0,
+     "value": "3"
+    }
+   ]
+  },
+  {
+   "entityId": 2055,
+   "name": "용기",
+   "assetName": "2055_Courage",
+   "rarity": "Legend",
+   "rotatable": true,
+   "query": "LEFT_RISING 1\nRIGHT_FALLING 1\nDIAUPRIGHT 2\nDIADOWNLEFT 2",
+   "conditionQuery": "",
+   "rotatedQueries": [
+    "LEFT_RISING 1\nRIGHT_FALLING 1\nDIAUPRIGHT 2\nDIADOWNLEFT 2",
+    "LEFT_FALLING 1\nRIGHT_RISING 1\nDIAUPLEFT 2\nDIADOWNRIGHT 2",
+    "RIGHT_FALLING 1\nLEFT_RISING 1\nDIADOWNLEFT 2\nDIAUPRIGHT 2",
+    "RIGHT_RISING 1\nLEFT_FALLING 1\nDIADOWNRIGHT 2\nDIAUPLEFT 2"
+   ],
+   "cells": [
+    {
+     "dx": -1,
+     "dy": -1,
+     "value": "1"
+    },
+    {
+     "dx": -2,
+     "dy": -2,
+     "value": "1"
+    },
+    {
+     "dx": -3,
+     "dy": -3,
+     "value": "1"
+    },
+    {
+     "dx": -4,
+     "dy": -4,
+     "value": "1"
+    },
+    {
+     "dx": 1,
+     "dy": 1,
+     "value": "1"
+    },
+    {
+     "dx": 2,
+     "dy": 2,
+     "value": "1"
+    },
+    {
+     "dx": 3,
+     "dy": 3,
+     "value": "1"
+    },
+    {
+     "dx": 4,
+     "dy": 4,
+     "value": "1"
+    },
+    {
+     "dx": 1,
+     "dy": -1,
+     "value": "2"
+    },
+    {
+     "dx": -1,
+     "dy": 1,
+     "value": "2"
+    }
+   ]
+  },
+  {
+   "entityId": 2056,
+   "name": "환대",
+   "assetName": "2056_Hospitality",
+   "rarity": "Legend",
+   "rotatable": false,
+   "query": "LEFT 1\nUP 2\nUP IGNORECRITERIA\nLEFT IGNORECRITERIA",
+   "conditionQuery": "",
+   "rotatedQueries": [
+    "LEFT 1\nUP 2\nUP IGNORECRITERIA\nLEFT IGNORECRITERIA",
+    "DOWN 1\nLEFT 2\nLEFT IGNORECRITERIA\nDOWN IGNORECRITERIA",
+    "RIGHT 1\nDOWN 2\nDOWN IGNORECRITERIA\nRIGHT IGNORECRITERIA",
+    "UP 1\nRIGHT 2\nRIGHT IGNORECRITERIA\nUP IGNORECRITERIA"
+   ],
+   "cells": [
+    {
+     "dx": -1,
+     "dy": 0,
+     "value": "1"
+    },
+    {
+     "dx": 0,
+     "dy": -1,
+     "value": "2"
+    },
+    {
+     "dx": 0,
+     "dy": -1,
+     "value": "IGNORECRITERIA"
+    },
+    {
+     "dx": -1,
+     "dy": 0,
+     "value": "IGNORECRITERIA"
+    }
+   ]
+  },
+  {
+   "entityId": 2057,
+   "name": "명예",
+   "assetName": "2057_Honor",
+   "rarity": "Uncommon",
+   "rotatable": true,
+   "query": "KNIGHTUPLEFT 1\nUP 2",
+   "conditionQuery": "",
+   "rotatedQueries": [
+    "KNIGHTUPLEFT 1\nUP 2",
+    "KNIGHTDOWNLEFT 1\nLEFT 2",
+    "KNIGHTDOWNRIGHT 1\nDOWN 2",
+    "KNIGHTUPRIGHT 1\nRIGHT 2"
+   ],
+   "cells": [
+    {
+     "dx": -1,
+     "dy": -2,
+     "value": "1"
+    },
+    {
+     "dx": 0,
+     "dy": -1,
+     "value": "2"
+    }
+   ]
+  },
+  {
+   "entityId": 2058,
+   "name": "배수진",
+   "assetName": "2058_LastStand",
+   "rarity": "Rare",
+   "rotatable": true,
+   "query": "UP 5\nDOWN -1\nLEFT -1\nRIGHT -1",
+   "conditionQuery": "",
+   "rotatedQueries": [
+    "UP 5\nDOWN -1\nLEFT -1\nRIGHT -1",
+    "LEFT 5\nRIGHT -1\nDOWN -1\nUP -1",
+    "DOWN 5\nUP -1\nRIGHT -1\nLEFT -1",
+    "RIGHT 5\nLEFT -1\nUP -1\nDOWN -1"
+   ],
+   "cells": [
+    {
+     "dx": 0,
+     "dy": -1,
+     "value": "5"
+    },
+    {
+     "dx": 0,
+     "dy": 1,
+     "value": "-1"
+    },
+    {
+     "dx": -1,
+     "dy": 0,
+     "value": "-1"
+    },
+    {
+     "dx": 1,
+     "dy": 0,
+     "value": "-1"
+    }
+   ]
+  },
+  {
+   "entityId": 2059,
+   "name": "깃발",
+   "assetName": "2059_Flag",
+   "rarity": "Rare",
+   "rotatable": false,
+   "query": "UP 1\nDOWN -1\nRIGHT 1\nRIGHTRIGHT 2\nRIGHTRIGHTRIGHT 3",
+   "conditionQuery": "LEFTEND PLACED",
+   "rotatedQueries": [
+    "UP 1\nDOWN -1\nRIGHT 1\nRIGHTRIGHT 2\nRIGHTRIGHTRIGHT 3",
+    "LEFT 1\nRIGHT -1\nUP 1\nUPUP 2\nUPUPUP 3",
+    "DOWN 1\nUP -1\nLEFT 1\nLEFTLEFT 2\nLEFTLEFTLEFT 3",
+    "RIGHT 1\nLEFT -1\nDOWN 1\nDOWNDOWN 2\nDOWNDOWNDOWN 3"
+   ],
+   "cells": [
+    {
+     "dx": 0,
+     "dy": -1,
+     "value": "1"
+    },
+    {
+     "dx": 0,
+     "dy": 1,
+     "value": "-1"
+    },
+    {
+     "dx": 1,
+     "dy": 0,
+     "value": "1"
+    },
+    {
+     "dx": 2,
+     "dy": 0,
+     "value": "2"
+    },
+    {
+     "dx": 3,
+     "dy": 0,
+     "value": "3"
+    }
+   ]
+  },
+  {
+   "entityId": 2060,
+   "name": "방어수",
+   "assetName": "2060_DefensiveMove",
+   "rarity": "Rare",
+   "rotatable": true,
+   "query": "DIAUPLEFT 1\nDIAUPRIGHT 2\nDIADOWNLEFT 2\nDIADOWNRIGHT 1\nLEFT -1\nRIGHT -1",
+   "conditionQuery": "",
+   "rotatedQueries": [
+    "DIAUPLEFT 1\nDIAUPRIGHT 2\nDIADOWNLEFT 2\nDIADOWNRIGHT 1\nLEFT -1\nRIGHT -1",
+    "DIADOWNLEFT 1\nDIAUPLEFT 2\nDIADOWNRIGHT 2\nDIAUPRIGHT 1\nDOWN -1\nUP -1",
+    "DIADOWNRIGHT 1\nDIADOWNLEFT 2\nDIAUPRIGHT 2\nDIAUPLEFT 1\nRIGHT -1\nLEFT -1",
+    "DIAUPRIGHT 1\nDIADOWNRIGHT 2\nDIAUPLEFT 2\nDIADOWNLEFT 1\nUP -1\nDOWN -1"
+   ],
+   "cells": [
+    {
+     "dx": -1,
+     "dy": -1,
+     "value": "1"
+    },
+    {
+     "dx": 1,
+     "dy": -1,
+     "value": "2"
+    },
+    {
+     "dx": -1,
+     "dy": 1,
+     "value": "2"
+    },
+    {
+     "dx": 1,
+     "dy": 1,
+     "value": "1"
+    },
+    {
+     "dx": -1,
+     "dy": 0,
+     "value": "-1"
+    },
+    {
+     "dx": 1,
+     "dy": 0,
+     "value": "-1"
+    }
+   ]
+  },
+  {
+   "entityId": 2061,
+   "name": "쐐기",
+   "assetName": "2061_Fang",
+   "rarity": "Rare",
+   "rotatable": true,
+   "query": "DIAUPLEFT 3",
+   "conditionQuery": "",
+   "rotatedQueries": [
+    "DIAUPLEFT 3",
+    "DIADOWNLEFT 3",
+    "DIADOWNRIGHT 3",
+    "DIAUPRIGHT 3"
+   ],
+   "cells": [
+    {
+     "dx": -1,
+     "dy": -1,
+     "value": "3"
+    }
+   ]
+  },
+  {
+   "entityId": 2062,
+   "name": "생장",
+   "assetName": "2062_Growth",
+   "rarity": "Rare",
+   "rotatable": false,
+   "query": "TOP 1\n",
+   "conditionQuery": "BOTTOM PLACED",
+   "rotatedQueries": [
+    "TOP 1",
+    "LEFTEND 1",
+    "BOTTOM 1",
+    "RIGHTEND 1"
+   ],
+   "cells": [
+    {
+     "dx": -4,
+     "dy": -4,
+     "value": "1",
+     "yWorld": true
+    },
+    {
+     "dx": -3,
+     "dy": -4,
+     "value": "1",
+     "yWorld": true
+    },
+    {
+     "dx": -2,
+     "dy": -4,
+     "value": "1",
+     "yWorld": true
+    },
+    {
+     "dx": -1,
+     "dy": -4,
+     "value": "1",
+     "yWorld": true
+    },
+    {
+     "dx": 0,
+     "dy": -4,
+     "value": "1",
+     "yWorld": true
+    },
+    {
+     "dx": 1,
+     "dy": -4,
+     "value": "1",
+     "yWorld": true
+    },
+    {
+     "dx": 2,
+     "dy": -4,
+     "value": "1",
+     "yWorld": true
+    },
+    {
+     "dx": 3,
+     "dy": -4,
+     "value": "1",
+     "yWorld": true
+    },
+    {
+     "dx": 4,
+     "dy": -4,
+     "value": "1",
+     "yWorld": true
+    }
+   ]
+  },
+  {
+   "entityId": 2063,
+   "name": "반향",
+   "assetName": "2063_Reverberation",
+   "rarity": "Rare",
+   "rotatable": false,
+   "query": "DOWN 1\nDOWNDOWN 3",
+   "conditionQuery": "",
+   "rotatedQueries": [
+    "DOWN 1\nDOWNDOWN 3",
+    "RIGHT 1\nRIGHTRIGHT 3",
+    "UP 1\nUPUP 3",
+    "LEFT 1\nLEFTLEFT 3"
+   ],
+   "cells": [
+    {
+     "dx": 0,
+     "dy": 1,
+     "value": "1"
+    },
+    {
+     "dx": 0,
+     "dy": 2,
+     "value": "3"
+    }
+   ]
+  },
+  {
+   "entityId": 2098,
+   "name": "지옥",
+   "assetName": "2098_Hell",
+   "rarity": "Eternal",
+   "rotatable": false,
+   "query": "CHECKERBOARD2 -9\nCHECKERBOARD -9",
+   "conditionQuery": "",
+   "rotatedQueries": [
+    "CHECKERBOARD2 -9\nCHECKERBOARD -9",
+    "CHECKERBOARD2 -9\nCHECKERBOARD -9",
+    "CHECKERBOARD2 -9\nCHECKERBOARD -9",
+    "CHECKERBOARD2 -9\nCHECKERBOARD -9"
+   ],
+   "cells": [
+    {
+     "dx": -4,
+     "dy": -3,
+     "value": "-9"
+    },
+    {
+     "dx": -4,
+     "dy": -1,
+     "value": "-9"
+    },
+    {
+     "dx": -4,
+     "dy": 1,
+     "value": "-9"
+    },
+    {
+     "dx": -4,
+     "dy": 3,
+     "value": "-9"
+    },
+    {
+     "dx": -3,
+     "dy": -4,
+     "value": "-9"
+    },
+    {
+     "dx": -3,
+     "dy": -2,
+     "value": "-9"
+    },
+    {
+     "dx": -3,
+     "dy": 0,
+     "value": "-9"
+    },
+    {
+     "dx": -3,
+     "dy": 2,
+     "value": "-9"
+    },
+    {
+     "dx": -3,
+     "dy": 4,
+     "value": "-9"
+    },
+    {
+     "dx": -2,
+     "dy": -3,
+     "value": "-9"
+    },
+    {
+     "dx": -2,
+     "dy": -1,
+     "value": "-9"
+    },
+    {
+     "dx": -2,
+     "dy": 1,
+     "value": "-9"
+    },
+    {
+     "dx": -2,
+     "dy": 3,
+     "value": "-9"
+    },
+    {
+     "dx": -1,
+     "dy": -4,
+     "value": "-9"
+    },
+    {
+     "dx": -1,
+     "dy": -2,
+     "value": "-9"
+    },
+    {
+     "dx": -1,
+     "dy": 0,
+     "value": "-9"
+    },
+    {
+     "dx": -1,
+     "dy": 2,
+     "value": "-9"
+    },
+    {
+     "dx": -1,
+     "dy": 4,
+     "value": "-9"
+    },
+    {
+     "dx": 0,
+     "dy": -3,
+     "value": "-9"
+    },
+    {
+     "dx": 0,
+     "dy": -1,
+     "value": "-9"
+    },
+    {
+     "dx": 0,
+     "dy": 1,
+     "value": "-9"
+    },
+    {
+     "dx": 0,
+     "dy": 3,
+     "value": "-9"
+    },
+    {
+     "dx": 1,
+     "dy": -4,
+     "value": "-9"
+    },
+    {
+     "dx": 1,
+     "dy": -2,
+     "value": "-9"
+    },
+    {
+     "dx": 1,
+     "dy": 0,
+     "value": "-9"
+    },
+    {
+     "dx": 1,
+     "dy": 2,
+     "value": "-9"
+    },
+    {
+     "dx": 1,
+     "dy": 4,
+     "value": "-9"
+    },
+    {
+     "dx": 2,
+     "dy": -3,
+     "value": "-9"
+    },
+    {
+     "dx": 2,
+     "dy": -1,
+     "value": "-9"
+    },
+    {
+     "dx": 2,
+     "dy": 1,
+     "value": "-9"
+    },
+    {
+     "dx": 2,
+     "dy": 3,
+     "value": "-9"
+    },
+    {
+     "dx": 3,
+     "dy": -4,
+     "value": "-9"
+    },
+    {
+     "dx": 3,
+     "dy": -2,
+     "value": "-9"
+    },
+    {
+     "dx": 3,
+     "dy": 0,
+     "value": "-9"
+    },
+    {
+     "dx": 3,
+     "dy": 2,
+     "value": "-9"
+    },
+    {
+     "dx": 3,
+     "dy": 4,
+     "value": "-9"
+    },
+    {
+     "dx": 4,
+     "dy": -3,
+     "value": "-9"
+    },
+    {
+     "dx": 4,
+     "dy": -1,
+     "value": "-9"
+    },
+    {
+     "dx": 4,
+     "dy": 1,
+     "value": "-9"
+    },
+    {
+     "dx": 4,
+     "dy": 3,
+     "value": "-9"
+    },
+    {
+     "dx": -4,
+     "dy": -4,
+     "value": "-9"
+    },
+    {
+     "dx": -4,
+     "dy": -2,
+     "value": "-9"
+    },
+    {
+     "dx": -4,
+     "dy": 0,
+     "value": "-9"
+    },
+    {
+     "dx": -4,
+     "dy": 2,
+     "value": "-9"
+    },
+    {
+     "dx": -4,
+     "dy": 4,
+     "value": "-9"
+    },
+    {
+     "dx": -3,
+     "dy": -3,
+     "value": "-9"
+    },
+    {
+     "dx": -3,
+     "dy": -1,
+     "value": "-9"
+    },
+    {
+     "dx": -3,
+     "dy": 1,
+     "value": "-9"
+    },
+    {
+     "dx": -3,
+     "dy": 3,
+     "value": "-9"
+    },
+    {
+     "dx": -2,
+     "dy": -4,
+     "value": "-9"
+    },
+    {
+     "dx": -2,
+     "dy": -2,
+     "value": "-9"
+    },
+    {
+     "dx": -2,
+     "dy": 0,
+     "value": "-9"
+    },
+    {
+     "dx": -2,
+     "dy": 2,
+     "value": "-9"
+    },
+    {
+     "dx": -2,
+     "dy": 4,
+     "value": "-9"
+    },
+    {
+     "dx": -1,
+     "dy": -3,
+     "value": "-9"
+    },
+    {
+     "dx": -1,
+     "dy": -1,
+     "value": "-9"
+    },
+    {
+     "dx": -1,
+     "dy": 1,
+     "value": "-9"
+    },
+    {
+     "dx": -1,
+     "dy": 3,
+     "value": "-9"
+    },
+    {
+     "dx": 0,
+     "dy": -4,
+     "value": "-9"
+    },
+    {
+     "dx": 0,
+     "dy": -2,
+     "value": "-9"
+    },
+    {
+     "dx": 0,
+     "dy": 2,
+     "value": "-9"
+    },
+    {
+     "dx": 0,
+     "dy": 4,
+     "value": "-9"
+    },
+    {
+     "dx": 1,
+     "dy": -3,
+     "value": "-9"
+    },
+    {
+     "dx": 1,
+     "dy": -1,
+     "value": "-9"
+    },
+    {
+     "dx": 1,
+     "dy": 1,
+     "value": "-9"
+    },
+    {
+     "dx": 1,
+     "dy": 3,
+     "value": "-9"
+    },
+    {
+     "dx": 2,
+     "dy": -4,
+     "value": "-9"
+    },
+    {
+     "dx": 2,
+     "dy": -2,
+     "value": "-9"
+    },
+    {
+     "dx": 2,
+     "dy": 0,
+     "value": "-9"
+    },
+    {
+     "dx": 2,
+     "dy": 2,
+     "value": "-9"
+    },
+    {
+     "dx": 2,
+     "dy": 4,
+     "value": "-9"
+    },
+    {
+     "dx": 3,
+     "dy": -3,
+     "value": "-9"
+    },
+    {
+     "dx": 3,
+     "dy": -1,
+     "value": "-9"
+    },
+    {
+     "dx": 3,
+     "dy": 1,
+     "value": "-9"
+    },
+    {
+     "dx": 3,
+     "dy": 3,
+     "value": "-9"
+    },
+    {
+     "dx": 4,
+     "dy": -4,
+     "value": "-9"
+    },
+    {
+     "dx": 4,
+     "dy": -2,
+     "value": "-9"
+    },
+    {
+     "dx": 4,
+     "dy": 0,
+     "value": "-9"
+    },
+    {
+     "dx": 4,
+     "dy": 2,
+     "value": "-9"
+    },
+    {
+     "dx": 4,
+     "dy": 4,
+     "value": "-9"
+    }
+   ]
+  },
+  {
+   "entityId": 2099,
+   "name": "천국",
+   "assetName": "2099_Heaven",
+   "rarity": "Eternal",
+   "rotatable": false,
+   "query": "CHECKERBOARD2 9\nCHECKERBOARD 9",
+   "conditionQuery": "",
+   "rotatedQueries": [
+    "CHECKERBOARD2 9\nCHECKERBOARD 9",
+    "CHECKERBOARD2 9\nCHECKERBOARD 9",
+    "CHECKERBOARD2 9\nCHECKERBOARD 9",
+    "CHECKERBOARD2 9\nCHECKERBOARD 9"
+   ],
+   "cells": [
+    {
+     "dx": -4,
+     "dy": -3,
+     "value": "9"
+    },
+    {
+     "dx": -4,
+     "dy": -1,
+     "value": "9"
+    },
+    {
+     "dx": -4,
+     "dy": 1,
+     "value": "9"
+    },
+    {
+     "dx": -4,
+     "dy": 3,
+     "value": "9"
+    },
+    {
+     "dx": -3,
+     "dy": -4,
+     "value": "9"
+    },
+    {
+     "dx": -3,
+     "dy": -2,
+     "value": "9"
+    },
+    {
+     "dx": -3,
+     "dy": 0,
+     "value": "9"
+    },
+    {
+     "dx": -3,
+     "dy": 2,
+     "value": "9"
+    },
+    {
+     "dx": -3,
+     "dy": 4,
+     "value": "9"
+    },
+    {
+     "dx": -2,
+     "dy": -3,
+     "value": "9"
+    },
+    {
+     "dx": -2,
+     "dy": -1,
+     "value": "9"
+    },
+    {
+     "dx": -2,
+     "dy": 1,
+     "value": "9"
+    },
+    {
+     "dx": -2,
+     "dy": 3,
+     "value": "9"
+    },
+    {
+     "dx": -1,
+     "dy": -4,
+     "value": "9"
+    },
+    {
+     "dx": -1,
+     "dy": -2,
+     "value": "9"
+    },
+    {
+     "dx": -1,
+     "dy": 0,
+     "value": "9"
+    },
+    {
+     "dx": -1,
+     "dy": 2,
+     "value": "9"
+    },
+    {
+     "dx": -1,
+     "dy": 4,
+     "value": "9"
+    },
+    {
+     "dx": 0,
+     "dy": -3,
+     "value": "9"
+    },
+    {
+     "dx": 0,
+     "dy": -1,
+     "value": "9"
+    },
+    {
+     "dx": 0,
+     "dy": 1,
+     "value": "9"
+    },
+    {
+     "dx": 0,
+     "dy": 3,
+     "value": "9"
+    },
+    {
+     "dx": 1,
+     "dy": -4,
+     "value": "9"
+    },
+    {
+     "dx": 1,
+     "dy": -2,
+     "value": "9"
+    },
+    {
+     "dx": 1,
+     "dy": 0,
+     "value": "9"
+    },
+    {
+     "dx": 1,
+     "dy": 2,
+     "value": "9"
+    },
+    {
+     "dx": 1,
+     "dy": 4,
+     "value": "9"
+    },
+    {
+     "dx": 2,
+     "dy": -3,
+     "value": "9"
+    },
+    {
+     "dx": 2,
+     "dy": -1,
+     "value": "9"
+    },
+    {
+     "dx": 2,
+     "dy": 1,
+     "value": "9"
+    },
+    {
+     "dx": 2,
+     "dy": 3,
+     "value": "9"
+    },
+    {
+     "dx": 3,
+     "dy": -4,
+     "value": "9"
+    },
+    {
+     "dx": 3,
+     "dy": -2,
+     "value": "9"
+    },
+    {
+     "dx": 3,
+     "dy": 0,
+     "value": "9"
+    },
+    {
+     "dx": 3,
+     "dy": 2,
+     "value": "9"
+    },
+    {
+     "dx": 3,
+     "dy": 4,
+     "value": "9"
+    },
+    {
+     "dx": 4,
+     "dy": -3,
+     "value": "9"
+    },
+    {
+     "dx": 4,
+     "dy": -1,
+     "value": "9"
+    },
+    {
+     "dx": 4,
+     "dy": 1,
+     "value": "9"
+    },
+    {
+     "dx": 4,
+     "dy": 3,
+     "value": "9"
+    },
+    {
+     "dx": -4,
+     "dy": -4,
+     "value": "9"
+    },
+    {
+     "dx": -4,
+     "dy": -2,
+     "value": "9"
+    },
+    {
+     "dx": -4,
+     "dy": 0,
+     "value": "9"
+    },
+    {
+     "dx": -4,
+     "dy": 2,
+     "value": "9"
+    },
+    {
+     "dx": -4,
+     "dy": 4,
+     "value": "9"
+    },
+    {
+     "dx": -3,
+     "dy": -3,
+     "value": "9"
+    },
+    {
+     "dx": -3,
+     "dy": -1,
+     "value": "9"
+    },
+    {
+     "dx": -3,
+     "dy": 1,
+     "value": "9"
+    },
+    {
+     "dx": -3,
+     "dy": 3,
+     "value": "9"
+    },
+    {
+     "dx": -2,
+     "dy": -4,
+     "value": "9"
+    },
+    {
+     "dx": -2,
+     "dy": -2,
+     "value": "9"
+    },
+    {
+     "dx": -2,
+     "dy": 0,
+     "value": "9"
+    },
+    {
+     "dx": -2,
+     "dy": 2,
+     "value": "9"
+    },
+    {
+     "dx": -2,
+     "dy": 4,
+     "value": "9"
+    },
+    {
+     "dx": -1,
+     "dy": -3,
+     "value": "9"
+    },
+    {
+     "dx": -1,
+     "dy": -1,
+     "value": "9"
+    },
+    {
+     "dx": -1,
+     "dy": 1,
+     "value": "9"
+    },
+    {
+     "dx": -1,
+     "dy": 3,
+     "value": "9"
+    },
+    {
+     "dx": 0,
+     "dy": -4,
+     "value": "9"
+    },
+    {
+     "dx": 0,
+     "dy": -2,
+     "value": "9"
+    },
+    {
+     "dx": 0,
+     "dy": 2,
+     "value": "9"
+    },
+    {
+     "dx": 0,
+     "dy": 4,
+     "value": "9"
+    },
+    {
+     "dx": 1,
+     "dy": -3,
+     "value": "9"
+    },
+    {
+     "dx": 1,
+     "dy": -1,
+     "value": "9"
+    },
+    {
+     "dx": 1,
+     "dy": 1,
+     "value": "9"
+    },
+    {
+     "dx": 1,
+     "dy": 3,
+     "value": "9"
+    },
+    {
+     "dx": 2,
+     "dy": -4,
+     "value": "9"
+    },
+    {
+     "dx": 2,
+     "dy": -2,
+     "value": "9"
+    },
+    {
+     "dx": 2,
+     "dy": 0,
+     "value": "9"
+    },
+    {
+     "dx": 2,
+     "dy": 2,
+     "value": "9"
+    },
+    {
+     "dx": 2,
+     "dy": 4,
+     "value": "9"
+    },
+    {
+     "dx": 3,
+     "dy": -3,
+     "value": "9"
+    },
+    {
+     "dx": 3,
+     "dy": -1,
+     "value": "9"
+    },
+    {
+     "dx": 3,
+     "dy": 1,
+     "value": "9"
+    },
+    {
+     "dx": 3,
+     "dy": 3,
+     "value": "9"
+    },
+    {
+     "dx": 4,
+     "dy": -4,
+     "value": "9"
+    },
+    {
+     "dx": 4,
+     "dy": -2,
+     "value": "9"
+    },
+    {
+     "dx": 4,
+     "dy": 0,
+     "value": "9"
+    },
+    {
+     "dx": 4,
+     "dy": 2,
+     "value": "9"
+    },
+    {
+     "dx": 4,
+     "dy": 4,
+     "value": "9"
+    }
+   ]
+  },
+  {
+   "entityId": 2100,
+   "name": "보은",
+   "assetName": "2100_Requital",
+   "rarity": "Eternal",
+   "rotatable": true,
+   "query": "HORIZONTAL 3",
+   "conditionQuery": "",
+   "rotatedQueries": [
+    "HORIZONTAL 3",
+    "VERTICAL 3",
+    "HORIZONTAL 3",
+    "VERTICAL 3"
+   ],
+   "cells": [
+    {
+     "dx": -4,
+     "dy": 0,
+     "value": "3"
+    },
+    {
+     "dx": -3,
+     "dy": 0,
+     "value": "3"
+    },
+    {
+     "dx": -2,
+     "dy": 0,
+     "value": "3"
+    },
+    {
+     "dx": -1,
+     "dy": 0,
+     "value": "3"
+    },
+    {
+     "dx": 1,
+     "dy": 0,
+     "value": "3"
+    },
+    {
+     "dx": 2,
+     "dy": 0,
+     "value": "3"
+    },
+    {
+     "dx": 3,
+     "dy": 0,
+     "value": "3"
+    },
+    {
+     "dx": 4,
+     "dy": 0,
+     "value": "3"
+    }
+   ]
+  },
+  {
+   "entityId": 2101,
+   "name": "...",
+   "assetName": "2101_CUSTOM",
+   "rarity": "Legend",
+   "rotatable": false,
+   "query": "",
+   "conditionQuery": "",
+   "rotatedQueries": null,
+   "cells": []
+  },
+  {
+   "entityId": 12000,
+   "name": "저주",
+   "assetName": "12000_Curse",
+   "rarity": "Legend",
+   "rotatable": true,
+   "query": "CHECKERBOARD2 1\nCHECKERBOARD -1",
+   "conditionQuery": "",
+   "rotatedQueries": [
+    "CHECKERBOARD2 1\nCHECKERBOARD -1",
+    "CHECKERBOARD2 1\nCHECKERBOARD -1",
+    "CHECKERBOARD2 1\nCHECKERBOARD -1",
+    "CHECKERBOARD2 1\nCHECKERBOARD -1"
+   ],
+   "cells": [
+    {
+     "dx": -4,
+     "dy": -3,
+     "value": "1"
+    },
+    {
+     "dx": -4,
+     "dy": -1,
+     "value": "1"
+    },
+    {
+     "dx": -4,
+     "dy": 1,
+     "value": "1"
+    },
+    {
+     "dx": -4,
+     "dy": 3,
+     "value": "1"
+    },
+    {
+     "dx": -3,
+     "dy": -4,
+     "value": "1"
+    },
+    {
+     "dx": -3,
+     "dy": -2,
+     "value": "1"
+    },
+    {
+     "dx": -3,
+     "dy": 0,
+     "value": "1"
+    },
+    {
+     "dx": -3,
+     "dy": 2,
+     "value": "1"
+    },
+    {
+     "dx": -3,
+     "dy": 4,
+     "value": "1"
+    },
+    {
+     "dx": -2,
+     "dy": -3,
+     "value": "1"
+    },
+    {
+     "dx": -2,
+     "dy": -1,
+     "value": "1"
+    },
+    {
+     "dx": -2,
+     "dy": 1,
+     "value": "1"
+    },
+    {
+     "dx": -2,
+     "dy": 3,
+     "value": "1"
+    },
+    {
+     "dx": -1,
+     "dy": -4,
+     "value": "1"
+    },
+    {
+     "dx": -1,
+     "dy": -2,
+     "value": "1"
+    },
+    {
+     "dx": -1,
+     "dy": 0,
+     "value": "1"
+    },
+    {
+     "dx": -1,
+     "dy": 2,
+     "value": "1"
+    },
+    {
+     "dx": -1,
+     "dy": 4,
+     "value": "1"
+    },
+    {
+     "dx": 0,
+     "dy": -3,
+     "value": "1"
+    },
+    {
+     "dx": 0,
+     "dy": -1,
+     "value": "1"
+    },
+    {
+     "dx": 0,
+     "dy": 1,
+     "value": "1"
+    },
+    {
+     "dx": 0,
+     "dy": 3,
+     "value": "1"
+    },
+    {
+     "dx": 1,
+     "dy": -4,
+     "value": "1"
+    },
+    {
+     "dx": 1,
+     "dy": -2,
+     "value": "1"
+    },
+    {
+     "dx": 1,
+     "dy": 0,
+     "value": "1"
+    },
+    {
+     "dx": 1,
+     "dy": 2,
+     "value": "1"
+    },
+    {
+     "dx": 1,
+     "dy": 4,
+     "value": "1"
+    },
+    {
+     "dx": 2,
+     "dy": -3,
+     "value": "1"
+    },
+    {
+     "dx": 2,
+     "dy": -1,
+     "value": "1"
+    },
+    {
+     "dx": 2,
+     "dy": 1,
+     "value": "1"
+    },
+    {
+     "dx": 2,
+     "dy": 3,
+     "value": "1"
+    },
+    {
+     "dx": 3,
+     "dy": -4,
+     "value": "1"
+    },
+    {
+     "dx": 3,
+     "dy": -2,
+     "value": "1"
+    },
+    {
+     "dx": 3,
+     "dy": 0,
+     "value": "1"
+    },
+    {
+     "dx": 3,
+     "dy": 2,
+     "value": "1"
+    },
+    {
+     "dx": 3,
+     "dy": 4,
+     "value": "1"
+    },
+    {
+     "dx": 4,
+     "dy": -3,
+     "value": "1"
+    },
+    {
+     "dx": 4,
+     "dy": -1,
+     "value": "1"
+    },
+    {
+     "dx": 4,
+     "dy": 1,
+     "value": "1"
+    },
+    {
+     "dx": 4,
+     "dy": 3,
+     "value": "1"
+    },
+    {
+     "dx": -4,
+     "dy": -4,
+     "value": "-1"
+    },
+    {
+     "dx": -4,
+     "dy": -2,
+     "value": "-1"
+    },
+    {
+     "dx": -4,
+     "dy": 0,
+     "value": "-1"
+    },
+    {
+     "dx": -4,
+     "dy": 2,
+     "value": "-1"
+    },
+    {
+     "dx": -4,
+     "dy": 4,
+     "value": "-1"
+    },
+    {
+     "dx": -3,
+     "dy": -3,
+     "value": "-1"
+    },
+    {
+     "dx": -3,
+     "dy": -1,
+     "value": "-1"
+    },
+    {
+     "dx": -3,
+     "dy": 1,
+     "value": "-1"
+    },
+    {
+     "dx": -3,
+     "dy": 3,
+     "value": "-1"
+    },
+    {
+     "dx": -2,
+     "dy": -4,
+     "value": "-1"
+    },
+    {
+     "dx": -2,
+     "dy": -2,
+     "value": "-1"
+    },
+    {
+     "dx": -2,
+     "dy": 0,
+     "value": "-1"
+    },
+    {
+     "dx": -2,
+     "dy": 2,
+     "value": "-1"
+    },
+    {
+     "dx": -2,
+     "dy": 4,
+     "value": "-1"
+    },
+    {
+     "dx": -1,
+     "dy": -3,
+     "value": "-1"
+    },
+    {
+     "dx": -1,
+     "dy": -1,
+     "value": "-1"
+    },
+    {
+     "dx": -1,
+     "dy": 1,
+     "value": "-1"
+    },
+    {
+     "dx": -1,
+     "dy": 3,
+     "value": "-1"
+    },
+    {
+     "dx": 0,
+     "dy": -4,
+     "value": "-1"
+    },
+    {
+     "dx": 0,
+     "dy": -2,
+     "value": "-1"
+    },
+    {
+     "dx": 0,
+     "dy": 2,
+     "value": "-1"
+    },
+    {
+     "dx": 0,
+     "dy": 4,
+     "value": "-1"
+    },
+    {
+     "dx": 1,
+     "dy": -3,
+     "value": "-1"
+    },
+    {
+     "dx": 1,
+     "dy": -1,
+     "value": "-1"
+    },
+    {
+     "dx": 1,
+     "dy": 1,
+     "value": "-1"
+    },
+    {
+     "dx": 1,
+     "dy": 3,
+     "value": "-1"
+    },
+    {
+     "dx": 2,
+     "dy": -4,
+     "value": "-1"
+    },
+    {
+     "dx": 2,
+     "dy": -2,
+     "value": "-1"
+    },
+    {
+     "dx": 2,
+     "dy": 0,
+     "value": "-1"
+    },
+    {
+     "dx": 2,
+     "dy": 2,
+     "value": "-1"
+    },
+    {
+     "dx": 2,
+     "dy": 4,
+     "value": "-1"
+    },
+    {
+     "dx": 3,
+     "dy": -3,
+     "value": "-1"
+    },
+    {
+     "dx": 3,
+     "dy": -1,
+     "value": "-1"
+    },
+    {
+     "dx": 3,
+     "dy": 1,
+     "value": "-1"
+    },
+    {
+     "dx": 3,
+     "dy": 3,
+     "value": "-1"
+    },
+    {
+     "dx": 4,
+     "dy": -4,
+     "value": "-1"
+    },
+    {
+     "dx": 4,
+     "dy": -2,
+     "value": "-1"
+    },
+    {
+     "dx": 4,
+     "dy": 0,
+     "value": "-1"
+    },
+    {
+     "dx": 4,
+     "dy": 2,
+     "value": "-1"
+    },
+    {
+     "dx": 4,
+     "dy": 4,
+     "value": "-1"
+    }
+   ]
+  },
+  {
+   "entityId": 12001,
+   "name": "",
+   "assetName": "12001_Miracle_Athlete",
+   "rarity": "Common",
+   "rotatable": true,
+   "query": "RIDX 0 1\nRIDX 1 1",
+   "conditionQuery": "",
+   "rotatedQueries": [
+    "RIDX 0 1\nRIDX 1 1",
+    "RIDX 0 1\nRIDX 1 1",
+    "RIDX 0 1\nRIDX 1 1",
+    "RIDX 0 1\nRIDX 1 1"
+   ],
+   "cells": [
+    {
+     "dx": 4,
+     "dy": 4,
+     "value": "1"
+    },
+    {
+     "dx": 3,
+     "dy": 4,
+     "value": "1"
+    }
+   ]
+  },
+  {
+   "entityId": 12002,
+   "name": "",
+   "assetName": "12002_Wisdom",
+   "rarity": "Rare",
+   "rotatable": true,
+   "query": "O MUL/2",
+   "conditionQuery": "",
+   "rotatedQueries": [
+    "O MUL/2",
+    "O MUL/2",
+    "O MUL/2",
+    "O MUL/2"
+   ],
+   "cells": [
+    {
+     "dx": 0,
+     "dy": 0,
+     "value": "MUL/2"
+    }
+   ]
+  }
+ ]
+}
