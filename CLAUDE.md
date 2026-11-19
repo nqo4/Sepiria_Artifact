@@ -11,6 +11,7 @@
 
 - 저장소: https://github.com/nqo4/Sepiria_Artifact (공개) — **게임/BepInEx DLL은 절대 커밋 금지**
 - 남은 작업과 데이터 불확실성: **`GAPS.md`** 를 먼저 볼 것
+- 새 PC 환경 준비, 단계별 로드맵, 실게임 확인 절차: **`docs/DEVELOPMENT_GUIDE.md`**
 
 ## 구조
 
