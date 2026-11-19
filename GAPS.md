@@ -27,7 +27,7 @@
   - 무기 티어/상위 무기: `WeaponEntity.standardEnhancements`(부모→자식)로 계산(`enhanceFromId`는 실게임에서 -1).
   - 식별자 `v` = 게임 에셋 이름(`1188_HPSteal`) — `/inv`의 `assetName`과 같아서 라이브 인벤토리와 바로 매칭.
   - 태그 키가 게임 키(`STURDY`, `EMBER` …)로 바뀜. 한국어는 `TAG_KO`(기존 DB 태그와 다수결로 맞춤).
-  - 이미지(`img`)는 게임에서 URL로 못 가져와 비어 있음.
+  - 이미지: `/icon?name=<에셋 이름>` 라우트가 게임 아이콘(Sprite)을 PNG로 변환해 보냄. `data.json`의 `img`가 이 주소(604개 중 601개 존재, 특수 무기 3개 없음).
 
 ## ❌ 아직 남음 (우선순위 순)
 
@@ -37,7 +37,7 @@
    - 게임에 `AutoArrangeInventoryForBestCharmLevels(maxIterations, allowTabletRotation)` 가 이미 있음 — 엔진 결과 비교 대상.
 2. **`recommend_template.html` 누락 부분** — 전역 상태 선언(`weapon, anchors, candidates, basket, pinnedTags, demoMode, candidateKind`), 라이브 폴링(`/inv`), `runPlacement`, `renderPlacementGrid`, `renderBasket`.
    - `TIER_RANK`는 게임 등급 이름(`Common`, `Uncommon`, `Rare`, `Legend`) 기준으로 새로 정의해야 함.
-   - 아이템 이미지 없음 — 필요하면 게임 아이콘(Sprite)을 PNG로 뽑는 별도 작업.
+   - `img`는 `/icon?name=...` 상대 주소 — 페이지를 `file://`로 열면 연결된 플러그인 주소(`http://127.0.0.1:포트`)를 앞에 붙여야 함. 게임이 꺼져 있으면 아이콘 없음.
    - `placement_db.json`의 `artifacts`(267개, 한국어 태그·conditionType)는 아직 예전 데이터 — `data/items_game.json` 기준으로 맞출지 결정 필요.
 
 ## ⚠ 데이터 확인 필요

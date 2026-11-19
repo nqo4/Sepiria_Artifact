@@ -37,6 +37,12 @@ namespace SephiriaLive.Core
         public int Status = 200;
         public string ContentType = "application/json; charset=utf-8";
         public string Body = "";
+        /// <summary>null이 아니면 Body 대신 이 바이트를 그대로 보낸다(이미지 등).</summary>
+        public byte[] BodyBytes;
+        public string CacheControl = "no-store";
+
+        public static HttpResponseData Binary(byte[] bytes, string contentType, string cacheControl = "max-age=3600") =>
+            new HttpResponseData { ContentType = contentType, BodyBytes = bytes ?? new byte[0], CacheControl = cacheControl };
 
         public static HttpResponseData Json(object obj, int status = 200) =>
             new HttpResponseData { Status = status, Body = MiniJson.Write(obj) };
@@ -235,12 +241,12 @@ namespace SephiriaLive.Core
 
         static void WriteResponse(NetworkStream stream, HttpResponseData resp, string allowedOrigin)
         {
-            var body = Encoding.UTF8.GetBytes(resp.Body ?? "");
+            var body = resp.BodyBytes ?? Encoding.UTF8.GetBytes(resp.Body ?? "");
             var sb = new StringBuilder();
             sb.Append("HTTP/1.1 ").Append(resp.Status).Append(' ').Append(ReasonPhrase(resp.Status)).Append("\r\n");
             if (!string.IsNullOrEmpty(resp.ContentType)) sb.Append("Content-Type: ").Append(resp.ContentType).Append("\r\n");
             sb.Append("Content-Length: ").Append(body.Length).Append("\r\n");
-            sb.Append("Cache-Control: no-store\r\n");
+            sb.Append("Cache-Control: ").Append(string.IsNullOrEmpty(resp.CacheControl) ? "no-store" : resp.CacheControl).Append("\r\n");
             if (!string.IsNullOrEmpty(allowedOrigin))
             {
                 sb.Append("Access-Control-Allow-Origin: ").Append(allowedOrigin).Append("\r\n");

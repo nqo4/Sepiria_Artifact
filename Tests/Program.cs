@@ -282,6 +282,8 @@ void Check(string name, bool ok, string detail = "")
 {
     var server = new MiniHttpServer(48766);
     server.Route("POST", "/apply", ctx => HttpResponseData.Json(new JObj { ["ok"] = true }));
+    var png = new byte[] { 0x89, 0x50, 0x4E, 0x47, 0x00, 0xFF };
+    server.Route("GET", "/icon", ctx => ctx.QueryParam("name") == "x" ? HttpResponseData.Binary(png, "image/png") : HttpResponseData.Text("no", 404));
     server.Start();
     using var http = new System.Net.Http.HttpClient();
     try
@@ -297,6 +299,11 @@ void Check(string name, bool ok, string detail = "")
         req2.Headers.Add("Origin", "null"); // file:// 로 연 동반 페이지
         var resp2 = http.SendAsync(req2).GetAwaiter().GetResult();
         Check("file:// (Origin: null) 요청은 허용", (int)resp2.StatusCode == 200, ((int)resp2.StatusCode).ToString());
+
+        var iconResp = http.GetAsync("http://127.0.0.1:48766/icon?name=x").GetAwaiter().GetResult();
+        var iconBytes = iconResp.Content.ReadAsByteArrayAsync().GetAwaiter().GetResult();
+        Check("바이너리 응답(PNG) 바이트 그대로 + 캐시 허용", iconBytes.SequenceEqual(png) && iconResp.Content.Headers.ContentType?.MediaType == "image/png"
+            && iconResp.Headers.CacheControl?.MaxAge == TimeSpan.FromHours(1), BitConverter.ToString(iconBytes));
 
         bool threw = false;
         var dupServer = new MiniHttpServer(48766);

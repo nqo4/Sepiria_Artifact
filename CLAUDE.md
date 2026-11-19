@@ -63,6 +63,8 @@ dotnet build Plugin -c Release -p:DeployToGame=true   # BepInEx/plugins/Sephiria
   (`maxLevel`, `BuildEffectString(null, "", "
 ", level, 0, true, true)` = 툴팁 문장). 무기는 `WeaponEntity`
   (`standardEnhancements` = 다음 강화 무기들, `enhanceFromId`는 -1) + 프리팹 `WeaponSimple.addons[].GetEffectText()`. 덤프: `/items` → `data/items_game.json`.
+- 아이콘: `ItemEntity.icon` / `WeaponEntity.icon`(Sprite, 아틀라스 안 작은 픽셀 아트, 텍스처 CPU 읽기 불가)
+  → RenderTexture에 Blit 후 `textureRect`만 ReadPixels → EncodeToPNG (`/icon`, 메인 스레드, 결과 캐시).
 - 게임 메타데이터 재조사: `BepInEx/core/Mono.Cecil.dll`을 스크래치로 복사 → `[Reflection.Assembly]::Load(bytes)` → `ModuleDefinition.ReadModule`.
   (게임 폴더에서 바로 Add-Type 하면 0x80131515로 막힘)
 - 게임 환경: Unity 6000.3, BepInEx 5.4.23.2, Mirror 네트워킹(싱글도 호스트).

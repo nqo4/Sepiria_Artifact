@@ -3,6 +3,7 @@
 v(식별자)는 게임 에셋 이름(예: 1188_HPSteal) — /inv 의 assetName 과 같아서 라이브 인벤토리와 바로 매칭된다.
 """
 import json, re
+from urllib.parse import quote
 
 from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
@@ -93,6 +94,11 @@ def extract_redef(text):
     return sorted(hits)
 
 
+def icon_url(asset_name):
+    # 플러그인 /icon 라우트(게임 Sprite → PNG). 게임이 켜져 있어야 보인다. file:// 로 열면 페이지가 플러그인 주소를 앞에 붙여야 함.
+    return "/icon?name=" + quote(asset_name)
+
+
 def clean_text(t):
     # 게임 툴팁 문장의 Unity rich text 태그(<color=..>, <sprite=..>)를 걷어낸다.
     if not t:
@@ -113,7 +119,7 @@ for a in artifacts:
         "l": a.get("maxLevel", 0),
         "s": [c for c in a.get("categories") or [] if c],
         "c": content,
-        "img": None,
+        "img": icon_url(a["assetName"]),
         "kw": extract_kw(content),
     })
 
@@ -135,7 +141,7 @@ for w in weapons:
         "type": w.get("weaponType"),
         "parent": parent["assetName"] if parent else None,
         "c": joined,
-        "img": None,
+        "img": icon_url(w["assetName"]),
         "kw": extract_kw(joined),
         "redef": extract_redef(joined),
     })
@@ -150,7 +156,7 @@ for s in slabs:
         "k": s["name"],
         "t": s["rarity"],
         "r": bool(s.get("rotatable")),
-        "img": None,
+        "img": icon_url(s["assetName"]),
     })
 
 out = {

@@ -92,6 +92,26 @@ namespace SephiriaLive.Plugin
             // /items: 아티팩트(ItemEntity type=Charm)·무기(WeaponEntity) 정의 덤프 — 위키 스크래핑 대체.
             server.Route("GET", "/items", ctx => RunOnMainThread(BuildItemsResponse));
 
+            // /icon?name=<에셋 이름>: 아이템·무기 아이콘(게임 Sprite → PNG). 만든 PNG는 캐시해서 다음부터는 메인 스레드를 안 탄다.
+            server.Route("GET", "/icon", ctx =>
+            {
+                var name = ctx.QueryParam("name");
+                if (string.IsNullOrEmpty(name)) return HttpResponseData.Json(new JObj { ["ok"] = false, ["error"] = "name_required" }, 400);
+                lock (_iconCache) if (_iconCache.TryGetValue(name, out var cached)) return IconResponse(name, cached);
+                return RunOnMainThread(() =>
+                {
+                    byte[] png = null;
+                    var sprite = FindIconSprite(name);
+                    if (sprite != null)
+                    {
+                        try { png = SpriteToPng(sprite); }
+                        catch (Exception ex) { Logger.LogWarning($"[SephiriaLive] 아이콘 변환 실패 {name}: {ex.Message}"); }
+                    }
+                    lock (_iconCache) _iconCache[name] = png; // 없는 것도 캐시(null)해서 반복 탐색 방지
+                    return IconResponse(name, png);
+                });
+            });
+
             server.Route("GET", "/", ctx => ServeCompanionPage());
             server.Route("GET", "/recommend.html", ctx => ServeCompanionPage());
 
@@ -278,6 +298,60 @@ namespace SephiriaLive.Plugin
                 ["weaponCount"] = weapons.Count,
                 ["errors"] = errors,
             });
+        }
+
+        readonly Dictionary<string, byte[]> _iconCache = new Dictionary<string, byte[]>(StringComparer.Ordinal);
+        Dictionary<string, Sprite> _iconSprites;
+
+        static HttpResponseData IconResponse(string name, byte[] png) => png != null
+            ? HttpResponseData.Binary(png, "image/png")
+            : HttpResponseData.Json(new JObj { ["ok"] = false, ["error"] = "icon_not_found", ["name"] = name }, 404);
+
+        /// <summary>에셋 이름 → 아이콘 Sprite. ItemEntity.icon(아티팩트·석판·포션 등)과 WeaponEntity.icon. 메인 스레드 전용.</summary>
+        Sprite FindIconSprite(string assetName)
+        {
+            if (_iconSprites == null)
+            {
+                var map = new Dictionary<string, Sprite>(StringComparer.Ordinal);
+                foreach (var typeName in new[] { "ItemEntity", "WeaponEntity" })
+                {
+                    var t = ReflectionFinder.FindTypeByName(typeName);
+                    if (t == null) continue;
+                    foreach (var e in Resources.FindObjectsOfTypeAll(t))
+                        if (ReflectionFinder.GetMember(e, "icon") is Sprite s && s != null && !map.ContainsKey(e.name)) map[e.name] = s;
+                }
+                if (map.Count > 0) _iconSprites = map; // 로딩 전(0개)이면 다음 요청 때 다시 찾는다
+                else return null;
+            }
+            return _iconSprites.TryGetValue(assetName, out var sprite) ? sprite : null;
+        }
+
+        /// <summary>
+        /// 게임 텍스처는 보통 CPU에서 읽을 수 없고(isReadable=false) 여러 아이콘이 한 장(아틀라스)에 모여 있다.
+        /// 그래서 RenderTexture에 그린 뒤 Sprite.textureRect 영역만 읽어 PNG로 만든다.
+        /// </summary>
+        static byte[] SpriteToPng(Sprite sprite)
+        {
+            var src = sprite.texture;
+            var r = sprite.textureRect;
+            var rt = RenderTexture.GetTemporary(src.width, src.height, 0, RenderTextureFormat.ARGB32, RenderTextureReadWrite.sRGB);
+            var prev = RenderTexture.active;
+            Texture2D tex = null;
+            try
+            {
+                Graphics.Blit(src, rt);
+                RenderTexture.active = rt;
+                tex = new Texture2D(Mathf.RoundToInt(r.width), Mathf.RoundToInt(r.height), TextureFormat.RGBA32, false);
+                tex.ReadPixels(new Rect(r.x, r.y, r.width, r.height), 0, 0);
+                tex.Apply();
+                return tex.EncodeToPNG();
+            }
+            finally
+            {
+                RenderTexture.active = prev;
+                RenderTexture.ReleaseTemporary(rt);
+                if (tex != null) Destroy(tex);
+            }
         }
 
         void Update()
