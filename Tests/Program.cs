@@ -246,6 +246,11 @@ void Check(string name, bool ok, string detail = "")
     var cells = TabletReader.ParseCells(t, "UP 1", 6, 5, 2, 2, 0, out var perr).Select(MiniJson.AsObj).ToList();
     Check("TabletReader: ParseQuery → 상대 좌표", perr == null && cells.Count == 1 && (int)cells[0]["dx"] == 0 && (int)cells[0]["dy"] == -1 && (string)cells[0]["value"] == "1", perr + MiniJson.Write(cells));
 
+    var fx = TabletReader.BuildFixtures(new[] { new KeyValuePair<string, object>("T", new FakeStoneTablet { query = "UP 1" }) }, 2, 2, 0);
+    var at01 = MiniJson.AsObj(MiniJson.AsObj(MiniJson.AsObj(fx["tablets"])["T"])["0,1"]);
+    var cell = MiniJson.AsList(MiniJson.AsList(at01["effect"])[0]);
+    Check("TabletReader: 정답 데이터는 절대 좌표 [x,y,value]", (int)cell[0] == 0 && (int)cell[1] == 0 && (string)cell[2] == "1" && at01["cond"] == null, MiniJson.Write(at01));
+
     var inv = new FakeGameInventory();
     inv.Put(3, 1, "B", isTablet: true);
     inv.Put(1, 0, "A", isTablet: true);

@@ -25,6 +25,7 @@ scripts/   전처리 스크립트
 
 ```powershell
 dotnet run --project Tests                                   # Core 테스트
+node scripts/test_engine.js                                  # 배치 엔진 테스트
 dotnet build Plugin -c Release                               # 플러그인 빌드
 dotnet build Plugin -c Release -p:DeployToGame=true          # 빌드 + BepInEx/plugins/SephiriaLive 에 설치
 dotnet build Plugin -c Release -p:SephiriaGameDir="D:\Games\Sephiria"   # 게임 경로가 다를 때

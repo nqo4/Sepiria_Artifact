@@ -1,4 +1,4 @@
-name: Core tests
+name: Core + engine tests
 
 # Core는 게임/BepInEx 없이 빌드되므로 CI에서 유닛 테스트를 돌린다.
 # Plugin은 게임 DLL이 필요해서 CI에서는 빌드하지 않는다.
@@ -16,3 +16,5 @@ jobs:
         with:
           dotnet-version: 8.0.x
       - run: dotnet run --project Tests -c Release
+      # 배치 엔진: 게임 ParseQuery 결과(data/engine_fixtures)와 실게임 스냅샷으로 검증
+      - run: node scripts/test_engine.js

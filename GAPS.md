@@ -29,16 +29,17 @@
   - 태그 키가 게임 키(`STURDY`, `EMBER` …)로 바뀜. 한국어는 `TAG_KO`(기존 DB 태그와 다수결로 맞춤).
   - 이미지: `/icon?name=<에셋 이름>` 라우트가 게임 아이콘(Sprite)을 PNG로 변환해 보냄. `data.json`의 `img`가 이 주소(604개 중 601개 존재, 특수 무기 3개 없음).
 
+- **배치 엔진 `Plugin/companion/engine.js` 완료 (4단계)** — `parseQuery`(게임 ParseQuery 재현), `evaluate`(게임 ApplyEffect/ReleasePermission 규칙), `optimize`(시뮬레이티드 어닐링, `/apply` 형식 출력), `boardFromSnapshot`.
+  - 검증 `node scripts/test_engine.js`(CI 포함): 게임 `/tablets/fixtures` 결과(6×5·7×6 보드 × 회전 4 × 모든 칸, 39,168건)와 칸 단위 일치,
+    실게임 스냅샷 levelMatrix 일치(`data/engine_fixtures/inv_*.json`).
+
 ## ❌ 아직 남음 (우선순위 순)
 
-1. **`Plugin/companion/engine.js`** (시뮬레이티드 어닐링 배치 엔진) 재작성.
-   - `boardEffects`(HORIZONTAL, VERTICAL, TOP, BOTTOM, LEFTEND, RIGHTEND, *_RISING/*_FALLING, CHECKERBOARD/2)는 보드 크기 기준으로 계산해야 함 — 정확한 칸은 `/tablets`의 `cells`(게임 ParseQuery) 로 검증.
-   - 석판도 다른 석판 효과로 레벨을 받음. 조건(`conditionQuery`: `TOP PLACED` 등)이 있는 석판 5개.
-   - 게임에 `AutoArrangeInventoryForBestCharmLevels(maxIterations, allowTabletRotation)` 가 이미 있음 — 엔진 결과 비교 대상.
-2. **`recommend_template.html` 누락 부분** — 전역 상태 선언(`weapon, anchors, candidates, basket, pinnedTags, demoMode, candidateKind`), 라이브 폴링(`/inv`), `runPlacement`, `renderPlacementGrid`, `renderBasket`.
+1. **`recommend_template.html` 누락 부분** — 전역 상태 선언(`weapon, anchors, candidates, basket, pinnedTags, demoMode, candidateKind`), 라이브 폴링(`/inv`), `runPlacement`(→ `SephEngine.boardFromSnapshot` + `optimize`), `renderPlacementGrid`, `renderBasket`.
    - `TIER_RANK`는 게임 등급 이름(`Common`, `Uncommon`, `Rare`, `Legend`) 기준으로 새로 정의해야 함.
    - `img`는 `/icon?name=...` 상대 주소 — 페이지를 `file://`로 열면 연결된 플러그인 주소(`http://127.0.0.1:포트`)를 앞에 붙여야 함. 게임이 꺼져 있으면 아이콘 없음.
    - `placement_db.json`의 `artifacts`(267개, 한국어 태그·conditionType)는 아직 예전 데이터 — `data/items_game.json` 기준으로 맞출지 결정 필요.
+2. **엔진 결과를 게임 자동 배치와 비교** — 게임 `AutoArrangeInventoryForBestCharmLevels(maxIterations, allowTabletRotation)` 결과와 점수 비교(가방에 석판·아티팩트가 있을 때).
 
 ## ⚠ 데이터 확인 필요
 
@@ -46,4 +47,6 @@
 - 다른 사람 방(클라이언트)에서의 `CmdSwap`/`CmdDoClickAction` 동작은 미확인.
 - `mysticPositions`(GridInventory의 SyncList<ItemPosition>)의 의미 — 미확인.
 - 보드 키워드 중 `X_PLUS/X_MINUS/Y_PLUS/Y_MINUS`, `KNIGHT*_INVERT`, `IDX/RIDX`는 현재 석판 목록에서 거의/전혀 안 쓰임. 쓰이면 ParseQuery로 확인.
-- `MUL/2`(레벨 배수)·`X`(비활성) 값이 레벨 계산에 정확히 어떻게 반영되는지(순서, 중첩)는 미확인.
+- 엔진이 아직 단순화한 것: 조건 칸 종류(AnyItem/OnlyCharm)를 구분하지 않음(현재 석판은 PLACED만 사용), `IGNORECRITERIA`는 기록만 하고 점수에 반영 안 함(아티팩트 자체 발동 조건 미구현),
+  레벨 계산의 전역 보너스(`DungeonManager.GetGlobalItemStatValue`)·각인(`engravings`, `fixedEngravingsOnServer`) 미반영, `IDX/RIDX/X_PLUS` 등 미사용 키워드 미구현.
+- 최대 레벨을 넘는 레벨은 점수에서 잘라냄(clamp). 아티팩트별 효과 가치(레벨 1과 3의 차이)는 반영 안 함 — 지금은 레벨 합만 최대화.

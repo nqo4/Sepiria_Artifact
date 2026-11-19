@@ -91,6 +91,36 @@ namespace SephiriaLive.Core
             return cells;
         }
 
+        /// <summary>
+        /// 엔진 검증용 정답 데이터: 석판마다 보드(width×height)의 모든 칸 × 지정 회전에서 게임 ParseQuery 결과(절대 좌표 [x, y, value]).
+        /// effect = query, cond = conditionQuery. 키는 석판 이름 → "x,y" → { effect, cond }.
+        /// </summary>
+        public static JObj BuildFixtures(IEnumerable<KeyValuePair<string, object>> tablets, int width, int height, int rotation)
+        {
+            var res = new JObj { ["width"] = width, ["height"] = height, ["rotation"] = rotation };
+            var all = new JObj();
+            foreach (var kv in tablets)
+            {
+                var tablet = kv.Value;
+                var query = ReflectionFinder.GetMember(tablet, "query") as string;
+                var cond = ReflectionFinder.GetMember(tablet, "conditionQuery") as string;
+                var perPos = new JObj();
+                for (int y = 0; y < height; y++)
+                    for (int x = 0; x < width; x++)
+                    {
+                        var o = new JObj { ["effect"] = Abs(ParseCells(tablet, query, width, height, x, y, rotation, out _), x, y) };
+                        if (!string.IsNullOrEmpty(cond)) o["cond"] = Abs(ParseCells(tablet, cond, width, height, x, y, rotation, out _), x, y);
+                        perPos[x + "," + y] = o;
+                    }
+                all[kv.Key] = perPos;
+            }
+            res["tablets"] = all;
+            return res;
+        }
+
+        static List<object> Abs(List<object> cells, int ox, int oy) =>
+            cells.Select(MiniJson.AsObj).Select(c => (object)new List<object> { (int)c["dx"] + ox, (int)c["dy"] + oy, c["value"] }).ToList();
+
         static List<object> Ranges(object syncList, bool isEffect)
         {
             var list = new List<object>();

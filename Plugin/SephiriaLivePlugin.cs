@@ -89,6 +89,20 @@ namespace SephiriaLive.Plugin
             // /tablets: 석판 효과 범위 정의(query)를 게임에서 직접 읽음 — 가방의 석판 + 로드된 전체 석판 카탈로그.
             server.Route("GET", "/tablets", ctx => RunOnMainThread(BuildTabletsResponse));
 
+            // /tablets/fixtures?w=6&h=5&rot=0: 엔진 검증용 — 모든 석판 × 모든 칸에서 게임 ParseQuery 결과(읽기 전용, 계산만).
+            server.Route("GET", "/tablets/fixtures", ctx =>
+            {
+                int.TryParse(ctx.QueryParam("w"), out var w); int.TryParse(ctx.QueryParam("h"), out var h); int.TryParse(ctx.QueryParam("rot"), out var rot);
+                if (w < 1 || h < 1 || w > 12 || h > 12 || rot < 0 || rot > 3)
+                    return HttpResponseData.Json(new JObj { ["ok"] = false, ["error"] = "bad_params", ["message"] = "w,h는 1~12, rot는 0~3" }, 400);
+                return RunOnMainThread(() =>
+                {
+                    var res = TabletReader.BuildFixtures(FindTabletPrefabs(), w, h, rot);
+                    res["ok"] = true;
+                    return HttpResponseData.Json(res);
+                });
+            });
+
             // /items: 아티팩트(ItemEntity type=Charm)·무기(WeaponEntity) 정의 덤프 — 위키 스크래핑 대체.
             server.Route("GET", "/items", ctx => RunOnMainThread(BuildItemsResponse));
 
@@ -244,6 +258,22 @@ namespace SephiriaLive.Plugin
             res["catalogCount"] = catalog.Count;
             res["errors"] = errors;
             return HttpResponseData.Json(res);
+        }
+
+        /// <summary>석판 아이템 정의(에셋 이름 → 프리팹의 StoneTablet 컴포넌트). 메인 스레드 전용.</summary>
+        static List<KeyValuePair<string, object>> FindTabletPrefabs()
+        {
+            var list = new List<KeyValuePair<string, object>>();
+            var entityType = ReflectionFinder.FindTypeByName("ItemEntity");
+            var tabletType = ReflectionFinder.FindTypeByName("StoneTablet");
+            if (entityType == null || tabletType == null) return list;
+            foreach (var entity in Resources.FindObjectsOfTypeAll(entityType))
+            {
+                var prefab = ReflectionFinder.GetMember(entity, "resourcePrefab") as GameObject;
+                var tablet = prefab != null ? prefab.GetComponent(tabletType) : null;
+                if (tablet != null) list.Add(new KeyValuePair<string, object>(entity.name, tablet));
+            }
+            return list;
         }
 
         HttpResponseData BuildItemsResponse()

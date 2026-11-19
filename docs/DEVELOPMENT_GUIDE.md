@@ -14,7 +14,7 @@
 | 실게임 연동 (`/health` → `/inv` → `/apply`) | ✅ 이동·회전·레벨 재계산 확인 (CLAUDE.md "실게임 검증 결과") |
 | 석판 데이터 | ✅ 게임에서 직접 읽음 (`/tablets` → `data/slabs_game.json`, 71개) |
 | 아티팩트·무기 데이터 | ✅ 게임에서 직접 읽음 (`/items` → `data/items_game.json` → `prep_data_v2.py` → `data.json`) |
-| 배치 엔진 `engine.js` | ❌ 유실, 다시 만들어야 함 |
+| 배치 엔진 `engine.js` | ✅ 재작성, 게임 ParseQuery 결과·실게임 레벨과 일치 (`node scripts/test_engine.js`) |
 | 추천 페이지 `recommend_template.html` | ⚠ 일부만 남음 (CSS·점수 계산 O, 상태/폴링/배치 렌더링 X) |
 
 남은 작업과 데이터 불확실성의 상세 목록은 루트의 [`GAPS.md`](../GAPS.md)에 있습니다.
@@ -31,7 +31,7 @@
 | GitHub CLI (선택) | `gh auth status` | 푸시/CI 확인용 |
 | .NET 8 SDK | `dotnet --list-sdks` | 없으면 `winget install Microsoft.DotNet.SDK.8` |
 | Python 3.10+ | `python --version` | 데이터 전처리 스크립트용 |
-| Node.js (선택) | `node --version` | `engine.js` 단독 테스트용 |
+| Node.js | `node --version` | `engine.js` 테스트(`node scripts/test_engine.js`) |
 | Sephiria (Steam) | 게임 폴더 존재 | Plugin 빌드에 필요. Core/Tests는 게임 없이 됨 |
 | BepInEx 5.x | `게임폴더\BepInEx\core\BepInEx.dll` | 현재 PC는 5.4.23.2 |
 
@@ -66,6 +66,7 @@ dotnet build Plugin -c Release        # "빌드했습니다." / 경고 0
 
 ```powershell
 dotnet run --project Tests                                   # Core 테스트 (커밋 전 필수)
+node scripts/test_engine.js                                  # 배치 엔진 테스트 (커밋 전 필수)
 dotnet build SephiriaLive.sln -c Release                     # 전체 빌드
 dotnet build Plugin -c Release -p:DeployToGame=true          # 빌드 + 게임에 설치
 ```
@@ -202,7 +203,9 @@ $t.Methods | Where-Object Name -match 'Swap|Rotate' | ForEach-Object { $_.Name }
 - 스크래퍼 스크립트도 `scripts/`에 커밋 (다음에 다시 유실되지 않게).
 - 대안: 게임의 `ItemEntity` ScriptableObject를 플러그인에서 읽어 덤프하는 방식이 더 정확할 수 있음 (2단계와 같은 방식).
 
-### 4단계 — 배치 엔진 `engine.js` ← 지금 여기
+### 4단계 — 배치 엔진 `engine.js` ✅ 완료 (2026-11-19)
+
+결과: `Plugin/companion/engine.js`, 검증 `node scripts/test_engine.js`(정답 데이터 `data/engine_fixtures/`, 다시 받으려면 게임에서 `GET /tablets/fixtures?w=6&h=5&rot=0`). 아래는 원래 계획.
 
 - 시뮬레이티드 어닐링으로 석판 위치·회전과 아티팩트 위치를 바꿔가며 총 레벨 점수를 최대화.
 - 입력: `/inv` 스냅샷 + `placement_db.json` (석판 `effectPattern: [[dr, dc, level], ...]`, `rotatable`).
@@ -211,7 +214,7 @@ $t.Methods | Where-Object Name -match 'Swap|Rotate' | ForEach-Object { $_.Name }
 - Node로 단독 테스트할 수 있게 순수 함수로 작성 (`module.exports`와 브라우저 전역 둘 다 지원).
 - 참고: 게임 자체 `AutoArrangeInventoryForBestCharmLevels`가 있으니, 결과 비교용 디버그 라우트를 만들어 두면 엔진 검증에 유용.
 
-### 5단계 — 추천 페이지 완성
+### 5단계 — 추천 페이지 완성 ← 지금 여기
 
 - `Plugin/companion/recommend_template.html`에서 빠진 것:
   - 전역 상태 선언: `weapon, anchors, candidates, basket, pinnedTags, demoMode, candidateKind`

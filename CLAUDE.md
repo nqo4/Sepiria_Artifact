@@ -7,7 +7,7 @@
 스팀 게임 Sephiria(앱 ID 2436940)용 BepInEx 5.x 플러그인 + 동반 로컬 웹페이지.
 참고 프로젝트 SephiriaSync(인벤토리 미러링/원격 배치)와 달리, op.gg 증강 추천 UI에서 착안한
 "현재 빌드 방향 + 선택지별 S~D 추천 등급"과, 등급 계산과 분리된 "무기 호환성 점검"이 차별점.
-배치 최적화는 기존 계산기의 `engine.js`(시뮬레이티드 어닐링)를 재사용할 예정.
+배치 최적화는 `Plugin/companion/engine.js`(시뮬레이티드 어닐링, 게임 레벨 규칙 재현).
 
 - 저장소: https://github.com/nqo4/Sepiria_Artifact (공개) — **게임/BepInEx DLL은 절대 커밋 금지**
 - 남은 작업과 데이터 불확실성: **`GAPS.md`** 를 먼저 볼 것
@@ -28,6 +28,7 @@ scripts/   전처리 (prep_data_v2 → data.json, assemble_recommend → recomme
 
 ```powershell
 dotnet run --project Tests                            # 테스트 (전부 통과해야 커밋)
+node scripts/test_engine.js                           # 배치 엔진 테스트 (전부 통과해야 커밋)
 dotnet build Plugin -c Release                        # 게임 DLL 참조 빌드
 dotnet build Plugin -c Release -p:DeployToGame=true   # BepInEx/plugins/SephiriaLive 로 복사
 ```
@@ -65,6 +66,9 @@ dotnet build Plugin -c Release -p:DeployToGame=true   # BepInEx/plugins/Sephiria
   (`standardEnhancements` = 다음 강화 무기들, `enhanceFromId`는 -1) + 프리팹 `WeaponSimple.addons[].GetEffectText()`. 덤프: `/items` → `data/items_game.json`.
 - 아이콘: `ItemEntity.icon` / `WeaponEntity.icon`(Sprite, 아틀라스 안 작은 픽셀 아트, 텍스처 CPU 읽기 불가)
   → RenderTexture에 Blit 후 `textureRect`만 ReadPixels → EncodeToPNG (`/icon`, 메인 스레드, 결과 캐시).
+- 레벨 규칙(엔진이 재현): `StoneTablet.ApplyEffect` — conditionQuery 칸 중 PLACED가 있으면 그중 하나가 석판 자기 칸이어야 하고,
+  나머지 조건 칸은 아이템이 있어야 함 → query 칸에 숫자는 levelMatrix +=, X=disable, IGNORECRITERIA, MUL/n=multiplyLevelMatrix += n.
+  `ReleasePermission`에서 multiply≠0 칸은 level *= multiply. ParseQuery는 rotation을 직접 받아 회전(고정 칸은 보드 밖도 그대로).
 - 게임 메타데이터 재조사: `BepInEx/core/Mono.Cecil.dll`을 스크래치로 복사 → `[Reflection.Assembly]::Load(bytes)` → `ModuleDefinition.ReadModule`.
   (게임 폴더에서 바로 Add-Type 하면 0x80131515로 막힘)
 - 게임 환경: Unity 6000.3, BepInEx 5.4.23.2, Mirror 네트워킹(싱글도 호스트).
