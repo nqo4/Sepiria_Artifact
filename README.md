@@ -42,7 +42,7 @@ dotnet build Plugin -c Release -p:SephiriaGameDir="D:\Games\Sephiria"   # 게임
 | `GET /icon?name=<에셋 이름>` | 아이템·무기·석판 아이콘 PNG (게임 Sprite에서 변환, 캐시) |
 | `POST /autoarrange` | 게임 자체 자동 배치 실행(가방을 바꿈, 엔진 비교용 — `scripts/compare_autoarrange.js`) |
 | `GET/POST /grade-weapon` | 게임 안 선택지 등급의 기준 무기(사이트에서 고른 무기, `BepInEx/config/SephiriaLive.grade-weapon.txt`에 저장) |
-| `GET/POST /grade-damage` | 게임 안 등급의 주요 피해 방식(여러 개, `BepInEx/config/SephiriaLive.grade-damage.txt`) |
+| `GET/POST /grade-build` | 게임 안 등급의 빌드 방향: 콤보 고정·주요 피해 방식·주요 스탯(`BepInEx/config/SephiriaLive.grade-build.json`) |
 | `GET /keyword-icon?name=<키워드>` | 효과 문장 키워드 아이콘 PNG(예: `MP`, `IceDamage`) |
 | `GET /tablets` | 석판 효과 범위(query, 게임 ParseQuery 칸) — 가방 석판 + 전체 석판 카탈로그 |
 | `POST /apply` | `{"placements":[{"fromX","fromY","toX","toY","rotation"?}]}` 배치 적용 |

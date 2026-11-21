@@ -52,6 +52,10 @@
       <HintPath>$(SephiriaManagedDir)\UnityEngine.TextRenderingModule.dll</HintPath>
       <Private>false</Private>
     </Reference>
+    <Reference Include="Unity.TextMeshPro">
+      <HintPath>$(SephiriaManagedDir)\Unity.TextMeshPro.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
     <Reference Include="UnityEngine.InputLegacyModule">
       <HintPath>$(SephiriaManagedDir)\UnityEngine.InputLegacyModule.dll</HintPath>
       <Private>false</Private>

@@ -256,6 +256,33 @@ void Check(string name, bool ok, string detail = "")
     var sword = new JObj { ["type"] = "GreatSword", ["kw"] = new List<object>(), ["redef"] = new List<object>() };
     Check("GradeCalculator: 근접 무기는 대시 공격 사용 가능", !GradeCalculator.Score(Art("Common", 3, new string[0], new[] { "dash_attack" }), counts, sword).Caution);
 
+    // 상태이상은 종류별: 상처 악화 무기(심홍의 소용돌이)는 화상 아이템(신갈나무 숯)을 지원하지 않음, 일반 디버프 효과는 지원
+    var woundSword = new JObj { ["type"] = "GreatSword", ["kw"] = new List<object> { "status_wound" }, ["redef"] = new List<object>() };
+    var burnArt = GradeCalculator.Score(Art("Common", 3, new string[0], new[] { "status_burn" }), counts, woundSword);
+    var woundArt = GradeCalculator.Score(Art("Common", 3, new string[0], new[] { "status_wound" }), counts, woundSword);
+    var debuffArt = GradeCalculator.Score(Art("Common", 3, new string[0], new[] { "debuff" }), counts, woundSword);
+    var debuffNoStatus = GradeCalculator.Score(Art("Common", 3, new string[0], new[] { "debuff" }), counts, sword);
+    Check("GradeCalculator: 상태이상은 같은 종류만 무기 지원, 일반 디버프는 아무 상태이상이나",
+        burnArt.Supported.Count == 0 && woundArt.Supported.SequenceEqual(new[] { "status_wound" })
+        && debuffArt.Supported.SequenceEqual(new[] { "debuff" }) && debuffNoStatus.Supported.Count == 0);
+
+    // 기적(요리사): 게임 문장 → 규칙으로 dt/st/kw, 효과 + 주는 아이템 점수는 합
+    var rules = new JObj
+    {
+        ["kw"] = new JObj { ["status_burn"] = new List<object> { "화상" }, ["dash"] = new List<object> { "대시" } },
+        ["kwExclude"] = new JObj { ["dash"] = new List<object> { "대시 공격" } },
+        ["dtSprites"] = new JObj { ["FlameGround"] = new List<object> { "fire" } },
+        ["stSprites"] = new JObj { ["AttackSpeed"] = "attack_speed" },
+    };
+    var chef = GradeCalculator.TextFeatures("+5 <color=#FFC900>화염속성 피해</color><sprite=\"Keyword\" name=\"FlameGround\">\n+25% 화상<sprite name=Burn> 피해량, 대시 공격", rules, new[] { "EMBER" });
+    Check("GradeCalculator.TextFeatures: 아이콘 → 피해 방식, 단어 → 키워드(제외어 반영), 태그 유지",
+        MiniJson.AsList(chef["dt"]).SequenceEqual(new object[] { "fire" }) && MiniJson.AsList(chef["kw"]).SequenceEqual(new object[] { "status_burn" })
+        && MiniJson.AsList(chef["st"]).Count == 0 && MiniJson.AsList(chef["s"]).SequenceEqual(new object[] { "EMBER" }), MiniJson.Write(chef));
+    var chefR = GradeCalculator.Score(chef, counts, woundSword, new GradeCalculator.BuildFocus { Damage = { "physical" } });
+    var itemR = GradeCalculator.Score(Art("Common", 3, new[] { "PRECISION" }, new string[0]), counts, woundSword);
+    var both = GradeCalculator.Combine(chefR, new[] { itemR });
+    Check("GradeCalculator.Combine: 점수 합, 근거 합침", Math.Abs(both.Total - (chefR.Total + itemR.Total)) < 1e-9 && both.HitTags.Contains("PRECISION") && both.DamageMisses.SequenceEqual(new[] { "fire" }), both.Total.ToString());
+
     // 빌드와 무관한 아이템은 희귀도가 달라도 같은 점수(마그마 구슬 vs 차가운 자물쇠 사례)
     var legendOff = GradeCalculator.Score(Art("Legend", 3, new[] { "EMBER" }, new[] { "status" }), counts, crossbow);
     var uncommonOff = GradeCalculator.Score(Art("Uncommon", 4, new string[0], new string[0]), counts, crossbow);
@@ -270,13 +297,24 @@ void Check(string name, bool ok, string detail = "")
         && GradeCalculator.Summary(conflict, counts, tagKo, kwKo).StartsWith("일반공격 충돌"), GradeCalculator.Summary(dashAttack, counts, tagKo, kwKo));
     Check("GradeCalculator: 근거가 없으면 빈 요약", GradeCalculator.Summary(legendOff, counts, tagKo, kwKo) == "");
 
-    // 주요 피해 방식: 고른 것과 맞으면 +2, 요약에 "화염 피해"
+    // 빌드 방향(사이트에서 고름): 주요 피해 방식 일치 +2, 빌드 밖 −3, 콤보 고정 태그 +3×3, 주요 스탯 +2
     var fireArt = new JObj { ["t"] = "Rare", ["l"] = 3, ["s"] = new List<object> { "PRECISION" }, ["kw"] = new List<object>(), ["dt"] = new List<object> { "fire", "ice" } };
     var noFocus = GradeCalculator.Score(fireArt, counts, crossbow);
-    var focus = GradeCalculator.Score(fireArt, counts, crossbow, new HashSet<string> { "fire", "lightning" });
+    var focus = GradeCalculator.Score(fireArt, counts, crossbow, new GradeCalculator.BuildFocus { Damage = { "fire", "lightning" } });
     Check("GradeCalculator: 고른 피해 방식과 맞으면 맞는 방식당 +2", Math.Abs(focus.Total - noFocus.Total - 2) < 1e-9 && focus.DamageHits.SequenceEqual(new[] { "fire" }), focus.Total + " vs " + noFocus.Total);
-    var dmgKo = new JObj { ["fire"] = "화염" };
+    var dmgKo = new JObj { ["fire"] = "화염", ["ice"] = "얼음(빙결)" };
     Check("GradeCalculator: 요약에 '화염 피해'", GradeCalculator.Summary(focus, counts, tagKo, kwKo, 3, dmgKo) == "정밀 콤보, 화염 피해", GradeCalculator.Summary(focus, counts, tagKo, kwKo, 3, dmgKo));
+    var offBuild = GradeCalculator.Score(fireArt, counts, crossbow, new GradeCalculator.BuildFocus { Damage = { "physical" } });
+    Check("GradeCalculator: 물리 빌드의 화염·얼음 전용 아이템은 빌드 밖 −3", Math.Abs(offBuild.Total - noFocus.Total + 3) < 1e-9
+        && GradeCalculator.Summary(offBuild, counts, tagKo, kwKo, 3, dmgKo).StartsWith("화염/얼음(빙결) 피해(빌드 밖)"), GradeCalculator.Summary(offBuild, counts, tagKo, kwKo, 3, dmgKo));
+    var noDt = GradeCalculator.Score(Art("Rare", 3, new string[0], new string[0]), counts, crossbow, new GradeCalculator.BuildFocus { Damage = { "physical" } });
+    Check("GradeCalculator: 피해 방식이 없는 아이템은 빌드 밖 아님", noDt.Total == 0 && noDt.DamageMisses.Count == 0);
+    // 바람개비 사례: 가방에 바람노래가 없어도 콤보 고정 + 주요 스탯(공격 속도)이면 점수가 오른다
+    var pinwheel = new JObj { ["t"] = "Uncommon", ["l"] = 2, ["s"] = new List<object> { "WINDSONG", "SHADOW" }, ["kw"] = new List<object>(), ["st"] = new List<object> { "attack_speed", "evasion" } };
+    var pin = GradeCalculator.Score(pinwheel, counts, crossbow, new GradeCalculator.BuildFocus { Tags = { "WINDSONG" }, Stats = { "attack_speed" } });
+    Check("GradeCalculator: 콤보 고정 태그 +9, 주요 스탯 +2", Math.Abs(pin.Total - (3 * 3 + 2)) < 1e-9 && pin.HitTags.SequenceEqual(new[] { "WINDSONG" }) && pin.StatHits.SequenceEqual(new[] { "attack_speed" }), pin.Total.ToString());
+    Check("GradeCalculator: 요약에 콤보·스탯", GradeCalculator.Summary(pin, counts, new JObj { ["WINDSONG"] = "바람노래" }, kwKo, 3, dmgKo, new JObj { ["attack_speed"] = "공격 속도" }) == "바람노래 콤보, 공격 속도",
+        GradeCalculator.Summary(pin, counts, new JObj { ["WINDSONG"] = "바람노래" }, kwKo, 3, dmgKo, new JObj { ["attack_speed"] = "공격 속도" }));
 
     // 절대평가: 전체 점수 분포(0..99)에서의 위치
     var all = Enumerable.Range(0, 100).Select(i => (double)i).ToList();
@@ -287,7 +325,20 @@ void Check(string name, bool ok, string detail = "")
     GradeCalculator.AssignGrades(new[] { top, mid, low, capped }, all);
     Check("GradeCalculator: 절대평가 상위 8% S, 50% 이상 B, 하위 D", top.Grade == "S" && mid.Grade == "B" && low.Grade == "D", top.Grade + mid.Grade + low.Grade);
     Check("GradeCalculator: 주의 표시가 있으면 점수가 높아도 C 이하", capped.Grade == "C", capped.Grade);
+    // 빌드 밖 아이템이 음수로 내려가 분포가 밀려도, 근거 없는 0점 아이템은 B 이상 못 받음
+    var zero = new GradeCalculator.Result { Total = 0 };
+    GradeCalculator.AssignGrades(new[] { zero }, new List<double> { -3, -3, -3, -3, 0, 5 });
+    Check("GradeCalculator: 점수 0 이하는 분포상 위치와 상관없이 C 이하", zero.Grade == "C", zero.Grade);
     Check("GradeCalculator: 백분위(같은 값은 절반)", Math.Abs(GradeCalculator.Percentile(new[] { 1.0, 2, 2, 3 }, 2) - 0.5) < 1e-9);
+}
+
+// ---------- [추가] WeaponPath: 무기 강화 화면 스포트라이트 ----------
+{
+    var parentOf = new Dictionary<string, string> { ["T3"] = "T2", ["T2"] = "T1", ["X2"] = "T1", ["loopA"] = "loopB", ["loopB"] = "loopA" };
+    Check("WeaponPath: 목표의 강화 전 단계(2티어)는 경로", WeaponPath.LeadsTo("T2", "T3", parentOf));
+    Check("WeaponPath: 목표 자체도 경로", WeaponPath.LeadsTo("T3", "T3", parentOf));
+    Check("WeaponPath: 다른 가지(형제)는 경로 아님", !WeaponPath.LeadsTo("X2", "T3", parentOf));
+    Check("WeaponPath: 목표 없음·순환은 안전하게 false", !WeaponPath.LeadsTo("T2", null, parentOf) && !WeaponPath.LeadsTo("Z", "loopA", parentOf));
 }
 
 // ---------- [추가] InventoryReader: storage(쓸 수 있는 칸 수)와 아티팩트 켜짐 상태 ----------

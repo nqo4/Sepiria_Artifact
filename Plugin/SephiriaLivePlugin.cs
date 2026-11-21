@@ -50,7 +50,8 @@ namespace SephiriaLive.Plugin
             InventoryReader.Log = s => Logger.LogWarning(s);
             InventoryReader.InstanceFinder = FindInstances;
             LoadGradeWeapon();
-            LoadGradeDamage();
+            LoadGradeBuild();
+            LoadLabelScale();
 
             foreach (var port in CandidatePorts)
             {
@@ -113,9 +114,14 @@ namespace SephiriaLive.Plugin
             // 게임 안 선택지 등급의 기준 무기: 사이트에서 고른 무기(에셋 이름). {"weapon": null} 이면 지금 든 무기로.
             server.Route("GET", "/grade-weapon", ctx => HttpResponseData.Json(new JObj { ["ok"] = true, ["weapon"] = _gradeWeaponAsset }));
             server.Route("POST", "/grade-weapon", ctx => SetGradeWeapon(ctx.Body));
-            // 게임 안 등급의 주요 피해 방식(여러 개): {"damage": ["fire","ice"]}. 빈 목록이면 반영 안 함.
-            server.Route("GET", "/grade-damage", ctx => HttpResponseData.Json(new JObj { ["ok"] = true, ["damage"] = _gradeDamage.Cast<object>().ToList() }));
-            server.Route("POST", "/grade-damage", ctx => SetGradeDamage(ctx.Body));
+            // 게임 안 등급의 빌드 방향(사이트에서 고름): {"tags":["STURDY"],"damage":["physical"],"stats":["attack_speed"]}. 빈 목록은 반영 안 함.
+            server.Route("GET", "/grade-build", ctx => HttpResponseData.Json(BuildJson(_gradeBuild)));
+            server.Route("POST", "/grade-build", ctx => SetGradeBuild(ctx.Body));
+            // 게임 안 등급 라벨 글자 크기 배율(사이트에서 조절): {"scale": 0.7}
+            // 기적 화면 진단: 마지막으로 매긴 기적 카드들(효과 문장, 분석 결과, 점수, 카드 크기)
+            server.Route("GET", "/miracle-grades", ctx => HttpResponseData.Json(new JObj { ["ok"] = true, ["cards"] = _lastMiracles.Cast<object>().ToList() }));
+            server.Route("GET", "/grade-label", ctx => HttpResponseData.Json(new JObj { ["ok"] = true, ["scale"] = (double)_labelScale }));
+            server.Route("POST", "/grade-label", ctx => SetLabelScale(ctx.Body));
 
             // /icon?name=<에셋 이름>: 아이템·무기 아이콘(게임 Sprite → PNG). 만든 PNG는 캐시해서 다음부터는 메인 스레드를 안 탄다.
             server.Route("GET", "/icon", ctx => ServeIcon(ctx.QueryParam("name"), "", name =>
@@ -477,10 +483,14 @@ namespace SephiriaLive.Plugin
             // 아이템 선택 화면 등급: 0.5초마다 다시 계산해 게임 UI 배지를 갱신
             if (Time.unscaledTime >= _nextGradeRefresh)
             {
-                _nextGradeRefresh = Time.unscaledTime + 0.5f;
+                _nextGradeRefresh = Time.unscaledTime + 0.15f;
+                try { RefreshEnhanceSpotlight(); }
+                catch (Exception ex) { Logger.LogWarning("[SephiriaLive] 무기 강화 화면 강조 실패: " + ex.Message); }
                 try { RefreshRewardGrades(); }
                 catch (Exception ex) { Logger.LogWarning("[SephiriaLive] 선택지 등급 계산 실패: " + ex.Message); }
             }
+            try { UpdateMiracleSelection(); }
+            catch (Exception) { _miracleBadges.Clear(); }
 
             // F10: 스냅샷 즉시 갱신. 게임이 "새 Input System 전용"이면 레거시 Input이 예외를 던지므로 한 번만 경고하고 끈다.
             if (_legacyInputBroken) return;
@@ -505,39 +515,92 @@ namespace SephiriaLive.Plugin
         // 계산은 Core GradeCalculator(추천 페이지와 같은 식) — 현재 가방 태그 + 현재 무기 키워드 + 희귀도·최대 레벨.
 
         float _nextGradeRefresh;
+        Func<object, (GradeCalculator.Result result, string keys)> _cachedGrader; // BuildGrader 결과(1초 재사용)
+        float _graderExpires;
         Dictionary<string, JObj> _artifactsByAsset, _weaponsByAsset;
-        JObj _tagKo, _kwKo, _dmgKo; // 키워드 요약용 한국어 이름(data.json tagKo·kwKo·dmgKo)
+        JObj _tagKo, _kwKo, _dmgKo, _statKo; // 키워드 요약용 한국어 이름(data.json tagKo·kwKo·dmgKo·statKo)
+        JObj _rules; // 게임 문장 분석 규칙(data.json rules) — 기적 효과처럼 데이터에 없는 문장용
         volatile string _gradeWeaponAsset; // 사이트에서 고른 등급 기준 무기(에셋 이름), 없으면 null
 
         static string GradeWeaponPath => Path.Combine(Paths.ConfigPath, "SephiriaLive.grade-weapon.txt");
-        static string GradeDamagePath => Path.Combine(Paths.ConfigPath, "SephiriaLive.grade-damage.txt");
-        volatile string[] _gradeDamage = new string[0]; // 사이트에서 고른 주요 피해 방식(data.json dt 값)
+        static string GradeBuildPath => Path.Combine(Paths.ConfigPath, "SephiriaLive.grade-build.json");
+        volatile GradeCalculator.BuildFocus _gradeBuild = new GradeCalculator.BuildFocus(); // 통째로 바꿔 끼움(스레드 안전)
 
-        void LoadGradeDamage()
+        static JObj BuildJson(GradeCalculator.BuildFocus f) => new JObj
+        {
+            ["ok"] = true,
+            ["tags"] = f.Tags.Cast<object>().ToList(),
+            ["damage"] = f.Damage.Cast<object>().ToList(),
+            ["stats"] = f.Stats.Cast<object>().ToList(),
+        };
+
+        /// <summary>{"tags","damage","stats"} → BuildFocus. 파일에도 그대로 쓰므로 영문·숫자·_ 값만, 항목당 20개 이하. 형식이 틀리면 null.</summary>
+        static GradeCalculator.BuildFocus ParseBuild(string json)
+        {
+            var o = MiniJson.AsObj(MiniJson.Parse(string.IsNullOrWhiteSpace(json) ? "{}" : json));
+            var f = new GradeCalculator.BuildFocus();
+            foreach (var (key, set) in new[] { ("tags", f.Tags), ("damage", f.Damage), ("stats", f.Stats) })
+            {
+                var list = MiniJson.AsList(o?[key]);
+                if (list.Count > 20) return null;
+                foreach (var v in list)
+                {
+                    if (!(v is string str) || str.Length > 30 || !System.Text.RegularExpressions.Regex.IsMatch(str, "^[A-Za-z0-9_]+$")) return null;
+                    set.Add(str);
+                }
+            }
+            return f;
+        }
+
+        void LoadGradeBuild()
+        {
+            try { if (File.Exists(GradeBuildPath)) _gradeBuild = ParseBuild(File.ReadAllText(GradeBuildPath, Encoding.UTF8)) ?? new GradeCalculator.BuildFocus(); }
+            catch (Exception ex) { Logger.LogWarning("[SephiriaLive] 빌드 방향 설정을 읽지 못했습니다: " + ex.Message); }
+        }
+
+        HttpResponseData SetGradeBuild(string body)
+        {
+            GradeCalculator.BuildFocus f;
+            try { f = ParseBuild(body); }
+            catch (FormatException ex) { return HttpResponseData.Json(new JObj { ["ok"] = false, ["error"] = "bad_json", ["message"] = ex.Message }, 400); }
+            if (f == null) return HttpResponseData.Json(new JObj { ["ok"] = false, ["error"] = "bad_build" }, 400);
+            var json = BuildJson(f);
+            try { File.WriteAllText(GradeBuildPath, MiniJson.Write(json), new UTF8Encoding(false)); }
+            catch (Exception ex) { return HttpResponseData.Json(new JObj { ["ok"] = false, ["error"] = "save_failed", ["message"] = ex.Message }, 500); }
+            _gradeBuild = f;
+            Logger.LogInfo($"[SephiriaLive] 빌드 방향 = 콤보 {string.Join(",", f.Tags)} / 피해 {string.Join(",", f.Damage)} / 스탯 {string.Join(",", f.Stats)}");
+            return HttpResponseData.Json(json);
+        }
+
+        static string LabelScalePath => Path.Combine(Paths.ConfigPath, "SephiriaLive.grade-label.txt");
+        const float MinLabelScale = 0.3f, MaxLabelScale = 2f;
+        static volatile float _labelScale = 0.7f; // 1 = 예전 크기. 예전 글자가 너무 커서 기본 70%
+
+        void LoadLabelScale()
         {
             try
             {
-                if (File.Exists(GradeDamagePath))
-                    _gradeDamage = File.ReadAllText(GradeDamagePath, Encoding.UTF8).Split(',').Select(x => x.Trim()).Where(x => x.Length > 0).ToArray();
+                if (File.Exists(LabelScalePath) && float.TryParse(File.ReadAllText(LabelScalePath).Trim(), System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out var v))
+                    _labelScale = Mathf.Clamp(v, MinLabelScale, MaxLabelScale);
             }
-            catch (Exception ex) { Logger.LogWarning("[SephiriaLive] 주요 피해 방식 설정을 읽지 못했습니다: " + ex.Message); }
+            catch (Exception ex) { Logger.LogWarning("[SephiriaLive] 라벨 크기 설정을 읽지 못했습니다: " + ex.Message); }
         }
 
-        HttpResponseData SetGradeDamage(string body)
+        HttpResponseData SetLabelScale(string body)
         {
-            List<object> list;
-            try { list = MiniJson.AsList(MiniJson.AsObj(MiniJson.Parse(string.IsNullOrWhiteSpace(body) ? "{}" : body))?["damage"]); }
+            double v;
+            try
+            {
+                var raw = MiniJson.AsObj(MiniJson.Parse(string.IsNullOrWhiteSpace(body) ? "{}" : body))?["scale"];
+                v = raw is double d ? d : raw is long l ? l : raw is int i ? i : double.NaN;
+            }
             catch (FormatException ex) { return HttpResponseData.Json(new JObj { ["ok"] = false, ["error"] = "bad_json", ["message"] = ex.Message }, 400); }
-            var values = list.Select(o => o as string).ToArray();
-            // 파일에 그대로 쓰므로 영문 소문자·_ 만, 12개 이하
-            if (values.Length > 12 || values.Any(v => v == null || v.Length > 20 || !System.Text.RegularExpressions.Regex.IsMatch(v, "^[a-z_]+$")))
-                return HttpResponseData.Json(new JObj { ["ok"] = false, ["error"] = "bad_damage" }, 400);
-            values = values.Distinct().ToArray();
-            try { File.WriteAllText(GradeDamagePath, string.Join(",", values), new UTF8Encoding(false)); }
+            if (double.IsNaN(v) || v < MinLabelScale || v > MaxLabelScale)
+                return HttpResponseData.Json(new JObj { ["ok"] = false, ["error"] = "bad_scale" }, 400);
+            try { File.WriteAllText(LabelScalePath, v.ToString("0.##", System.Globalization.CultureInfo.InvariantCulture), new UTF8Encoding(false)); }
             catch (Exception ex) { return HttpResponseData.Json(new JObj { ["ok"] = false, ["error"] = "save_failed", ["message"] = ex.Message }, 500); }
-            _gradeDamage = values;
-            Logger.LogInfo($"[SephiriaLive] 주요 피해 방식 = {(values.Length == 0 ? "(없음)" : string.Join(",", values))}");
-            return HttpResponseData.Json(new JObj { ["ok"] = true, ["damage"] = values.Cast<object>().ToList() });
+            _labelScale = (float)v;
+            return HttpResponseData.Json(new JObj { ["ok"] = true, ["scale"] = v });
         }
 
         void LoadGradeWeapon()
@@ -576,7 +639,7 @@ namespace SephiriaLive.Plugin
             var data = MiniJson.AsObj(MiniJson.Parse(File.ReadAllText(path, Encoding.UTF8)));
             foreach (var a in MiniJson.AsList(data?["artifacts"]).Select(MiniJson.AsObj)) if (a?["v"] is string v) _artifactsByAsset[v] = a;
             foreach (var w in MiniJson.AsList(data?["weapons"]).Select(MiniJson.AsObj)) if (w?["v"] is string v) _weaponsByAsset[v] = w;
-            _tagKo = MiniJson.AsObj(data?["tagKo"]); _kwKo = MiniJson.AsObj(data?["kwKo"]); _dmgKo = MiniJson.AsObj(data?["dmgKo"]);
+            _tagKo = MiniJson.AsObj(data?["tagKo"]); _kwKo = MiniJson.AsObj(data?["kwKo"]); _dmgKo = MiniJson.AsObj(data?["dmgKo"]); _statKo = MiniJson.AsObj(data?["statKo"]); _rules = MiniJson.AsObj(data?["rules"]);
         }
 
         static object CallStatic(string typeName, string method, object arg)
@@ -590,6 +653,11 @@ namespace SephiriaLive.Plugin
         /// 등급 계산 준비: 현재 가방 태그 수, 기준 무기(사이트에서 고른 무기 → 없으면 지금 든 무기), 전체 아티팩트 점수 분포.
         /// 반환한 함수는 아이템 번호(entityID) → 등급 결과(아티팩트가 아니면 null). 선택 화면·상점이 같이 쓴다.
         /// </summary>
+        /// <summary>BuildGrader 가 돌려주는 등급 함수: 아이템 번호 하나 → 결과. Miracle 은 (기적 효과 문장, 태그, 주는 아이템 번호들) → 결과.</summary>
+        Func<string, IEnumerable<string>, IEnumerable<object>, (GradeCalculator.Result result, string keys)> _miracleGrader;
+
+        volatile List<JObj> _lastMiracles = new List<JObj>(); // /miracle-grades 용(메인 스레드가 통째로 바꿔 끼움)
+
         Func<object, (GradeCalculator.Result result, string keys)> BuildGrader()
         {
             LoadGradeData();
@@ -617,17 +685,32 @@ namespace SephiriaLive.Plugin
                 }
 
             // 절대평가: 같은 빌드·무기 기준으로 전체 아티팩트를 점수 매긴 분포에서의 위치
-            var focus = new HashSet<string>(_gradeDamage);
+            var focus = _gradeBuild;
             var allTotals = _artifactsByAsset.Values.Select(d => GradeCalculator.Score(d, tagCounts, weapon, focus).Total).ToList();
-            return entityId =>
+            GradeCalculator.Result ScoreItem(object entityId)
             {
                 var entity = CallStatic("ItemDatabase", "FindItemById", entityId) as UnityEngine.Object;
-                if (entity == null || ReflectionFinder.GetMember(entity, "type")?.ToString() != "Charm") return (null, null); // 석판·포션 등은 등급 없음
-                if (!_artifactsByAsset.TryGetValue(entity.name, out var def)) return (null, null);
-                var r = GradeCalculator.Score(def, tagCounts, weapon, focus);
+                if (entity == null || ReflectionFinder.GetMember(entity, "type")?.ToString() != "Charm") return null; // 석판·포션 등은 등급 없음
+                return _artifactsByAsset.TryGetValue(entity.name, out var def) ? GradeCalculator.Score(def, tagCounts, weapon, focus) : null;
+            }
+            (GradeCalculator.Result, string) Finish(GradeCalculator.Result r)
+            {
+                if (r == null) return (null, null);
                 GradeCalculator.AssignGrades(new[] { r }, allTotals);
-                return (r, GradeCalculator.Summary(r, tagCounts, _tagKo, _kwKo, 3, _dmgKo));
+                return (r, GradeCalculator.Summary(r, tagCounts, _tagKo, _kwKo, 3, _dmgKo, _statKo));
+            }
+            // 기적: 효과 문장(규칙으로 분석) 점수 + 주는 아이템 점수의 합을 아티팩트 분포에 놓는다 — 좋은 아이템 + 빌드에 맞는 효과면 S
+            _miracleGrader = (effect, tags, itemIds) =>
+            {
+                var features = GradeCalculator.TextFeatures(effect, _rules, tags);
+                var items = itemIds.Select(ScoreItem).Where(x => x != null).ToList();
+                var res = Finish(GradeCalculator.Combine(GradeCalculator.Score(features, tagCounts, weapon, focus), items));
+                features["effect"] = effect; features["items"] = items.Select(i => (object)i.Total).ToList();
+                features["total"] = res.Item1?.Total ?? 0; features["grade"] = res.Item1?.Grade; features["keys"] = res.Item2;
+                _miracleLog.Add(features);
+                return res;
             };
+            return entityId => Finish(ScoreItem(entityId));
         }
 
         static UnityEngine.Object[] ActiveObjects(string typeName)
@@ -648,8 +731,15 @@ namespace SephiriaLive.Plugin
         {
             var rewards = ActiveObjects("UI_SephiriteRewardElement");
             var shops = ActiveObjects("UI_ShopPanel");
-            if (rewards.Length == 0 && shops.Length == 0) return;
-            var grader = BuildGrader();
+            var miracles = ActiveObjects("UI_MiracleElement");
+            if (rewards.Length == 0 && shops.Length == 0 && miracles.Length == 0) { _cachedGrader = null; return; }
+            // 화면은 자주(0.15초) 보되, 가방·무기·전체 분포를 읽는 무거운 준비는 1초에 한 번만
+            if (_cachedGrader == null || Time.unscaledTime >= _graderExpires)
+            {
+                _cachedGrader = BuildGrader();
+                _graderExpires = Time.unscaledTime + 1f;
+            }
+            var grader = _cachedGrader;
             if (grader == null) return;
 
             foreach (var el in rewards)
@@ -661,18 +751,259 @@ namespace SephiriaLive.Plugin
                 SetGradeLabel(((Component)el).transform as RectTransform, r, _gameFont, keys, compact: false);
             }
 
+            if (_gameFont == null && (shops.Length > 0 || miracles.Length > 0))
+                _gameFont = UnityEngine.Object.FindObjectsByType<Text>(FindObjectsInactive.Include, FindObjectsSortMode.None).Select(t => t.font).FirstOrDefault(f => f != null);
+
+            _miracleLog = new List<JObj>();
+            _miracleBadges.Clear();
+            // 기적 선택 화면: UI_MiracleElement.Face(Miracle 프리팹: GetEffectString·categories) + itemIcons(주는 아이템, Item.entityID)
+            foreach (var el in miracles)
+            {
+                var face = ReflectionFinder.GetMember(el, "Face");
+                GradeCalculator.Result r = null; string keys = null;
+                if (face != null && _miracleGrader != null)
+                {
+                    var effectMethod = ReflectionFinder.FindMethod(face.GetType(), "GetEffectString", 0);
+                    string effect = null;
+                    if (effectMethod != null && ReflectionFinder.TryInvoke(face, effectMethod, new object[0], out var e, out _)) effect = e as string;
+                    if (string.IsNullOrEmpty(effect)) effect = (ReflectionFinder.GetMember(ReflectionFinder.GetMember(el, "effectText"), "text") as string) ?? "";
+                    var tags = ReflectionFinder.EnumerateValues(ReflectionFinder.GetMember(face, "categories")).OfType<string>().Where(t => t.Length > 0);
+                    var itemIds = ReflectionFinder.EnumerateValues(ReflectionFinder.GetMember(el, "itemIcons")).OfType<Component>()
+                        .Where(i => i != null && i.gameObject.activeInHierarchy)
+                        .Select(i => ReflectionFinder.GetMember(ReflectionFinder.GetMember(i, "Item"), "entityID")).Where(id => id != null).ToList();
+                    (r, keys) = _miracleGrader(effect, tags, itemIds);
+                }
+                // 카드 영역: 클릭 버튼(카드 전체) → 없으면 요소 자신
+                var card = (ReflectionFinder.GetMember(el, "button") as Component)?.transform as RectTransform ?? ((Component)el).transform as RectTransform;
+                var titleFont = (ReflectionFinder.GetMember(el, "titleText") as TMPro.TextMeshProUGUI)?.font; // 카드 제목과 같은 글꼴
+                SetMiracleBadge(card, r, _gameFont, keys, ((Component)el).transform, titleFont);
+                if (_miracleLog.Count > 0 && card != null)
+                {
+                    var fr = FindCardFrame(((Component)el).transform);
+                    _miracleLog[_miracleLog.Count - 1]["images"] = ((Component)el).GetComponentsInChildren<Image>(true).Where(i => !IsOurs(i.transform)).Take(30)
+                        .Select(i => (object)$"{i.name} {i.rectTransform.rect.width:0}x{i.rectTransform.rect.height:0} active={i.isActiveAndEnabled} color={ColorUtility.ToHtmlStringRGBA(i.color)} sprite={(i.sprite == null ? "-" : i.sprite.name)} type={i.type} outlines={i.GetComponents<Outline>().Length}").ToList();
+                    _miracleLog[_miracleLog.Count - 1]["selected"] = UnityEngine.EventSystems.EventSystem.current?.currentSelectedGameObject?.name;
+                    _miracleLog[_miracleLog.Count - 1]["card"] = $"{card.name} {card.rect.width:0}x{card.rect.height:0}, frame {(fr == null ? "-" : fr.name + " " + fr.rectTransform.rect.width.ToString("0") + "x" + fr.rectTransform.rect.height.ToString("0"))}";
+                }
+            }
+            if (miracles.Length > 0) _lastMiracles = _miracleLog;
+
             if (shops.Length == 0) return;
             if (_gameFont == null) _gameFont = UnityEngine.Object.FindObjectsByType<Text>(FindObjectsInactive.Include, FindObjectsSortMode.None).Select(t => t.font).FirstOrDefault(f => f != null);
             foreach (var shop in shops)
+            {
+                // 상점 창이 쓰는 게임 글꼴(가장 많이 쓰인 TMP 글꼴)
+                var shopFont = ((Component)shop).GetComponentsInChildren<TMPro.TextMeshProUGUI>(false).Where(x => x.font != null && !IsOurs(x.transform))
+                    .GroupBy(x => x.font).OrderByDescending(g => g.Count()).Select(g => g.Key).FirstOrDefault();
                 foreach (var icon in ReflectionFinder.EnumerateValues(ReflectionFinder.GetMember(shop, "shopInventoryIconList")).OfType<Component>())
                 {
                     if (icon == null || !icon.gameObject.activeInHierarchy) continue;
                     var item = ReflectionFinder.GetMember(icon, "Item");
-                    SetGradeLabel(icon.transform as RectTransform, item == null ? null : grader(ReflectionFinder.GetMember(item, "EntityID")).result, _gameFont, null, compact: true);
+                    SetGradeLabel(icon.transform as RectTransform, item == null ? null : grader(ReflectionFinder.GetMember(item, "EntityID")).result, _gameFont, null, compact: true, shopFont);
                 }
+            }
         }
 
         const string LabelName = "SephiriaLiveGrade";
+
+        static TMPro.TMP_FontAsset _pixelFont; // 게임 TMP 글꼴(도트) — 등급 알파벳을 게임 글씨처럼
+
+        static TMPro.TMP_FontAsset PixelFont()
+        {
+            if (_pixelFont != null) return _pixelFont;
+            try
+            {
+                _pixelFont = UnityEngine.Object.FindObjectsByType<TMPro.TextMeshProUGUI>(FindObjectsInactive.Exclude, FindObjectsSortMode.None)
+                    .Where(t => t.font != null && !IsOurs(t.transform)).GroupBy(t => t.font).OrderByDescending(g => g.Count()).Select(g => g.Key).FirstOrDefault();
+            }
+            catch (Exception) { _pixelFont = null; }
+            return _pixelFont;
+        }
+
+        /// <summary>parent 안 "Letter" 자식에 등급 알파벳(게임 도트 글꼴, 등급색). 게임 글꼴을 못 찾으면 null(호출한 쪽이 일반 글자로 대신).</summary>
+        static RectTransform SetLetter(RectTransform parent, string grade, float size, TMPro.TextAlignmentOptions align, TMPro.TMP_FontAsset font = null)
+        {
+            font = font ?? PixelFont();
+            if (font == null) return null;
+            var tr = parent.Find("Letter") as RectTransform;
+            TMPro.TextMeshProUGUI t;
+            if (tr == null)
+            {
+                tr = NewUi("Letter", parent);
+                t = tr.gameObject.AddComponent<TMPro.TextMeshProUGUI>();
+                t.raycastTarget = false; t.enableWordWrapping = false; t.overflowMode = TMPro.TextOverflowModes.Overflow;
+            }
+            else t = tr.GetComponent<TMPro.TextMeshProUGUI>();
+            t.font = font; t.fontSize = size; t.color = GradeColor(grade); t.alignment = align; t.text = grade;
+            return tr;
+        }
+
+        // 기적 카드 테두리: 선택된 카드는 매 프레임 굵은 노란 테두리로(0.5초 갱신을 기다리지 않게)
+        static readonly List<(RectTransform root, Transform card, Color color, float th, Outline[] outlines)> _miracleBadges = new List<(RectTransform, Transform, Color, float, Outline[])>();
+        // 게임 카드 프레임 이미지에 붙인 외곽선(카드 모양·둥근 모서리를 그대로 따라감). 프레임 → 우리가 붙인 Outline 들
+        static readonly Dictionary<Image, Outline[]> _frameOutlines = new Dictionary<Image, Outline[]>();
+
+        static void SetOutline(Outline[] ols, Color c, float th)
+        {
+            for (int i = 0; i < ols.Length; i++)
+            {
+                if (ols[i] == null) continue;
+                float d = th * (i + 1) / ols.Length; // 안쪽부터 바깥쪽까지 겹쳐서 빈틈 없는 굵은 선
+                ols[i].effectColor = c; ols[i].effectDistance = new Vector2(d, -d); ols[i].useGraphicAlpha = true;
+            }
+        }
+
+        /// <summary>기적 카드의 프레임 이미지: 카드 요소 안에서 보이는 가장 큰 이미지(위 문양·아이템 아이콘은 작아서 빠짐). 우리 UI 는 제외.</summary>
+        static readonly Dictionary<Transform, Image> _frameOf = new Dictionary<Transform, Image>(); // 처음 고른 프레임 고정(선택 시 켜지는 게임 강조 이미지로 바뀌지 않게)
+
+        static Image FindCardFrame(Transform element)
+        {
+            if (element == null) return null;
+            if (_frameOf.TryGetValue(element, out var cached) && cached != null) return cached;
+            if (_frameOf.Count > 64) _frameOf.Clear();
+            return _frameOf[element] = element.GetComponentsInChildren<Image>(false)
+                .Where(i => i.sprite != null && i.enabled && i.color.a > 0.5f && !i.transform.name.StartsWith("SephiriaLive")
+                            && !IsOurs(i.transform))
+                .OrderByDescending(i => i.rectTransform.rect.width * i.rectTransform.rect.height)
+                .FirstOrDefault();
+        }
+
+        static bool IsOurs(Transform t)
+        {
+            for (; t != null; t = t.parent) if (t.name == MiracleBadgeName || t.name == LabelName) return true;
+            return false;
+        }
+
+        static void RemoveFrameOutline(Image frame)
+        {
+            if (frame == null || !_frameOutlines.TryGetValue(frame, out var ols)) return;
+            foreach (var o in ols) if (o != null) Destroy(o);
+            _frameOutlines.Remove(frame);
+        }
+        static readonly Color SelectedColor = new Color(1f, 0.82f, 0.1f);
+
+        static void UpdateMiracleSelection()
+        {
+            if (_miracleBadges.Count == 0) return;
+            var selected = UnityEngine.EventSystems.EventSystem.current?.currentSelectedGameObject;
+            foreach (var (root, card, color, th, outlines) in _miracleBadges)
+            {
+                if (root == null || card == null) continue;
+                bool on = selected != null && (selected.transform == card || selected.transform.IsChildOf(card));
+                if (outlines != null) { SetOutline(outlines, on ? SelectedColor : color, on ? th * 1.6f : th); continue; }
+                foreach (Transform edge in root)
+                {
+                    if (edge.name != "Edge") continue;
+                    edge.GetComponent<Image>().color = on ? SelectedColor : color;
+                    var rt = (RectTransform)edge;
+                    float t = on ? th * 2.5f : th;
+                    rt.sizeDelta = new Vector2(rt.anchorMin.x == rt.anchorMax.x ? t : 0f, rt.anchorMin.y == rt.anchorMax.y ? t : 0f);
+                }
+            }
+        }
+        List<JObj> _miracleLog = new List<JObj>();
+        const string MiracleBadgeName = "SephiriaLiveMiracle";
+
+        /// <summary>
+        /// 기적 카드는 크고 눈에 띄어야 해서 따로 꾸민다(등급색 = GradeColor):
+        /// 카드 둘레 등급색 테두리 + 왼쪽 위 큰 등급 배지 + 카드 아래쪽 근거 띠. 글자 크기는 사이트의 라벨 크기 배율을 따른다.
+        /// </summary>
+        static void SetMiracleBadge(RectTransform card, GradeCalculator.Result result, Font font, string keys, Transform cardBottomOf = null, TMPro.TMP_FontAsset tmpFont = null)
+        {
+            if (card == null) return;
+            var existing = card.Find(MiracleBadgeName);
+            if (existing != null) Destroy(existing.gameObject);
+            var frame = FindCardFrame(cardBottomOf ?? card);
+            if (result == null) { RemoveFrameOutline(frame); return; }
+
+            var root = NewUi(MiracleBadgeName, card); // 카드 꽉 채움
+            root.SetAsLastSibling();
+            // 클릭 버튼은 아이템 칸 위에서 끝나서, 아래쪽은 카드 요소 전체의 바닥까지 늘린다
+            if (cardBottomOf != null)
+            {
+                var bounds = RectTransformUtility.CalculateRelativeRectTransformBounds(card, cardBottomOf);
+                float extra = card.rect.yMin - bounds.min.y;
+                if (extra > 0f && extra < card.rect.height) root.offsetMin = new Vector2(0f, -extra);
+            }
+            var color = GradeColor(result.Grade);
+            float w = card.rect.width, scale = _labelScale / 0.7f; // 기본(70%)일 때 1배
+            font = font ?? Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+
+            Image Box(string name, RectTransform parent, Color c)
+            {
+                var img = NewUi(name, parent).gameObject.AddComponent<Image>();
+                img.raycastTarget = false; img.color = c;
+                return img;
+            }
+            Text Label(RectTransform parent, string text, int size, Color c, TextAnchor align)
+            {
+                var t = NewUi("Text", parent).gameObject.AddComponent<Text>();
+                t.raycastTarget = false; t.font = font; t.fontSize = size; t.color = c; t.alignment = align;
+                t.supportRichText = true; t.horizontalOverflow = HorizontalWrapMode.Wrap; t.verticalOverflow = VerticalWrapMode.Overflow;
+                t.text = text;
+                return t;
+            }
+
+            float th = 1f; // 카드 프레임 외곽선 두께(캔버스 단위, 선택 시 1.6배)
+            tmpFont = tmpFont ?? PixelFont();
+            Outline[] outlines = null;
+            if (frame != null)
+            {
+                if (!_frameOutlines.TryGetValue(frame, out outlines) || outlines.Any(o => o == null))
+                {
+                    RemoveFrameOutline(frame);
+                    outlines = new[] { frame.gameObject.AddComponent<Outline>(), frame.gameObject.AddComponent<Outline>() };
+                    _frameOutlines[frame] = outlines;
+                }
+                SetOutline(outlines, color, th);
+            }
+            // 프레임을 못 찾았을 때만 직사각형 테두리 4변
+            if (outlines == null)
+            foreach (var (min, max, size) in new[] {
+                (new Vector2(0, 1), new Vector2(1, 1), new Vector2(0, th)), (new Vector2(0, 0), new Vector2(1, 0), new Vector2(0, th)),
+                (new Vector2(0, 0), new Vector2(0, 1), new Vector2(th, 0)), (new Vector2(1, 0), new Vector2(1, 1), new Vector2(th, 0)) })
+            {
+                var edge = Box("Edge", root, color).rectTransform;
+                edge.anchorMin = min; edge.anchorMax = max; edge.pivot = new Vector2(min.x == max.x ? min.x : 0.5f, min.y == max.y ? min.y : 0.5f);
+                edge.sizeDelta = size; edge.anchoredPosition = Vector2.zero;
+            }
+
+            // 왼쪽 위 등급 배지
+            float b = Mathf.Clamp(w * 0.1f, 16f, 60f) * scale; // 글자가 크면 카드를 가려서 작게, 대신 테두리로 눈에 띄게
+            var badge = Box("Badge", root, new Color(0.05f, 0.04f, 0.07f, 0.92f)).rectTransform;
+            badge.anchorMin = badge.anchorMax = badge.pivot = new Vector2(0f, 1f);
+            badge.sizeDelta = new Vector2(b, b); badge.anchoredPosition = new Vector2(th * 3f, -th * 3f);
+            _miracleBadges.Add((root, card, color, th, outlines));
+            var ol = badge.gameObject.AddComponent<Outline>(); ol.effectColor = color; ol.effectDistance = new Vector2(2f, -2f);
+            if (SetLetter(badge, result.Grade, b * 0.75f, TMPro.TextAlignmentOptions.Center, tmpFont) == null)
+                Label(badge, result.Grade, Mathf.RoundToInt(b * 0.75f), color, TextAnchor.MiddleCenter);
+
+            // 아래쪽 근거 띠(근거가 있을 때만)
+            if (!string.IsNullOrEmpty(keys))
+            {
+                float h = Mathf.Clamp(w * 0.045f, 9f, 24f) * scale;
+                var strip = Box("Reason", root, new Color(0.05f, 0.04f, 0.07f, 0.85f)).rectTransform;
+                strip.anchorMin = new Vector2(0f, 0f); strip.anchorMax = new Vector2(1f, 0f); strip.pivot = new Vector2(0.5f, 0f);
+                float innerW = Mathf.Max(1f, w - 2f * th - 12f), fs = Mathf.Max(5f, h * 0.68f);
+                float textH;
+                if (tmpFont != null)
+                {
+                    var tr = NewUi("Text", strip);
+                    var tm = tr.gameObject.AddComponent<TMPro.TextMeshProUGUI>();
+                    tm.raycastTarget = false; tm.font = tmpFont; tm.fontSize = fs; tm.color = Color.white;
+                    tm.alignment = TMPro.TextAlignmentOptions.Center; tm.enableWordWrapping = true; tm.text = keys;
+                    tr.offsetMin = new Vector2(6f, 0f); tr.offsetMax = new Vector2(-6f, 0f);
+                    textH = tm.GetPreferredValues(keys, innerW, 0f).y;
+                }
+                else
+                {
+                    var t = Label(strip, keys, Mathf.RoundToInt(fs), Color.white, TextAnchor.MiddleCenter);
+                    ((RectTransform)t.transform).offsetMin = new Vector2(6f, 0f); ((RectTransform)t.transform).offsetMax = new Vector2(-6f, 0f);
+                    textH = h * Mathf.Clamp(Mathf.CeilToInt(t.preferredWidth / innerW), 1, 3);
+                }
+                strip.sizeDelta = new Vector2(-2f * th, Mathf.Max(h, textH + 4f)); strip.anchoredPosition = new Vector2(0f, th);
+            }
+        }
 
         /// <summary>
         /// op.gg 처럼 깔끔한 한 줄 라벨: "<등급색>A</> 정밀/그림자 콤보, 치명타".
@@ -680,7 +1011,7 @@ namespace SephiriaLive.Plugin
         ///  · 상점(compact=true): 목록 줄 간격이 좁아 아이콘 안 오른쪽 위에 등급 글자만.
         /// result 가 null(아티팩트 아님)이면 떼어낸다. 클릭을 막지 않도록 raycastTarget 은 끈다.
         /// </summary>
-        static void SetGradeLabel(RectTransform rect, GradeCalculator.Result result, Font font, string keys, bool compact)
+        static void SetGradeLabel(RectTransform rect, GradeCalculator.Result result, Font font, string keys, bool compact, TMPro.TMP_FontAsset tmpFont = null)
         {
             if (rect == null) return;
             var existing = rect.Find(LabelName);
@@ -709,28 +1040,133 @@ namespace SephiriaLive.Plugin
             float w = rect.rect.width;
             if (compact)
             {
-                float size = Mathf.Clamp(w * 0.28f, 10f, 22f);
+                float size = Mathf.Clamp(w * 0.28f, 10f, 22f) * _labelScale;
                 label.anchorMin = label.anchorMax = label.pivot = new Vector2(1f, 1f);
                 label.sizeDelta = new Vector2(size, size);
                 label.anchoredPosition = new Vector2(-2f, -2f); // 아이콘 안쪽
                 t.alignment = TextAnchor.MiddleCenter;
                 t.resizeTextMinSize = 6; t.resizeTextMaxSize = Mathf.RoundToInt(size * 0.85f);
-                t.text = grade;
+                t.text = SetLetter(label, result.Grade, size * 0.65f, TMPro.TextAlignmentOptions.Center, tmpFont) != null ? "" : grade; // 도트 글꼴은 커 보여서 작게
             }
             else
             {
-                float h = Mathf.Clamp(w * 0.16f, 10f, 20f);
+                float h = Mathf.Clamp(w * 0.16f, 10f, 20f) * _labelScale;
                 label.anchorMin = label.anchorMax = new Vector2(0.5f, 1f);
                 label.pivot = new Vector2(0.5f, 0f);
                 label.sizeDelta = new Vector2(w, h);
                 label.anchoredPosition = new Vector2(0f, 2f); // 아이템 바로 위
                 t.alignment = TextAnchor.MiddleLeft; // 등급 글자는 설명 유무와 상관없이 항상 왼쪽
-                t.resizeTextMinSize = 5; t.resizeTextMaxSize = Mathf.RoundToInt(h * 0.8f);
-                t.text = string.IsNullOrEmpty(keys) ? grade : grade + " " + keys;
+                // 글자 크기는 고정, 아이템 너비를 넘으면 줄을 늘린다(예전엔 자동 축소하다 두 번째 줄이 잘려 "충돌" 같은 말이 사라졌음)
+                t.resizeTextForBestFit = false;
+                t.fontSize = Mathf.RoundToInt(h * 0.75f);
+                t.verticalOverflow = VerticalWrapMode.Overflow;
+                var letter = SetLetter(label, result.Grade, h * 0.85f, TMPro.TextAlignmentOptions.Center);
+                float lead = letter != null ? h : 0f; // 등급 글자 칸(첫 줄 왼쪽)
+                t.text = letter != null ? (keys ?? "") : (string.IsNullOrEmpty(keys) ? grade : grade + " " + keys);
+                int lines = Mathf.Clamp(Mathf.CeilToInt(t.preferredWidth / Mathf.Max(1f, w - 4f - lead)), 1, 3);
+                label.sizeDelta = new Vector2(w, h * lines);
+                if (letter != null)
+                {
+                    letter.anchorMin = letter.anchorMax = letter.pivot = new Vector2(0f, 1f);
+                    letter.sizeDelta = new Vector2(h, h); letter.anchoredPosition = new Vector2(2f, 0f);
+                }
+                var tt = (RectTransform)t.transform;
+                tt.offsetMin = new Vector2(2f + lead, 0f); tt.offsetMax = new Vector2(-2f, 0f);
             }
-            var tr = (RectTransform)t.transform;
-            tr.offsetMin = new Vector2(2f, 0f); tr.offsetMax = new Vector2(-2f, 0f);
+            if (compact) { var tr = (RectTransform)t.transform; tr.offsetMin = new Vector2(2f, 0f); tr.offsetMax = new Vector2(-2f, 0f); }
             label.GetComponent<Image>().color = new Color(0.05f, 0.04f, 0.07f, 0.72f);
+        }
+
+        // ---------------- 무기 강화 화면: 목표 무기로 가는 선택지에 스포트라이트 ----------------
+        const string SpotOn = "SephiriaLivePath:on", SpotDim = "SephiriaLivePath:dim";
+
+        /// <summary>
+        /// 무기 강화 화면(UI_WeaponEnhancementButton.enhancementMetadata.enhanced) 선택지 중 사이트에서 고른 목표 무기(또는 그 강화 전 단계)를
+        /// 금색 테두리 + "★ 목표 경로 → 이름" 라벨로 강조하고 나머지는 어둡게 덮는다. 경로 선택지가 없으면 아무것도 안 함.
+        /// </summary>
+        void RefreshEnhanceSpotlight()
+        {
+            var buttons = ActiveObjects("UI_WeaponEnhancementButton").OfType<Component>().ToList();
+            if (buttons.Count == 0) return;
+            LoadGradeData();
+            var target = _gradeWeaponAsset;
+            var parentOf = _weaponsByAsset.Where(kv => kv.Value?["parent"] is string).ToDictionary(kv => kv.Key, kv => (string)kv.Value["parent"]);
+            // 선택지 무기는 enhancementMetadata.enhanced(SetWeaponMethod 가 채움). weapon 필드는 게임이 안 씀
+            string AssetOf(Component b) => (ReflectionFinder.GetMember(ReflectionFinder.GetMember(b, "enhancementMetadata"), "enhanced") as UnityEngine.Object
+                                            ?? ReflectionFinder.GetMember(b, "weapon") as UnityEngine.Object)?.name;
+            var onPath = buttons.ToDictionary(b => b, b => WeaponPath.LeadsTo(AssetOf(b), target, parentOf));
+            bool any = onPath.Values.Any(v => v);
+            if (_gameFont == null) _gameFont = UnityEngine.Object.FindObjectsByType<Text>(FindObjectsInactive.Include, FindObjectsSortMode.None).Select(t => t.font).FirstOrDefault(f => f != null);
+            var targetName = target != null && _weaponsByAsset.TryGetValue(target, out var tw) ? tw["k"] as string : target;
+            foreach (var b in buttons)
+            {
+                var rect = b.transform as RectTransform;
+                if (rect == null) continue;
+                var label = AssetOf(b) == target ? "★ 목표 무기" : "★ 목표 경로 → " + targetName;
+                SetSpotlight(rect, !any ? null : onPath[b] ? SpotOn : SpotDim, label, _gameFont);
+            }
+        }
+
+        static void SetSpotlight(RectTransform rect, string state, string label, Font font)
+        {
+            var on = rect.Find(SpotOn); var dim = rect.Find(SpotDim);
+            if (state != SpotOn && on != null) Destroy(on.gameObject);
+            if (state != SpotDim && dim != null) Destroy(dim.gameObject);
+            if (state == null) return;
+            var existing = state == SpotOn ? on : dim;
+            RectTransform root;
+            if (existing != null) root = (RectTransform)existing;
+            else
+            {
+                root = NewUi(state, rect); // 부모 꽉 채움
+                if (state == SpotDim)
+                    root.gameObject.AddComponent<Image>().color = new Color(0f, 0f, 0f, 0.55f);
+                else
+                {
+                    var gold = new Color(1f, 0.8f, 0.25f);
+                    float th = Mathf.Max(4f, rect.rect.height * 0.025f);
+                    void Edge(Vector2 min, Vector2 max, Vector2 size)
+                    {
+                        var e = NewUi("Edge", root);
+                        e.anchorMin = min; e.anchorMax = max; e.pivot = new Vector2(0.5f, 0.5f);
+                        e.offsetMin = Vector2.zero; e.offsetMax = Vector2.zero; e.sizeDelta = size;
+                        var img = e.gameObject.AddComponent<Image>(); img.color = gold; img.raycastTarget = false;
+                    }
+                    Edge(new Vector2(0, 1), new Vector2(1, 1), new Vector2(0, th));   // 위
+                    Edge(new Vector2(0, 0), new Vector2(1, 0), new Vector2(0, th));   // 아래
+                    Edge(new Vector2(0, 0), new Vector2(0, 1), new Vector2(th, 0));   // 왼쪽
+                    Edge(new Vector2(1, 0), new Vector2(1, 1), new Vector2(th, 0));   // 오른쪽
+                    var tag = NewUi("Label", root);
+                    tag.anchorMin = tag.anchorMax = tag.pivot = new Vector2(1f, 0f);
+                    tag.sizeDelta = new Vector2(rect.rect.width * 0.45f, rect.rect.height * 0.18f);
+                    tag.anchoredPosition = new Vector2(-th * 3f, th * 2f);
+                    var bg = tag.gameObject.AddComponent<Image>(); bg.color = new Color(0.05f, 0.04f, 0.07f, 0.85f); bg.raycastTarget = false;
+                    // 게임 글꼴(이 버튼 안 글자의 TMP 글꼴 → 화면에서 가장 많이 쓰는 글꼴). 없으면 일반 글자로
+                    var tmpFont = rect.GetComponentsInChildren<TMPro.TextMeshProUGUI>(true).Select(x => x.font).FirstOrDefault(f => f != null) ?? PixelFont();
+                    if (tmpFont != null)
+                    {
+                        var tm = NewUi("Text", tag).gameObject.AddComponent<TMPro.TextMeshProUGUI>();
+                        tm.raycastTarget = false; tm.font = tmpFont; tm.alignment = TMPro.TextAlignmentOptions.Center; tm.color = gold;
+                        tm.enableAutoSizing = true; tm.fontSizeMin = 6; tm.fontSizeMax = rect.rect.height * 0.12f; tm.enableWordWrapping = false;
+                    }
+                    else
+                    {
+                        var t = NewUi("Text", tag).gameObject.AddComponent<Text>();
+                        t.raycastTarget = false; t.alignment = TextAnchor.MiddleCenter; t.color = gold;
+                        t.resizeTextForBestFit = true; t.resizeTextMinSize = 6; t.resizeTextMaxSize = Mathf.RoundToInt(rect.rect.height * 0.12f);
+                    }
+                }
+                foreach (var g in root.GetComponentsInChildren<Graphic>(true)) g.raycastTarget = false; // 선택 클릭을 막지 않게
+            }
+            root.SetAsLastSibling();
+            if (state == SpotOn)
+            {
+                var textTr = root.Find("Label/Text");
+                var tm = textTr?.GetComponent<TMPro.TextMeshProUGUI>();
+                if (tm != null) tm.text = label;
+                var t = textTr?.GetComponent<Text>();
+                if (t != null) { t.font = font ?? t.font ?? Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf"); t.text = label; }
+            }
         }
 
         static RectTransform NewUi(string name, Transform parent)
