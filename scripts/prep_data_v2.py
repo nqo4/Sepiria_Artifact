@@ -37,6 +37,8 @@ KEYWORDS = {
     "elemental": ["속성 피해", "얼음속성", "번개속성", "화염속성", "먹구름", "빛속성", "암속성", "혼돈 속성"],
     "perfect_guard": ["퍼펙트 가드"],
     "lifesteal": ["흡혈"],
+    # 무기 종류에 따라 못 쓰는 동작(GradeCalculator 가 감점): "대시" 중에서도 대시 공격만 — 대시 횟수 등은 모든 무기가 씀
+    "dash_attack": ["대시 공격"],
 }
 
 KW_KO = {
@@ -44,7 +46,7 @@ KW_KO = {
     "charge_ammo": "탄환/충전", "dash": "대시", "status": "상태이상", "last_hit_chain": "연격/마지막",
     "guard": "가드", "summon": "소환/동료", "mp": "MP", "shield": "보호막",
     "ranged": "원거리/투사체", "melee": "근접", "reload": "재장전", "elemental": "속성피해",
-    "perfect_guard": "퍼펙트가드", "lifesteal": "흡혈",
+    "perfect_guard": "퍼펙트가드", "lifesteal": "흡혈", "dash_attack": "대시공격",
 }
 
 # 게임 ItemEntity.categories 키 → 한국어. 기존 placement_db.json 아티팩트 태그(한국어)와 이름으로 맞춰 다수결로 정함.
@@ -99,11 +101,50 @@ def icon_url(asset_name):
     return "/icon?name=" + quote(asset_name)
 
 
+KEYWORD_SPRITE = re.compile(r'<sprite="?Keyword"? name="?([A-Za-z0-9_]+)"?>')
+
+
 def clean_text(t):
-    # 게임 툴팁 문장의 Unity rich text 태그(<color=..>, <sprite=..>)를 걷어낸다.
+    # 게임 툴팁 문장의 키워드 아이콘 <sprite="Keyword" name=MP> 는 {kw:MP} 로 남기고(페이지가 /keyword-icon 그림으로 바꿈),
+    # 나머지 Unity rich text 태그(<color=..> 등)는 걷어낸다.
     if not t:
         return t
+    t = KEYWORD_SPRITE.sub(lambda m: "{kw:" + m.group(1) + "}", t)
     return re.sub(r"<[^>]+>", "", t).strip()
+
+
+def plain(t):
+    # 키워드 분석용: 아이콘 자리 표시까지 뺀 순수 문장
+    return re.sub(r"\{kw:[A-Za-z0-9_]+\}", "", t or "")
+
+
+# 주요 피해 방식: 효과 문장의 키워드 아이콘 이름 → 피해 방식. 빌드 방향의 "주요 피해 방식" 선택과 맞으면 등급 점수가 오른다.
+DAMAGE_TYPES = {
+    "physical": ["PhysicalDamage"],
+    "fire": ["FlameGround", "FlameSword", "BlueBurn"],
+    "lightning": ["LightningDamage", "DarkCloud", "Plasma"],
+    "ice": ["IceDamage", "FrostRelic", "DarkCloudIce"],
+    "chaos": ["ChaosDamage"],
+    "magic": ["MagicBook", "MagicDamageBonus", "CooldownRecovey", "MagicCriticalChance"],
+    "companion": ["Companion", "FollowerDamage", "FollowerHP", "FollowerCritical", "FollowerDefense"],
+    "true": ["TrueDamage"],
+}
+DAMAGE_KO = {
+    "physical": "물리", "fire": "화염", "lightning": "번개(감전)", "ice": "얼음(빙결)",
+    "chaos": "혼돈", "magic": "마법서", "companion": "동료", "true": "고정 피해",
+}
+_SPRITE_TO_DT = {sp: dt for dt, sps in DAMAGE_TYPES.items() for sp in sps}
+_SPRITE_TO_DT_MULTI = {"HighestElementalDamage": ["fire", "lightning", "ice"]}  # 가장 높은 속성 피해 = 어느 속성이든
+
+
+def damage_types(raw_texts):
+    hits = set()
+    for t in raw_texts:
+        for name in KEYWORD_SPRITE.findall(t or ""):
+            if name in _SPRITE_TO_DT:
+                hits.add(_SPRITE_TO_DT[name])
+            hits.update(_SPRITE_TO_DT_MULTI.get(name, []))
+    return sorted(hits)
 
 
 # ---------- 아티팩트 ----------
@@ -120,7 +161,10 @@ for a in artifacts:
         "s": [c for c in a.get("categories") or [] if c],
         "c": content,
         "img": icon_url(a["assetName"]),
-        "kw": extract_kw(content),
+        "kw": extract_kw(plain(content)),
+        "dt": damage_types(a.get("effects") or []),  # 피해 방식(DAMAGE_TYPES)
+        "cr": a.get("criteria"),          # 발동 조건(CharmActivateCriteria_XXX 의 XXX), 없으면 None
+        "mb": bool(a.get("magicBook")),   # 마법서(Charm_Magic) — Near8MagicBook 조건이 봄
     })
 
 # ---------- 무기 ----------
@@ -142,8 +186,8 @@ for w in weapons:
         "parent": parent["assetName"] if parent else None,
         "c": joined,
         "img": icon_url(w["assetName"]),
-        "kw": extract_kw(joined),
-        "redef": extract_redef(joined),
+        "kw": extract_kw(plain(joined)),
+        "redef": extract_redef(plain(joined)),
     })
 
 # ---------- 석판 (요약 목록, 효과 패턴은 placement_db.json 쪽에서 관리) ----------
@@ -165,6 +209,7 @@ out = {
     "weapons": out_weapons,
     "tagKo": TAG_KO,
     "kwKo": KW_KO,
+    "dmgKo": DAMAGE_KO,
 }
 
 with open(OUT_PATH, "w", encoding="utf-8") as f:

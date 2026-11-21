@@ -63,19 +63,19 @@ for (const f of fs.readdirSync(FX).filter(f => /^inv_.*\.json$/.test(f))) {
   check(`optimize 점수가 줄지 않음 ${f}`, o.after >= o.before, `${o.before} -> ${o.after}`);
   const dest = new Set(o.placements.map(p => p.toX + ',' + p.toY));
   check(`optimize 목표 칸 중복 없음 ${f}`, dest.size === o.placements.length);
-  check(`optimize 결과 재평가 = after ${f}`, E.evaluate(o.board).score === o.after);
+  check(`optimize 결과 재평가 = after ${f}`, E.evaluate(o.board).levelSum === o.after);
 }
 
 // 단위 검사
 check('회전: 게임 rotation 1 은 UP→LEFT', JSON.stringify(E.parseQuery('UP 1', 6, 5, 2, 2, 1)) === JSON.stringify([{ x: 1, y: 2, value: '1' }]));
 check('조건 PLACED: 맨 윗줄이 아니면 효과 없음',
-  E.evaluate({ w: 3, h: 3, items: [{ x: 1, y: 1, kind: 'tablet', query: 'LEFT 1', cond: 'TOP PLACED' }, { x: 0, y: 1, kind: 'artifact', maxLevel: 3 }] }).score === 0);
+  E.evaluate({ w: 3, h: 3, items: [{ x: 1, y: 1, kind: 'tablet', query: 'LEFT 1', cond: 'TOP PLACED' }, { x: 0, y: 1, kind: 'artifact', maxLevel: 3 }] }).levelSum === 0);
 check('조건 PLACED: 맨 윗줄이면 효과 있음',
-  E.evaluate({ w: 3, h: 3, items: [{ x: 1, y: 0, kind: 'tablet', query: 'LEFT 1', cond: 'TOP PLACED' }, { x: 0, y: 0, kind: 'artifact', maxLevel: 3 }] }).score === 1);
+  E.evaluate({ w: 3, h: 3, items: [{ x: 1, y: 0, kind: 'tablet', query: 'LEFT 1', cond: 'TOP PLACED' }, { x: 0, y: 0, kind: 'artifact', maxLevel: 3 }] }).levelSum === 1);
 check('MUL/2 는 합산 후 곱함, maxLevel 로 자름',
-  E.evaluate({ w: 3, h: 1, items: [{ x: 0, y: 0, kind: 'tablet', query: 'RIGHT 2' }, { x: 2, y: 0, kind: 'tablet', query: 'LEFT MUL/2' }, { x: 1, y: 0, kind: 'artifact', maxLevel: 3 }] }).score === 3);
+  E.evaluate({ w: 3, h: 1, items: [{ x: 0, y: 0, kind: 'tablet', query: 'RIGHT 2' }, { x: 2, y: 0, kind: 'tablet', query: 'LEFT MUL/2' }, { x: 1, y: 0, kind: 'artifact', maxLevel: 3 }] }).levelSum === 3);
 check('X 는 비활성(점수 0)',
-  E.evaluate({ w: 3, h: 1, items: [{ x: 0, y: 0, kind: 'tablet', query: 'RIGHT 2' }, { x: 2, y: 0, kind: 'tablet', query: 'LEFT X' }, { x: 1, y: 0, kind: 'artifact', maxLevel: 3 }] }).score === 0);
+  E.evaluate({ w: 3, h: 1, items: [{ x: 0, y: 0, kind: 'tablet', query: 'RIGHT 2' }, { x: 2, y: 0, kind: 'tablet', query: 'LEFT X' }, { x: 1, y: 0, kind: 'artifact', maxLevel: 3 }] }).levelSum === 0);
 
 {
   // 레벨 0(maxLevel 0) 아이템은 점수와 무관하니 옮기지 않아야 함
@@ -86,6 +86,58 @@ check('X 는 비활성(점수 0)',
   ] };
   const o = E.optimize(b, { iterations: 3000, seed: 3 });
   check('optimize: 점수 무관 이동은 되돌림', o.after === 1 && !o.placements.some(p => p.fromX === 0 && p.fromY === 0), JSON.stringify(o.placements));
+}
+
+// 4) 아티팩트 발동 조건 (게임 CharmActivateCriteria_XXX.GetCriteria 규칙) — 6×5 가방, storage 28(마지막 줄 4칸)
+{
+  const W = 6, S = 28;
+  const met = (criteria, x, y, others = []) => {
+    const it = { x, y, kind: 'artifact', criteria };
+    const at = new Map([[x + ',' + y, it], ...others.map(o => [o.x + ',' + o.y, o])]);
+    return E.criteriaMet(it, at, W, S);
+  };
+  const art = (x, y, extra = {}) => ({ x, y, kind: 'artifact', ...extra });
+  check('조건 없음 → 켜짐', met(null, 2, 2));
+  check('TopInInventory: 맨 윗줄만', met('TopInInventory', 3, 0) && !met('TopInInventory', 3, 1));
+  check('BottomInInventory: 마지막 6칸(칸 번호 ≥ storage-6)', met('BottomInInventory', 4, 3) && met('BottomInInventory', 0, 4) && !met('BottomInInventory', 3, 3));
+  check('SideEnd: x=0 또는 x=5', met('SideEnd', 0, 2) && met('SideEnd', 5, 2) && !met('SideEnd', 3, 2));
+  check('Inside: 가장자리 아님', met('Inside', 2, 2) && !met('Inside', 0, 2) && !met('Inside', 2, 0) && !met('Inside', 5, 1) && !met('Inside', 3, 3));
+  check('Outlined: 가장자리', met('Outlined', 0, 2) && met('Outlined', 3, 0) && met('Outlined', 1, 4) && !met('Outlined', 2, 2));
+  check('BothSideCharm: 양옆이 아티팩트', met('BothSideCharm', 2, 1, [art(1, 1), art(3, 1)]) && !met('BothSideCharm', 2, 1, [art(1, 1), { x: 3, y: 1, kind: 'tablet' }]) && !met('BothSideCharm', 0, 1, [art(1, 1)]));
+  check('BothSidesAreEmpty: 양옆 빔(덜 찬 마지막 줄 끝 고려)', met('BothSidesAreEmpty', 2, 1) && !met('BothSidesAreEmpty', 2, 1, [art(1, 1)]) && !met('BothSidesAreEmpty', 3, 4) && met('BothSidesAreEmpty', 2, 4));
+  const full8 = [[1, 1], [2, 1], [3, 1], [1, 2], [3, 2], [1, 3], [2, 3], [3, 3]].map(([x, y]) => art(x, y));
+  check('NeighborsAreFull: 8칸 모두 참', met('NeighborsAreFull', 2, 2, full8) && !met('NeighborsAreFull', 2, 2, full8.slice(1)) && !met('NeighborsAreFull', 0, 2, full8));
+  check('Near8MagicBook: 주변 8칸에 마법서', met('Near8MagicBook', 2, 2, [art(3, 3, { magicBook: true })]) && !met('Near8MagicBook', 2, 2, [art(3, 3)]));
+  check('FullHP 등 배치 무관 조건 → 켜짐', met('FullHP', 2, 2));
+
+  const items = [{ x: 0, y: 1, kind: 'tablet', query: 'RIGHT 2' }, { x: 1, y: 1, kind: 'artifact', maxLevel: 3, criteria: 'TopInInventory' }];
+  const off = E.evaluate({ w: W, h: 5, storage: S, items });
+  check('조건 불만족 아티팩트는 레벨 합에서 빠짐(게임 IsEffectEnabled)', off.levelSum === 0 && off.enabled[1] === false);
+  const on = E.evaluate({ w: W, h: 5, storage: S, items: items.concat({ x: 2, y: 1, kind: 'tablet', query: 'LEFT IGNORECRITERIA' }) });
+  check('IGNORECRITERIA 받으면 조건 무시하고 켜짐', on.levelSum === 2 && on.enabled[1] === true);
+  check('게임 점수 공식: 10000×켜진 레벨 + 1000×켜짐 + 10×원래 레벨 − 750×꺼짐', on.score === 2 * 10000 + 1000 + 20 && off.score === 20 - 750);
+
+  const o = E.optimize({ w: W, h: 5, storage: S, items: [{ x: 0, y: 3, kind: 'tablet', query: 'DOWN 2', rotatable: true }, art(5, 0, { maxLevel: 3 })] }, { iterations: 4000, seed: 5 });
+  check('optimize: 잠긴 칸(칸 번호 ≥ storage)에는 놓지 않음', o.placements.every(p => p.toY * W + p.toX < S) && o.after === 2, JSON.stringify(o.placements));
+}
+
+// 5) 사용자 설정: 최소 레벨 → 우선도 → 나머지 레벨 합 순서
+{
+  // 3×1 가방, 석판(왼쪽 +2, 오른쪽 +1), 아티팩트 A·B(최대 3) — 누가 +2 칸을 받는지만 달라진다
+  const board = prefs => ({ w: 3, h: 1, storage: 3, items: [
+    { x: 1, y: 0, kind: 'tablet', query: 'LEFT 2\nRIGHT 1', name: 't' },
+    { x: 0, y: 0, kind: 'artifact', maxLevel: 3, name: 'A', ...prefs.A },
+    { x: 2, y: 0, kind: 'artifact', maxLevel: 3, name: 'B', ...prefs.B },
+  ] });
+  const lvOf = (o, n) => { const ev = E.evaluate(o.board); return ev.perItem[o.board.items.findIndex(i => i.name === n)]; };
+  const o1 = E.optimize(board({ A: {}, B: { priority: 1 } }), { iterations: 3000, seed: 1 });
+  check('우선도 높은 아이템이 큰 레벨을 받음', lvOf(o1, 'B') === 2 && lvOf(o1, 'A') === 1 && o1.after === 3, JSON.stringify(o1.placements));
+  const o2 = E.optimize(board({ A: { minLevel: 2 }, B: { priority: 3 } }), { iterations: 3000, seed: 1 });
+  check('최소 레벨이 우선도보다 먼저', lvOf(o2, 'A') === 2 && lvOf(o2, 'B') === 1 && o2.shortfall === 0, JSON.stringify(o2.placements));
+  const o3 = E.optimize(board({ A: { minLevel: 3 } }), { iterations: 3000, seed: 1 });
+  check('못 맞추는 최소 레벨은 미달로 보고', o3.shortfall === 1 && o3.unmet.length === 1 && o3.unmet[0].item.name === 'A' && o3.unmet[0].need === 3);
+  const ev = E.evaluate({ w: 1, h: 1, items: [{ x: 0, y: 0, kind: 'artifact', maxLevel: 2, minLevel: 5 }] });
+  check('최소 레벨은 최대 레벨을 넘지 않게 잘림', ev.unmet[0].need === 2);
 }
 
 console.log(`\n=== engine: ${pass} passed, ${fail} failed ===`);

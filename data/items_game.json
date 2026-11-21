@@ -1,12 +1,13 @@
 {
  "_meta": {
   "source": "SephiriaLive /items (ItemEntity type=Charm + Charm_Basic.BuildEffectString / WeaponEntity + WeaponSimple.addons[].GetEffectText)",
-  "captured": "2026-11-19",
+  "captured": "2026-11-21",
   "confidence": "game_data",
   "notes": [
    "effects 는 최대 레벨 기준 툴팁 문장(Unity rich text 태그 포함)",
    "effectsRaw=true 는 BuildEffectString 실패로 자리표시자({DAMAGE})가 남은 것",
-   "weapon tier/parentId 는 standardEnhancements(부모→자식)로 계산, 기본 무기=1"
+   "weapon tier/parentId 는 standardEnhancements(부모→자식)로 계산, 기본 무기=1",
+   "criteria = 발동 조건(CharmActivateCriteria_XXX 의 XXX), magicBook = Charm_Magic 여부"
   ]
  },
  "artifacts": [
@@ -21,6 +22,8 @@
    ],
    "flavor": "믿음직스럽지 않게 ‘힘’이라 적혀 있다.",
    "maxLevel": 3,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "물리 피해<sprite=\"Keyword\" name=PhysicalDamage> <color=#0F93FFFF>+6</color>"
    ]
@@ -36,6 +39,8 @@
    ],
    "flavor": "손목을 고정해 주는 보호대 역할도 한다.",
    "maxLevel": 1,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "회피<sprite=\"Keyword\" name=Evasion> <color=#0F93FFFF>+6</color>"
    ]
@@ -51,6 +56,8 @@
    ],
    "flavor": "지닌 자의 잡념을 지워준다.",
    "maxLevel": 3,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "얼음속성 피해<sprite=\"Keyword\" name=IceDamage> <color=#0F93FFFF>+8</color>"
    ]
@@ -66,6 +73,8 @@
    ],
    "flavor": "푹신한 솜털이 잔뜩.",
    "maxLevel": 4,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "피해를 받으면 주변에 다이너마이트 <color=#0F93FFFF>1→5</color>개 생성 (피해 15→15)"
    ]
@@ -81,6 +90,8 @@
    ],
    "flavor": "부서졌음에도 마르지 않았다.",
    "maxLevel": 4,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "최대 MP<sprite=\"Keyword\" name=MP> <color=#0F93FFFF>+5→60</color>"
    ]
@@ -96,6 +107,8 @@
    ],
    "flavor": "특이한 모양의 당근으로 만든 아티팩트.",
    "maxLevel": 4,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "최대 HP<sprite=\"Keyword\" name=HP> <color=#0F93FFFF>+5→30</color>",
     "최대 MP<sprite=\"Keyword\" name=MP> <color=#0F93FFFF>+5→30</color>"
@@ -112,6 +125,8 @@
    ],
    "flavor": "느껴진다, 선율이. 불어온다, 하늘이.",
    "maxLevel": 4,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "근접 공격의 범위 <color=#0F93FFFF>+10→50</color>% 증가"
    ]
@@ -127,6 +142,8 @@
    ],
    "flavor": "‘어린 동물에게 보여주지 마시오’라고 쓰여있다.",
    "maxLevel": 2,
+   "criteria": "TopInInventory",
+   "magicBook": false,
    "effects": [
     "공격 속도<sprite=\"Keyword\" name=AttackSpeed> <color=#0F93FFFF>+7→26</color>%"
    ]
@@ -142,6 +159,8 @@
    ],
    "flavor": "‘어린 동물에게 보여주지 마시오’라고 쓰여있다.",
    "maxLevel": 1,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "특수 공격 피해<sprite=\"Keyword\" name=SpecialAttackDamage> <color=#0F93FFFF>+8%</color>"
    ]
@@ -157,6 +176,8 @@
    ],
    "flavor": "더 멋진 동물이 된 것 같은 기분을 주는 치장용 목도리.",
    "maxLevel": 3,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "대시 공격 피해<sprite=\"Keyword\" name=DashAttackDamage> <color=#0F93FFFF>+30→80</color>%"
    ]
@@ -172,6 +193,8 @@
    ],
    "flavor": "튼튼하고 무거워!",
    "maxLevel": 3,
+   "criteria": "Outlined",
+   "magicBook": false,
    "effects": [
     "최대 HP<sprite=\"Keyword\" name=HP> <color=#0F93FFFF>+5→20</color>"
    ]
@@ -187,6 +210,8 @@
    ],
    "flavor": "사탕수수 정도는 베어낼 수 있다.",
    "maxLevel": 4,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "주기적으로 주변을 공격하는 차크람 <color=#0F93FFFF>1→3</color>개 발사",
     "[피해량: <color=#0F93FFFF>1000→2200x3</color> (번개속성 피해<sprite=\"Keyword\" name=LightningDamage><color=#0F93FFFF>50→110</color>%)]",
@@ -204,6 +229,8 @@
    ],
    "flavor": "달랠 수 없는 영혼을 끌어내는 데 사용되는 검집",
    "maxLevel": 6,
+   "criteria": "Outlined",
+   "magicBook": false,
    "effects": [
     "6초마다 충전, 일반 공격 시 얼음<sprite=\"Keyword\" name=IceDamage> 속성 검기 발사",
     "[피해량: <color=#0F93FFFF>24</color> (24 + 얼음속성 피해<sprite=\"Keyword\" name=IceDamage><color=#0F93FFFF>100→460</color>%)]"
@@ -220,6 +247,8 @@
    ],
    "flavor": "도서관에 전시되어 있던 푸른 행성 모형. 과거 하늘 밖을 보던 자들이 만들었다.",
    "maxLevel": 5,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "물리<sprite=\"Keyword\" name=PhysicalDamage> 탄환을 발사하는 푸른행성 소환",
     "[피해량: <color=#0F93FFFF>10→30</color>]"
@@ -236,6 +265,8 @@
    ],
    "flavor": "그들의 죄를 두고 가게 하자.",
    "maxLevel": 3,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "치명타 적중 시, 주변 적에게 가장 높은 속성 수치의 <color=#0F93FFFF>10→30</color>%만큼 피해를 입힘"
    ]
@@ -251,6 +282,8 @@
    ],
    "flavor": "검과 방패로 한 쌍의 귀걸이가 완성된다.",
    "maxLevel": 3,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "최대 HP<sprite=\"Keyword\" name=HP> <color=#0F93FFFF>+20</color>",
     "회피<sprite=\"Keyword\" name=Evasion> <color=#F8F411FF>-2</color>"
@@ -267,6 +300,8 @@
    ],
    "flavor": "따뜻하게 해 주지 않으면 원래 능력을 잃어버린다.",
    "maxLevel": 3,
+   "criteria": "Inside",
+   "magicBook": false,
    "effects": [
     "치명타 피해<sprite=\"Keyword\" name=CriticalDamageRate> <color=#0F93FFFF>+10→40</color>%"
    ]
@@ -282,6 +317,8 @@
    ],
    "flavor": "장화 아래에는 ‘두 번째’라는 글자가 적혀 있다.",
    "maxLevel": 3,
+   "criteria": "BottomInInventory",
+   "magicBook": false,
    "effects": [
     "대시 중 <color=#0F93FFFF>1.5</color>타일 범위에 불길 생성"
    ]
@@ -297,6 +334,8 @@
    ],
    "flavor": "끝에 방울이 달린 칼. 의식용으로 사용되었다.",
    "maxLevel": 2,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "무기 공격 시 <color=#0F93FFFF>1→4</color>% 확률로 기절 부여"
    ]
@@ -312,6 +351,8 @@
    ],
    "flavor": "어디서든 씩씩하게 자라는 꽃을 정갈하게 말린 것.",
    "maxLevel": 2,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "치명타 확률<sprite=\"Keyword\" name=CriticalChance> <color=#0F93FFFF>+6%</color>",
     "최대 MP<sprite=\"Keyword\" name=MP> <color=#0F93FFFF>+6</color>"
@@ -328,6 +369,8 @@
    ],
    "flavor": "중앙의 보석에선 불길한 빛이 흘러나온다.",
    "maxLevel": 4,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "일반 공격 마지막 연격의 치명타 확률<sprite=\"Keyword\" name=CriticalChance> <color=#0F93FFFF>+15→100</color>%"
    ]
@@ -343,6 +386,8 @@
    ],
    "flavor": "주로 소환 마법에 사용되는, 마법을 담아둘 수 있는 신비한 종이.",
    "maxLevel": 4,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "동료들의 최대 HP<sprite=\"Keyword\" name=FollowerHP> <color=#0F93FFFF>+25→150</color>%"
    ]
@@ -356,6 +401,8 @@
    "categories": [],
    "flavor": "여닫는 것을 목적으로 만들어진 것이 아니다.",
    "maxLevel": 4,
+   "criteria": "BothSidesAreEmpty",
+   "magicBook": false,
    "effects": [
     "모든 피해 증폭<sprite=\"Keyword\" name=FinalDamage> <color=#0F93FFFF>+25%</color>"
    ]
@@ -371,6 +418,8 @@
    ],
    "flavor": "가방에 넣어두면 가시가 삐져나올 것 같다.",
    "maxLevel": 3,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "치명타 확률<sprite=\"Keyword\" name=CriticalChance> <color=#0F93FFFF>+10%</color>",
     "물리 피해<sprite=\"Keyword\" name=PhysicalDamage> <color=#0F93FFFF>+5</color>"
@@ -387,6 +436,8 @@
    ],
    "flavor": "여럿이 모이면 더 아름다운 음색을 가진다.",
    "maxLevel": 4,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "함께 싸워주는 동료 소환"
    ]
@@ -402,6 +453,8 @@
    ],
    "flavor": "곳곳을 떠도는 여러분들의 필수 아이템! 색깔별로 구분해 쉽게 보관하세요! -키키-",
    "maxLevel": 3,
+   "criteria": "BottomInInventory",
+   "magicBook": false,
    "effects": [
     "인벤토리 맨 위칸에 있는 아티팩트 하나당 아래 효과를 중복 획득",
     "화염속성 피해<sprite=\"Keyword\" name=FlameGround> <color=#0F93FFFF>+1→2</color>",
@@ -420,6 +473,8 @@
    ],
    "flavor": "양피지가 있으면 자동으로 펴주는 마법 도구.",
    "maxLevel": 2,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "MP 재생<sprite=\"Keyword\" name=MPRegen> <color=#0F93FFFF>+9</color>",
     "최대 MP<sprite=\"Keyword\" name=MP> <color=#0F93FFFF>+9</color>"
@@ -436,6 +491,8 @@
    ],
    "flavor": "뜨거운 기운을 머금은 보석. 어두운 곳에서도 길잡이가 되어준다.",
    "maxLevel": 5,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "플레이어 근처에 화염 속성 피해 <color=#0F93FFFF>130→170</color>%의 운석을 <color=#0F93FFFF>1→4</color>개 떨어뜨림",
     "운석에 맞은 적은 <link=Burn></link>화상<sprite=\"Keyword\" name=FlameGround> 부여",
@@ -453,6 +510,8 @@
    ],
    "flavor": "검과 방패로 한 쌍의 귀걸이가 완성된다.",
    "maxLevel": 3,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "치명타 피해<sprite=\"Keyword\" name=CriticalDamageRate> <color=#0F93FFFF>+33%</color>",
     "최대 MP<sprite=\"Keyword\" name=MP> <color=#F8F411FF>-7</color>"
@@ -469,6 +528,8 @@
    ],
    "flavor": "방패를 더 안정적으로 사용할 수 있도록 설계된 건틀릿",
    "maxLevel": 6,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "특수 공격 MP 소모<sprite=\"Keyword\" name=SpecialAttackDamage> <color=#0F93FFFF>-15%→더 이상 MP<sprite=\"Keyword\" name=MP>를 소모하지 않음</color>",
     "무기 피해량<sprite=\"Keyword\" name=FinalWeaponDamage> <color=#0F93FFFF>+20%</color>",
@@ -486,6 +547,8 @@
    ],
    "flavor": "<tag=DarkCloud>을 담아둔 특별한 마법 주머니.",
    "maxLevel": 5,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "대시 공격 성공 시 먹구름<sprite=\"Keyword\" name=DarkCloud> <color=#0F93FFFF>1→10</color> 획득 (재사용 대기시간 3.5→3.5초)",
     "먹구름<sprite=\"Keyword\" name=DarkCloud>의 소모 속도 <color=#0F93FFFF>+30%</color>"
@@ -502,6 +565,8 @@
    ],
    "flavor": "어린 도마뱀들이 첫 사냥을 나갈 때 수여하는 특별한 증표.",
    "maxLevel": 5,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "물리 피해<sprite=\"Keyword\" name=PhysicalDamage> <color=#0F93FFFF>+8</color>",
     "공격 속도<sprite=\"Keyword\" name=AttackSpeed> <color=#0F93FFFF>+10%</color>"
@@ -518,6 +583,8 @@
    ],
    "flavor": "발화 기름이 들어있는 통",
    "maxLevel": 3,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "대검 특수 공격: 소용돌이 시전 시 2.5→2.5타일 반경 내 <link=FlameGround></link>불길<sprite=\"Keyword\" name=FlameGround> 생성",
     "화염속성 피해<sprite=\"Keyword\" name=FlameGround> <color=#0F93FFFF>+12</color>",
@@ -533,6 +600,8 @@
    "categories": [],
    "flavor": "위대한 뱀 미논의 모습을 본떠 만들어진 인형. 누가 만들었는지는 알려진 바 없지만 스스로 움직인다.",
    "maxLevel": 3,
+   "criteria": "TopInInventory",
+   "magicBook": false,
    "effects": [
     "아래쪽 칸에 있는 볼트 마법서<sprite=\"Keyword\" name=MagicBook><sprite=\"Keyword\" name=MagicBook>를 <color=#0F93FFFF>5→1.5</color>초마다 자동으로 시전"
    ]
@@ -548,6 +617,8 @@
    ],
    "flavor": "희귀한 병에 걸려 색이 변했다.",
    "maxLevel": 4,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "MP 재생<sprite=\"Keyword\" name=MPRegen> <color=#0F93FFFF>+5→30</color>"
    ]
@@ -563,6 +634,8 @@
    ],
    "flavor": "가끔 발견되는 특별한 당근. 썩지 않지만 먹을 수 없다.",
    "maxLevel": 4,
+   "criteria": "TopInInventory",
+   "magicBook": false,
    "effects": [
     "가장 높은 속성 피해<sprite=\"Keyword\" name=HighestElementalDamage> <color=#0F93FFFF>+8</color>",
     "이동 속도<sprite=\"Keyword\" name=MoveSpeed> <color=#0F93FFFF>+10%</color>"
@@ -579,6 +652,8 @@
    ],
    "flavor": "구름 위를 나는 듯 가벼운 기운이어라.",
    "maxLevel": 3,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "대시 공격 피해<sprite=\"Keyword\" name=DashAttackDamage> <color=#0F93FFFF>+40%</color>",
     "대시 회복 속도<sprite=\"Keyword\" name=DashRecovery> <color=#0F93FFFF>+16%</color>"
@@ -595,6 +670,8 @@
    ],
    "flavor": "어두운 곳에서 빛을 내는 물질로 수호자의 염원을 담았다.",
    "maxLevel": 4,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "가드 성공 시 25.5초간 물리 피해 <color=#0F93FFFF>+2→10</color>"
    ]
@@ -610,6 +687,8 @@
    ],
    "flavor": "소유자의 움직임을 방해하지 않는 정교한 검날.",
    "maxLevel": 5,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "카운터 : 가드 시 전방으로 짧은 근접 공격 생성함 (물리 피해의 <color=#0F93FFFF>50→550</color>%)"
    ]
@@ -623,6 +702,8 @@
    "categories": [],
    "flavor": "주문 시전 중 안전을 위한 반지. 미완성으로 마법을 시전하며 몸 또한 빙글빙글 돌아야 했다.",
    "maxLevel": 2,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "플레이어 주변 공격을 막아주는 보조 방패 소환 (깨질 시 <color=#0F93FFFF>10→5</color>초 후 재생)"
    ]
@@ -639,6 +720,8 @@
    ],
    "flavor": "거북이도 찾는, 위험한 여행길의 필수품.",
    "maxLevel": 3,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "방어력<sprite=\"Keyword\" name=Defense> 10당 다음 효과 획득",
     "화염속성 피해<sprite=\"Keyword\" name=FlameGround> <color=#0F93FFFF>+1→3</color>",
@@ -657,6 +740,8 @@
    ],
    "flavor": "금속과 부딪히면 번개가 떨어지는 사실을 발견했지만, 위험하여 아무도 사용하지 않는다.",
    "maxLevel": 6,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "먹구름<sprite=\"Keyword\" name=DarkCloud>의 추가 피해량 <color=#0F93FFFF>+60%</color>"
    ]
@@ -672,6 +757,8 @@
    ],
    "flavor": "과거의 염원이 강하게 남아있다. 부서진 채로 보자기에 싸여 전해진다.",
    "maxLevel": 3,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "특수 공격 소모 MP<sprite=\"Keyword\" name=MP> 감소 <color=#0F93FFFF>+50%</color>"
    ]
@@ -696,6 +783,8 @@
    ],
    "flavor": "한때는 탑에 살던 모든 동물이 도서관의 종소리를 들을 수 있었다.",
    "maxLevel": 2,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "특수 공격: 퓨리 시 무적 시간 <color=#0F93FFFF>+0.3s</color>"
    ]
@@ -709,6 +798,8 @@
    "categories": [],
    "flavor": "과거에 짠물이 가득하던 장소가 있었다.",
    "maxLevel": 3,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "MP 흡수<sprite=\"Keyword\" name=MPSteal> <color=#0F93FFFF>+4</color>",
     "3타일 밖의 피해를 준 적에게 <link=Chim></link>침식 부여"
@@ -725,6 +816,8 @@
    ],
    "flavor": "다급함이 느껴진다. 그리고 알아볼 수 없어.",
    "maxLevel": 2,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "전투 중 MP<sprite=\"Keyword\" name=MP> 40을 소모할 때마다 보호막 <color=#0F93FFFF>5→15</color> 획득 (15초 지속)"
    ]
@@ -740,6 +833,8 @@
    ],
    "flavor": "전설로 내려오던 종족의 뿔을 본떠 만들었다.",
    "maxLevel": 5,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "볼트 마법을 세 갈래로 발사함. (각 마법의 피해량 <color=#0F93FFFF>69%→39%</color> 감소) MP<sprite=\"Keyword\" name=MP> 소모량 <color=#0F93FFFF>0→125%</color> 증가."
    ]
@@ -755,6 +850,8 @@
    ],
    "flavor": "고둥이 원하는 때 마법을 들려준다.",
    "maxLevel": 2,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "얼음 무구<sprite=\"Keyword\" name=FrostRelic>의 피해량 <color=#0F93FFFF>+10%</color>",
     "치명타 피해<sprite=\"Keyword\" name=CriticalDamageRate> <color=#0F93FFFF>+12%</color>"
@@ -771,6 +868,8 @@
    ],
    "flavor": "그들이 놀이용으로 사용하던 것. 자신의 마법을 쏟아내어 원하는 면으로 떨어지게 한다.",
    "maxLevel": 2,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "보상에서 마법서가 등장할 확률 25% 증가",
     "마법서 가속<sprite=\"Keyword\" name=CooldownRecovey> <color=#0F93FFFF>+30</color>"
@@ -787,6 +886,8 @@
    ],
    "flavor": "과거 커다란 홍수가 생겼을 때 배를 묶어서 살아남기를 도모한 자들이 있었다.",
    "maxLevel": 2,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "먹구름<sprite=\"Keyword\" name=DarkCloud>의 소모 속도 <color=#0F93FFFF>+60%</color>"
    ]
@@ -802,6 +903,8 @@
    ],
    "flavor": "꽃은 하늘에도 지상에도 지하에도 있다.",
    "maxLevel": 1,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "번개속성 피해<sprite=\"Keyword\" name=LightningDamage> <color=#0F93FFFF>+6</color>",
     "치명타 피해<sprite=\"Keyword\" name=CriticalDamageRate> <color=#0F93FFFF>+6%</color>"
@@ -816,6 +919,8 @@
    "categories": [],
    "flavor": "어딘가를 여는 것이 아닌 의식을 위해 만들어졌다.",
    "maxLevel": 3,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "위치한 가로줄에 따라 견고, 잉걸불, 빙하, 마법공학 중 하나의 콤보가 부여됨",
     "부여된 콤보와 관련된 속성 피해 <color=#0F93FFFF>+2→8</color>"
@@ -832,6 +937,8 @@
    ],
    "flavor": "갈증이 날 때 씹으면 왜인지 모르게 괜찮아진다.",
    "maxLevel": 3,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "먹구름<sprite=\"Keyword\" name=DarkCloud> 용량 <color=#0F93FFFF>+16</color>",
     "MP 재생<sprite=\"Keyword\" name=MPRegen> <color=#0F93FFFF>+4</color>"
@@ -848,6 +955,8 @@
    ],
    "flavor": "아주 뜨겁고 밝은 별에서 나온 조각",
    "maxLevel": 3,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "왼쪽 칸의 마법서 소모 MP<sprite=\"Keyword\" name=MP> <color=#0F93FFFF>+30→55%</color> 감소"
    ]
@@ -863,6 +972,8 @@
    ],
    "flavor": "번개를 다루는 일족이 좋아하는 열매",
    "maxLevel": 3,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "전투 중 먹구름<sprite=\"Keyword\" name=DarkCloud> 회복 속도 <color=#0F93FFFF>+12%</color>",
     "회피<sprite=\"Keyword\" name=Evasion> <color=#0F93FFFF>+6</color>"
@@ -880,6 +991,8 @@
    ],
    "flavor": "누군가는 대형화를 꿈꾸듯, 소형화를 꿈꾸는 자도 있었다.",
    "maxLevel": 4,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "함께 싸워주는 동료 소환",
     "전기 화살에 적이 맞으면 <color=#0F93FFFF>20→75</color>% 확률로 먹구름<sprite=\"Keyword\" name=DarkCloud> 획득"
@@ -896,6 +1009,8 @@
    ],
    "flavor": "알 수 없는 생명체의 가죽. 특이한 문양이 그려져 있다.",
    "maxLevel": 3,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "일반 공격, 대시 공격 적중 시 <color=#0F93FFFF>100→100</color>% 확률로 먹구름<sprite=\"Keyword\" name=DarkCloud>을 즉시 1 소모 (재사용 대기시간 <color=#0F93FFFF>1.2→0.6</color>초)",
     "먹구름<sprite=\"Keyword\" name=DarkCloud>의 추가 피해량 <color=#0F93FFFF>+4%</color>"
@@ -912,6 +1027,8 @@
    ],
    "flavor": "마법사임을 증명하는 목걸이. 조금씩 모양이 달라서 증명하기 힘들다.",
    "maxLevel": 1,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "볼트 마법이 적을 향해 유도",
     "MP 재생<sprite=\"Keyword\" name=MPRegen> <color=#0F93FFFF>+5</color>"
@@ -928,6 +1045,8 @@
    ],
    "flavor": "커스터드로 속을 채워 넣은 빵. 빠르게 먹지 않으면 흘러내린다.",
    "maxLevel": 2,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "적 처치 시 33% 확률로 전기 빵이 바닥에 떨어짐. 전기 빵을 먹으면 먹구름<sprite=\"Keyword\" name=DarkCloud> <color=#0F93FFFF>1→3</color> 획득"
    ]
@@ -943,6 +1062,8 @@
    ],
    "flavor": "위험에 대비하라.",
    "maxLevel": 5,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "마법서 피해량<sprite=\"Keyword\" name=MagicDamageBonus> <color=#0F93FFFF>+30%</color>",
     "최종 MP<sprite=\"Keyword\" name=MP> <color=#0F93FFFF>+20%</color>",
@@ -960,6 +1081,8 @@
    ],
    "flavor": "공격 마법에 관한 책. 앞쪽 페이지만 읽은 흔적이 있다.",
    "maxLevel": 4,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "가장 높은 속성 피해<sprite=\"Keyword\" name=HighestElementalDamage> <color=#0F93FFFF>+10</color>",
     "마법서 피해량<sprite=\"Keyword\" name=MagicDamageBonus> <color=#0F93FFFF>+15%</color>"
@@ -976,6 +1099,8 @@
    ],
    "flavor": "있어서는 안 될 일을 반쯤 없던 일로 해준다.",
    "maxLevel": 2,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "<color=#0F93FFFF>16→12</color>초마다 공격을 무조건 회피<sprite=\"Keyword\" name=Evasion>하는 장막 획득",
     "회피<sprite=\"Keyword\" name=Evasion> <color=#0F93FFFF>+6</color>",
@@ -993,6 +1118,8 @@
    ],
    "flavor": "마법사를 도와주기 위해 만들어졌다. 집중해야 소통할 수 있다.",
    "maxLevel": 5,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "가드 중 MP 재생<sprite=\"Keyword\" name=MPRegen>을 <color=#0F93FFFF>5→50</color> 획득하지만 이동 속도<sprite=\"Keyword\" name=MoveSpeed>가 90% 감소함"
    ]
@@ -1008,6 +1135,8 @@
    ],
    "flavor": "마을에서는 잘 사용하지 않는 물건.",
    "maxLevel": 3,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "치명타 확률<sprite=\"Keyword\" name=CriticalChance> <color=#0F93FFFF>+8%</color>",
     "가장 높은 속성 피해<sprite=\"Keyword\" name=HighestElementalDamage> <color=#0F93FFFF>+4</color>"
@@ -1024,6 +1153,8 @@
    ],
    "flavor": "중앙의 보석에서 편안한 빛이 흘러나온다.",
    "maxLevel": 4,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "일반 공격 마지막 연격의 피해량 <color=#0F93FFFF>+10→84</color>% 증가"
    ]
@@ -1039,6 +1170,8 @@
    ],
    "flavor": "겁 많은 새가 과시용으로 사용하던 것",
    "maxLevel": 4,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "물리 피해<sprite=\"Keyword\" name=PhysicalDamage> <color=#0F93FFFF>+8</color>",
     "회피<sprite=\"Keyword\" name=Evasion> <color=#0F93FFFF>+6</color>"
@@ -1055,6 +1188,8 @@
    ],
    "flavor": "털을 감춰 더 빠르게 움직일 수 있게 한다…는 인식을 심어준다.",
    "maxLevel": 2,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "대시 회복 속도<sprite=\"Keyword\" name=DashRecovery> <color=#0F93FFFF>+30%</color>"
    ]
@@ -1070,6 +1205,8 @@
    ],
    "flavor": "바라건대 이 몸에 강인한 영혼을.",
    "maxLevel": 3,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "무기 공격의 치명타 확률<sprite=\"Keyword\" name=WeaponCriticalChance> <color=#0F93FFFF>+3→14</color>% 증가"
    ]
@@ -1085,6 +1222,8 @@
    ],
    "flavor": "가방에서 꺼낼 때 가방 안을 보면 안 됩니다.",
    "maxLevel": 3,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "현재 HP<sprite=\"Keyword\" name=HP>가 70% 이상이면 모든 피해 증폭<sprite=\"Keyword\" name=FinalDamage> <color=#0F93FFFF>+6→15</color>%"
    ]
@@ -1100,6 +1239,8 @@
    ],
    "flavor": "피가 그 열쇠다.",
    "maxLevel": 2,
+   "criteria": "BottomInInventory",
+   "magicBook": false,
    "effects": [
     "일반 공격 피해<sprite=\"Keyword\" name=BasicAttackDamage> <color=#0F93FFFF>+10%</color>",
     "특수 공격 피해<sprite=\"Keyword\" name=SpecialAttackDamage> <color=#0F93FFFF>+10%</color>"
@@ -1116,6 +1257,8 @@
    ],
    "flavor": "탑에서 남용되어 화폐가 될 뻔한 물건",
    "maxLevel": 2,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "잎<sprite=\"Keyword\" name=Leaf> 획득량 <color=#0F93FFFF>+10→50</color>%"
    ]
@@ -1131,6 +1274,8 @@
    ],
    "flavor": "어딘가에 부착하면 스스로 돌아가는 마법이 걸려 있다.",
    "maxLevel": 0,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "전투 중 MP<sprite=\"Keyword\" name=MP> 소모 15당 치명타 확률<sprite=\"Keyword\" name=CriticalChance> 버프 3% 획득 (20초간, 3스택까지 중복 가능)"
    ]
@@ -1146,6 +1291,8 @@
    ],
    "flavor": "인공적으로 만드는 데 성공했지만, 여전히 가품이 많다.",
    "maxLevel": 2,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "마법서 피해량<sprite=\"Keyword\" name=MagicDamageBonus> <color=#0F93FFFF>+12%</color>"
    ]
@@ -1161,6 +1308,8 @@
    ],
    "flavor": "스스로의 힘으로 원하는 바를 얻으리라.",
    "maxLevel": 6,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "동료들이 <color=#0F93FFFF>+20→60%</color> 더 자주 공격",
     "동료 부활 시간 가속 <color=#0F93FFFF>+50%</color>"
@@ -1177,6 +1326,8 @@
    ],
    "flavor": "어느 동물의 비늘인지 알 수 없다.",
    "maxLevel": 3,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "인벤토리 내 석판 개수만큼 치명타 확률<sprite=\"Keyword\" name=CriticalChance> <color=#0F93FFFF>1→2.5</color>% 증가",
     "현재 석판 개수 : 0개"
@@ -1194,6 +1345,8 @@
    ],
    "flavor": "언령을 외우면 바람이 없어도 돌아가기 시작한다.",
    "maxLevel": 2,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "공격 속도<sprite=\"Keyword\" name=AttackSpeed> <color=#0F93FFFF>+9%</color>",
     "회피<sprite=\"Keyword\" name=Evasion> <color=#0F93FFFF>+6</color>"
@@ -1210,6 +1363,8 @@
    ],
    "flavor": "다가오지 말아요.",
    "maxLevel": 4,
+   "criteria": "Inside",
+   "magicBook": false,
    "effects": [
     "대시 중 닿은 적을 물리 피해의 <color=#0F93FFFF>30→100</color>%로 공격",
     "(대시 횟수<sprite=\"Keyword\" name=DashRecovery> 소모 시 2배 피해)"
@@ -1226,6 +1381,8 @@
    ],
    "flavor": "빠져나오기 위해 발버둥 치는 무언가가 들어있다.",
    "maxLevel": 3,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "피해를 입지 않은 적 공격 시 <color=#0F93FFFF>+10→80</color>% 추가 피해"
    ]
@@ -1241,6 +1398,8 @@
    ],
    "flavor": "고쳐줄 수 있는 이가 어딘가에 있을지도 몰라.",
    "maxLevel": 1,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "장소 이동 시 내구도 <color=#0F93FFFF>+5→12</color>의 보호막 획득",
     "방어력<sprite=\"Keyword\" name=Defense> <color=#0F93FFFF>+8</color>"
@@ -1257,6 +1416,8 @@
    ],
    "flavor": "에카티가 어른 환자를 돌보는 동안, 이 인형은 어린 환자들을 돌보는 의사였다.",
    "maxLevel": 4,
+   "criteria": "BothSideCharm",
+   "magicBook": false,
    "effects": [
     "동료를 치료하고 강화해 주는 동료 소환 (아티팩트 레벨에 따라 능력치 증가)"
    ]
@@ -1270,6 +1431,8 @@
    "categories": [],
    "flavor": "신비로운 힘이 느껴지는 양동이.",
    "maxLevel": 2,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "이동 속도<sprite=\"Keyword\" name=MoveSpeed> <color=#0F93FFFF>+3→10</color>%"
    ]
@@ -1283,6 +1446,8 @@
    "categories": [],
    "flavor": "무거워…",
    "maxLevel": 0,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "이동 속도<sprite=\"Keyword\" name=MoveSpeed> <color=#0F93FFFF>-40→-40</color>%"
    ]
@@ -1298,6 +1463,8 @@
    ],
    "flavor": "용의 타액이 굳어져 생긴 덩어리",
    "maxLevel": 4,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "화염속성 피해<sprite=\"Keyword\" name=FlameGround> <color=#0F93FFFF>+10</color>"
    ]
@@ -1313,6 +1480,8 @@
    ],
    "flavor": "이 꽃을 꺾으면 비가 내린다.",
    "maxLevel": 2,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "무기 공격이나 마법서<sprite=\"Keyword\" name=MagicBook>로 피해를 주면 대상에게 <color=#0F93FFFF>10→30</color> 화염속성 피해<sprite=\"Keyword\" name=FlameGround>를 가함 (재사용 대기시간 2초)"
    ]
@@ -1328,6 +1497,8 @@
    ],
    "flavor": "나무는 연료로, 잎은 깔창으로.",
    "maxLevel": 4,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "<link=Burn></link>화상<sprite=\"Keyword\" name=FlameGround> 공격 속도 <color=#0F93FFFF>+50%</color>"
    ]
@@ -1343,6 +1514,8 @@
    ],
    "flavor": "만물의 연속을 담아서.",
    "maxLevel": 4,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "먹구름<sprite=\"Keyword\" name=DarkCloud>이 <color=#0F93FFFF>70%</color> 확률로 소모되지 않음"
    ]
@@ -1358,6 +1531,8 @@
    ],
    "flavor": "도서관에 전시되어 있던 노란 행성. 과거 하늘 밖을 보던 자들이 만들었다.",
    "maxLevel": 6,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "튕기는 물리<sprite=\"Keyword\" name=PhysicalDamage> 탄환을 발사하는 노란행성 소환",
     "[피해량: <color=#0F93FFFF>20→60</color>]"
@@ -1374,6 +1549,8 @@
    ],
    "flavor": "도서관에 전시되어 있던 붉은 행성. 과거 하늘 밖을 보던 자들이 만들었다.",
    "maxLevel": 6,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "화염<sprite=\"Keyword\" name=FlameGround> 미사일을 발사하는 붉은행성 소환",
     "[피해량: <color=#0F93FFFF>26→60</color>]"
@@ -1390,6 +1567,8 @@
    ],
    "flavor": "도서관에 전시되어 있던 하늘색 행성. 과거 하늘 밖을 보던 자들이 만들었다.",
    "maxLevel": 5,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "번개<sprite=\"Keyword\" name=LightningDamage> 레이저를 발사하는 하늘색 행성 소환",
     "[피해량: <color=#0F93FFFF>30→60</color>]"
@@ -1406,6 +1585,8 @@
    ],
    "flavor": "하늘에 떠 있는 무언가를 보기 위해 발명된 도구",
    "maxLevel": 1,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "행성 공격 속도 <color=#0F93FFFF>+10%</color>",
     "주변 8칸에 위치한 행성을 거대화 (거대화된 행성은 투사체가 커지고 피해량이 50% 증가)"
@@ -1422,6 +1603,8 @@
    ],
    "flavor": "춤추는 그은 연기처럼.",
    "maxLevel": 3,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "치명타 확률<sprite=\"Keyword\" name=CriticalChance> <color=#0F93FFFF>+9%</color>",
     "물리 피해<sprite=\"Keyword\" name=PhysicalDamage> <color=#0F93FFFF>+3</color>"
@@ -1438,6 +1621,8 @@
    ],
    "flavor": "한때엔 누군가를 축복하기에 충분했던 반지",
    "maxLevel": 2,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "특수 공격 범위 <color=#0F93FFFF>+10→30%</color>",
     "특수 공격으로 적을 40명 처치 시 절대반지로 변함"
@@ -1454,6 +1639,8 @@
    ],
    "flavor": "과거의 찬란하던 그때처럼 가진 자를 축복해 주고 있다.",
    "maxLevel": 2,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "특수 공격 범위 <color=#0F93FFFF>+30→60%</color>",
     "특수 공격 피해 <color=#0F93FFFF>+10→45%</color>"
@@ -1470,6 +1657,8 @@
    ],
    "flavor": "검의 모양을 하고 있지만, 부서지기 쉬운 재질로 만들어졌습니다.",
    "maxLevel": 4,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "먹구름<sprite=\"Keyword\" name=DarkCloud> 용량 <color=#0F93FFFF>+25</color>",
     "전투 중 먹구름<sprite=\"Keyword\" name=DarkCloud> 회복 속도 <color=#0F93FFFF>+15%</color>",
@@ -1487,6 +1676,8 @@
    ],
    "flavor": "어느 마을의 이름을 따온 특이한 모양의 칼",
    "maxLevel": 3,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "2.5타일 이내 거리의 적에게 주는 피해량 <color=#0F93FFFF>+6%→14%</color>"
    ]
@@ -1502,6 +1693,8 @@
    ],
    "flavor": "쳐다보고 있으면 눈이 해롱해롱해집니다.",
    "maxLevel": 3,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "MP<sprite=\"Keyword\" name=MP>를 15 <link=ReservedMP></link>점유<sprite=\"Keyword\" name=ReservedMP>하여 마법서<sprite=\"Keyword\" name=MagicBook>로 주는 피해량이 <color=#0F93FFFF>10→18</color>% 증가"
    ]
@@ -1518,6 +1711,8 @@
    ],
    "flavor": "악기를 조율하는 데 사용하는 도구",
    "maxLevel": 4,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "0.8초마다 한 번 마법서<sprite=\"Keyword\" name=MagicBook> 시전 시 '음파' 스택을 획득 (최대 5 중첩)",
     "무기 공격으로 스택을 모두 소모하여 공격 지점에 <link=Elemental_Chaos></link>혼돈<sprite=\"Keyword\" name=ChaosDamage> 피해를 가함 (마법서<sprite=\"Keyword\" name=MagicBook> 피해로 간주됨)",
@@ -1535,6 +1730,8 @@
    ],
    "flavor": "아주 오래되어 바스락거린다.",
    "maxLevel": 4,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "공격한 대상의 체력이 <color=#0F93FFFF>+4→20%</color> 이하라면 즉시 처치 (보스, 미니보스에게는 발동되지 않음)"
    ]
@@ -1550,6 +1747,8 @@
    ],
    "flavor": "바깥은 촉촉하고 안쪽은 바삭해요.",
    "maxLevel": 2,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "피격 시 무적 시간 <color=#0F93FFFF>+0.4→1.2</color>초"
    ]
@@ -1565,6 +1764,8 @@
    ],
    "flavor": "생명의 고동이 전해진다.",
    "maxLevel": 2,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "<link=HPDamageRestore>받은 피해 회복<sprite=\"Keyword\" name=HP></link> <color=#0F93FFFF>+60%</color>"
    ]
@@ -1580,6 +1781,8 @@
    ],
    "flavor": "연금술을 익힌 동물들이 자주 사용하는 약. 특별한 재료를 넣어 색이 탁해졌다.",
    "maxLevel": 3,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "디버프로 주는 피해량<sprite=\"Keyword\" name=DebuffDamage> <color=#0F93FFFF>+16%</color>",
     "치명타 확률<sprite=\"Keyword\" name=CriticalChance> <color=#F8F411FF>-6%</color>"
@@ -1594,6 +1797,8 @@
    "categories": [],
    "flavor": "찻잎 빼기 귀찮다고 주머니 통째로 물에 넣으면 안 돼요!",
    "maxLevel": 2,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "미니보스를 처치할 때마다 모든 피해 증폭<sprite=\"Keyword\" name=FinalDamage> <color=#0F93FFFF>4→12%</color> 증가 (최대 3 스택)",
     "현재 스택 : <color=#FFEB04FF>0</color>",
@@ -1611,6 +1816,8 @@
    ],
    "flavor": "새로운 삶을 위하여.",
    "maxLevel": 2,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "최종 HP<sprite=\"Keyword\" name=HP> <color=#0F93FFFF>+33%</color>"
    ]
@@ -1626,6 +1833,8 @@
    ],
    "flavor": "장렬한 복수를 위하여.",
    "maxLevel": 2,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "최종 MP<sprite=\"Keyword\" name=MP> <color=#0F93FFFF>+33%</color>"
    ]
@@ -1641,6 +1850,8 @@
    ],
    "flavor": "탑을 두르는 계단이 있어야 고립되지 않을 거야.",
    "maxLevel": 5,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "장소 이동 시 90초간 이동 속도<sprite=\"Keyword\" name=MoveSpeed><color=#0F93FFFF>10→30</color>%, 공격 속도<sprite=\"Keyword\" name=AttackSpeed><color=#0F93FFFF>10→30</color>% 증가 버프 획득"
    ]
@@ -1656,6 +1867,8 @@
    ],
    "flavor": "상인 협회에서 만든 기념주화",
    "maxLevel": 0,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "경험치 드롭<sprite=\"Keyword\" name=Exp> <color=#FFFFFFFF>+10%</color>"
    ]
@@ -1669,6 +1882,8 @@
    "categories": [],
    "flavor": "거친 곳을 돌아다녀도 발바닥이 갈라지지 않는다.",
    "maxLevel": 0,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "대시 공격 시 0.5초간 무적 버프 획득 (재사용 대기시간 5초)"
    ]
@@ -1684,6 +1899,8 @@
    ],
    "flavor": "하나의 입구. 그리고 출구.",
    "maxLevel": 4,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "<link=Burn></link>화상<sprite=\"Keyword\" name=FlameGround> 피해량 <color=#0F93FFFF>+100%</color>"
    ]
@@ -1699,6 +1916,8 @@
    ],
    "flavor": "구름에 쏘면 비가 내린다고 한다.",
    "maxLevel": 5,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "먹구름<sprite=\"Keyword\" name=DarkCloud>의 벼락이 <color=#0F93FFFF>50</color>% 확률로 강화되어 발사됨"
    ]
@@ -1714,6 +1933,8 @@
    ],
    "flavor": "위대한 전사의 흔적에 스러진 혼들이 몰려온다.",
    "maxLevel": 7,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "회피<sprite=\"Keyword\" name=Evasion> <color=#0F93FFFF>+10</color>",
     "동료가 입히는 피해량<sprite=\"Keyword\" name=FollowerDamage> <color=#0F93FFFF>+80%</color>"
@@ -1739,6 +1960,8 @@
    ],
    "flavor": "이 병에 잉크를 넣으면 며칠 후 잉크가 사라집니다.",
    "maxLevel": 3,
+   "criteria": "Outlined",
+   "magicBook": false,
    "effects": [
     "디버프를 가할 때 <color=#0F93FFFF>20→50%</color> 확률로 가까운 적에게 추가 부여 (재사용 대기시간 0.4초)"
    ]
@@ -1754,6 +1977,8 @@
    ],
    "flavor": "착용자가 반지로 사용할 때까지 거대하게 만들어준다.",
    "maxLevel": 3,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "일반 공격으로 적을 3명 처치할 때마다 덩치가 커지고 최종 HP<sprite=\"Keyword\" name=HP>가 1% 증가 (최대 <color=#0F93FFFF>10→60%</color>)"
    ]
@@ -1778,6 +2003,8 @@
    ],
    "flavor": "균형을 유지하는 것이 핵심이야.",
    "maxLevel": 3,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "일반 공격 적중 시 대시 공격 피해<sprite=\"Keyword\" name=DashAttackDamage>가 {DAMAGE}% 증가. (대시 공격 시 초기화)",
     "이 효과는 일반 공격 명중 시 초기화"
@@ -1794,6 +2021,8 @@
    ],
    "flavor": "좁은 곳에서 사용하기 위해 만들어졌다.",
    "maxLevel": 4,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "주무기가 2연격을 날리는 레이피어로 변경됨",
     "일반 공격 피해<sprite=\"Keyword\" name=BasicAttackDamage> <color=#0F93FFFF>5→30</color>%",
@@ -1812,6 +2041,8 @@
    ],
    "flavor": "한때 이 귀걸이는 여러 가지 질문을 주었다.",
    "maxLevel": 5,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "전투 중 6초마다 충전됨. 충전 이후 주변에 적이 있다면 아래 효과 발동",
     "얼음<sprite=\"Keyword\" name=IceDamage> 창이 날아와 적들을 <color=#0F93FFFF>1→2</color>회 공격",
@@ -1829,6 +2060,8 @@
    ],
    "flavor": "밤사이 이슬이 차오르고, 낮에는 봉오리가 닫힌다.",
    "maxLevel": 3,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "MP<sprite=\"Keyword\" name=MP>를 소모할 때마다 최대 MP<sprite=\"Keyword\" name=MP> 1 증가 (최대 <color=#0F93FFFF>10→25</color>, 재사용 대기시간 5초)"
    ]
@@ -1844,6 +2077,8 @@
    ],
    "flavor": "인공적으로 만들어진 꽃. 따뜻한 곳에 있어도 녹지 않는다.",
    "maxLevel": 2,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "특수 공격 사용 시 전방으로 1줄기 얼음 가시 생성 (피해량: 10 + <color=#5F9FFF>얼음속성 피해</color><sprite=\"Keyword\" name=IceDamage> <color=#0F93FFFF>50→140</color>%)",
     "가시가 적에게 적중 시 <link=Frostbite></link>동상<sprite=\"Keyword\" name=IceDamage> 부여",
@@ -1861,6 +2096,8 @@
    ],
    "flavor": "우리는 이렇게나 강하다.",
    "maxLevel": 2,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "<link=ActiveCharm></link>발동형 아티팩트<sprite=\"Keyword\" name=ActiveCharm> (재사용 대기시간 30초)",
     "지정 위치에 깃발을 소환, 깃발 범위 내 아군은 공격 속도<sprite=\"Keyword\" name=AttackSpeed>가 <color=#0F93FFFF>10→30</color>% 증가"
@@ -1877,6 +2114,8 @@
    ],
    "flavor": "무겁고 특이한 냄새가 난다.",
    "maxLevel": 2,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "무기 공격이나 마법서<sprite=\"Keyword\" name=MagicBook>로 피해를 주면 대상에게 <color=#0F93FFFF>10→30</color> 번개속성 피해<sprite=\"Keyword\" name=LightningDamage>를 가함 (재사용 대기시간 2초)"
    ]
@@ -1890,6 +2129,8 @@
    "categories": [],
    "flavor": "깔끔하게 가공된 목재다. 상당히 무겁다…",
    "maxLevel": 0,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "이동 속도<sprite=\"Keyword\" name=MoveSpeed> <color=#0F93FFFF>-40→-40</color>%"
    ]
@@ -1905,6 +2146,8 @@
    ],
    "flavor": "마법으로 구름을 엮어 만든 날개.",
    "maxLevel": 5,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "추가 공격 속도<sprite=\"Keyword\" name=AttackSpeed> <color=#0F93FFFF>25→5</color>%당 모든 피해 증폭<sprite=\"Keyword\" name=FinalDamage> 1% 증가",
     "공격 속도<sprite=\"Keyword\" name=AttackSpeed> <color=#0F93FFFF>+18%</color>"
@@ -1922,6 +2165,8 @@
    ],
    "flavor": "절대로 균형을 맞출 수 없다.",
    "maxLevel": 5,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "인벤토리 왼편에선 불 속성, 오른편에선 얼음 속성이 부여됨",
     "부여된 속성 피해 <color=#0F93FFFF>+2→15</color>",
@@ -1939,6 +2184,8 @@
    ],
    "flavor": "한때 냉기를 품었던 용의 발톱. 분노하면 붉게 타오른다.",
    "maxLevel": 3,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "<link=Frostbite></link>동상<sprite=\"Keyword\" name=IceDamage> 부여 시 <color=#0F93FFFF>30→60%</color> 확률로 1회 추가 부여",
     "얼음속성 피해<sprite=\"Keyword\" name=IceDamage> <color=#0F93FFFF>+9</color>",
@@ -1956,6 +2203,8 @@
    ],
    "flavor": "삿된 일이여, 돌아가라. 삿된 기운이여, 물렀거라.",
    "maxLevel": 0,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "죽음에 이르는 피해를 받으면 아이템이 파괴되며 다음 효과가 발동됨",
     "HP<sprite=\"Keyword\" name=HP> <color=#0F93FFFF>50%</color> 회복 후 잠깐 동안 무적",
@@ -1973,6 +2222,8 @@
    ],
    "flavor": "무지개가 뜰 때 가끔 바람에 날려 온다.",
    "maxLevel": 2,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "몰입 획득 시 <color=#0F93FFFF>1</color> 추가 획득",
     "특수 공격 피해<sprite=\"Keyword\" name=SpecialAttackDamage> <color=#0F93FFFF>+22%</color>",
@@ -1990,6 +2241,8 @@
    ],
    "flavor": "모두가 잠든 사이 이곳에 들러 잠시 쉬어가.",
    "maxLevel": 2,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "상자나 항아리를 부술 때 <color=#0F93FFFF>3→5</color>% 확률로 생명의 오브 생성",
     "생명의 오브: HP<sprite=\"Keyword\" name=HP> 15 회복"
@@ -2006,6 +2259,8 @@
    ],
    "flavor": "이 망토는 왜 안쪽까지 금빛일까?",
    "maxLevel": 2,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "대시 횟수<sprite=\"Keyword\" name=DashRecovery> <color=#0F93FFFF>+2</color>",
     "공격 속도<sprite=\"Keyword\" name=AttackSpeed> <color=#0F93FFFF>+9%</color>"
@@ -2022,6 +2277,8 @@
    ],
    "flavor": "아무도 얼기 전 모습을 본 적이 없다.",
    "maxLevel": 3,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "얼음 속성 공격의 치명타 확률<sprite=\"Keyword\" name=CriticalChance> <color=#0F93FFFF>+5→20</color>% 증가 (동료<sprite=\"Keyword\" name=Companion> 피해에도 적용)",
     "MP 재생<sprite=\"Keyword\" name=MPRegen> <color=#0F93FFFF>+0</color>"
@@ -2038,6 +2295,8 @@
    ],
    "flavor": "효과는 확실하지만, 휘두르는 동물의 망설임을 만든다.",
    "maxLevel": 2,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "공격 시 10% 확률로 빗나감 발동 (피해량 <color=#F8F411FF>-20</color>% 감소)",
     "치명타 피해<sprite=\"Keyword\" name=CriticalDamageRate> <color=#0F93FFFF>+60%</color>"
@@ -2054,6 +2313,8 @@
    ],
    "flavor": "원예용으로 쓰기 참 좋지. -켄-",
    "maxLevel": 2,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "일반 공격 시 <color=#0F93FFFF>100→150</color>% 확률로 쿠나이를 발사",
     "[피해량: <color=#0F93FFFF>10</color> (10+치명타 피해<sprite=\"Keyword\" name=CriticalDamageRate><color=#0F93FFFF>20→30</color>%)]"
@@ -2070,6 +2331,8 @@
    ],
    "flavor": "발화 작용을 하는 신기한 풀의 뿌리.",
    "maxLevel": 2,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "특수 공격: 퓨리 적중 시 주변에 화염<sprite=\"Keyword\" name=FlameGround> 속성의 <color=#0F93FFFF>+200→600</color>% 피해를 입힘",
     "최대 MP<sprite=\"Keyword\" name=MP> <color=#0F93FFFF>+20</color>"
@@ -2084,6 +2347,8 @@
    "categories": [],
    "flavor": "껍질이 딱딱해도 취급에 주의하세요.",
    "maxLevel": 3,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "보스와 미니보스에게 주는 추가 피해량 <color=#0F93FFFF>+10%</color>"
    ]
@@ -2099,6 +2364,8 @@
    ],
    "flavor": "커다란 은방울 꽃 아래 수많은 클로버들 중 특별한 하나라고 전해진다.",
    "maxLevel": 3,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "회피<sprite=\"Keyword\" name=Evasion> <color=#0F93FFFF>+12</color>",
     "행운<sprite=\"Keyword\" name=Luck> <color=#0F93FFFF>+12</color>",
@@ -2117,6 +2384,8 @@
    ],
    "flavor": "누군가를 기린다고 쓰여있지만 잘 보이지 않습니다.",
    "maxLevel": 3,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "무기 피해량<sprite=\"Keyword\" name=FinalWeaponDamage> <color=#0F93FFFF>+12%</color>",
     "최종 HP<sprite=\"Keyword\" name=HP> <color=#F8F411FF>-12%</color>"
@@ -2133,6 +2402,8 @@
    ],
    "flavor": "평균 크기 토끼의 얼굴에만 맞습니다.",
    "maxLevel": 3,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "무기 피해량<sprite=\"Keyword\" name=FinalWeaponDamage> <color=#0F93FFFF>+16%</color>",
     "회피<sprite=\"Keyword\" name=Evasion> <color=#F8F411FF>-8</color>"
@@ -2149,6 +2420,8 @@
    ],
    "flavor": "약사의 피로와 새벽의 감성이 만든 특이한 물건",
    "maxLevel": 0,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "현재 HP<sprite=\"Keyword\" name=HP>가 30% 이하일 때 HP 포션 효과<sprite=\"Keyword\" name=HPRegen>가 <color=#0F93FFFF>+30</color>% 증가"
    ]
@@ -2164,6 +2437,8 @@
    ],
    "flavor": "차가운 빛을 뿜어내는 벌레. 만지면 찌릿하다.",
    "maxLevel": 2,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "번개속성 피해<sprite=\"Keyword\" name=LightningDamage> <color=#0F93FFFF>+4→+12</color>",
     "(피격 시 6초간 비활성화)"
@@ -2180,6 +2455,8 @@
    ],
    "flavor": "지키는 자들은 녹색 옷을 입는다.",
    "maxLevel": 3,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "회피<sprite=\"Keyword\" name=Evasion> 성공 시 전방으로 '호격권' 시전",
     "[피해량: <color=#0F93FFFF>30</color> (30 + 물리 피해<sprite=\"Keyword\" name=PhysicalDamage> <color=#0F93FFFF>200→650</color>%)]",
@@ -2198,6 +2475,8 @@
    ],
    "flavor": "작고 신맛이 강해서 마법 시약의 재료로 사용한다.",
    "maxLevel": 2,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "마법서 가속<sprite=\"Keyword\" name=CooldownRecovey> <color=#0F93FFFF>+14</color>",
     "대시 회복 속도<sprite=\"Keyword\" name=DashRecovery> <color=#0F93FFFF>+12%</color>"
@@ -2215,6 +2494,8 @@
    ],
    "flavor": "물고기 사역마를 부리고 싶은 괴짜 마법사가 만들었습니다.",
    "maxLevel": 2,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "MP 재생<sprite=\"Keyword\" name=MPRegen> <color=#0F93FFFF>+8</color>",
     "화염속성 피해<sprite=\"Keyword\" name=FlameGround> <color=#0F93FFFF>+2</color>",
@@ -2234,6 +2515,8 @@
    ],
    "flavor": "안경을 쓰면 현자 강아지가 보이게 됩니다. 도움이 되지는 않습니다.",
    "maxLevel": 3,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "회피<sprite=\"Keyword\" name=Evasion> <color=#0F93FFFF>+12</color>",
     "최대 MP<sprite=\"Keyword\" name=MP> <color=#0F93FFFF>+30</color>"
@@ -2250,6 +2533,8 @@
    ],
    "flavor": "마사지를 해주면 자신도 시원해지는 기분입니다.",
    "maxLevel": 2,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "MP 재생<sprite=\"Keyword\" name=MPRegen> <color=#0F93FFFF>+9</color>",
     "치명타 피해<sprite=\"Keyword\" name=CriticalDamageRate> <color=#0F93FFFF>+5%</color>"
@@ -2266,6 +2551,8 @@
    ],
    "flavor": "오른쪽으로 저항감이 느껴질 때까지 천천히 태엽을 돌려야 합니다.",
    "maxLevel": 2,
+   "criteria": "BottomInInventory",
+   "magicBook": false,
    "effects": [
     "마법서 가속<sprite=\"Keyword\" name=CooldownRecovey> <color=#0F93FFFF>+80</color>",
     "치명타 피해<sprite=\"Keyword\" name=CriticalDamageRate> <color=#0F93FFFF>+20%</color>",
@@ -2283,6 +2570,8 @@
    ],
    "flavor": "의식용으로 사용되던 것. 크기가 상당히 작다.",
    "maxLevel": 2,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "마법서<sprite=\"Keyword\" name=MagicBook>의 치명타 확률<sprite=\"Keyword\" name=MagicCriticalChance> <color=#0F93FFFF>+30%</color>",
     "MP 재생<sprite=\"Keyword\" name=MPRegen> <color=#0F93FFFF>+8</color>",
@@ -2300,6 +2589,8 @@
    ],
    "flavor": "뇌운을 쫓기 위해 만들어진 공학 도구.",
    "maxLevel": 3,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "<link=Electric></link>감전<sprite=\"Keyword\" name=LightningDamage> 부여 시 <color=#0F93FFFF>60%</color> 확률로 <link=AdvancedElectric></link>강화 <link=Electric_NoIcon></link>감전 부여",
     "번개속성 피해<sprite=\"Keyword\" name=LightningDamage> <color=#0F93FFFF>+8</color>"
@@ -2316,6 +2607,8 @@
    ],
    "flavor": "모래에서 은은한 빛이 흘러나온다.",
    "maxLevel": 2,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "오른쪽 칸의 마법서 마법서 가속<sprite=\"Keyword\" name=CooldownRecovey> <color=#0F93FFFF>+60→140%</color> 증가"
    ]
@@ -2331,6 +2624,8 @@
    ],
    "flavor": "무겁고 두텁습니다. 전투 마법사가 아니라 마법 전사의 물건이 아니었을까요?",
    "maxLevel": 3,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "마법서 피해량<sprite=\"Keyword\" name=MagicDamageBonus> <color=#0F93FFFF>+20%</color>",
     "이동 속도<sprite=\"Keyword\" name=MoveSpeed> <color=#0F93FFFF>+6%</color>"
@@ -2347,6 +2642,8 @@
    ],
    "flavor": "다른 동물을 해칠 수 없게 가죽에 덮여 있었습니다.",
    "maxLevel": 2,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "번개<sprite=\"Keyword\" name=LightningDamage> 속성 공격의 치명타 확률<sprite=\"Keyword\" name=CriticalChance> <color=#0F93FFFF>+10→30%</color> (동료<sprite=\"Keyword\" name=Companion> 피해에도 적용)",
     "얼음속성 피해<sprite=\"Keyword\" name=IceDamage> <color=#F8F411FF>-6</color>"
@@ -2363,6 +2660,8 @@
    ],
    "flavor": "이 피를 마시면 흐르는 물을 건널 수 없는 병에 걸린다고 한다.",
    "maxLevel": 3,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "MP 흡수<sprite=\"Keyword\" name=MPSteal> <color=#0F93FFFF>+12</color>"
    ]
@@ -2378,6 +2677,8 @@
    ],
    "flavor": "어떻게 섞어도 스페이드가 맨 위로 올라온다.",
    "maxLevel": 4,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "일반 공격 시 50% 확률로 카드를 발사",
     "행운<sprite=\"Keyword\" name=Luck> 1마다 발사 확률 <color=#0F93FFFF>0→10%</color> 증가 (현재: -%)",
@@ -2395,6 +2696,8 @@
    ],
    "flavor": "악은 없다. 무지함에서 오는 행동만이 존재한다.",
    "maxLevel": 3,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "공격의 치명타 확률<sprite=\"Keyword\" name=CriticalChance>이 100%를 초과한 경우, 초과된 확률이 <link=Execution></link>처형<sprite=\"Keyword\" name=Execution> 발생 확률로 전환",
     "치명타 확률<sprite=\"Keyword\" name=CriticalChance> <color=#0F93FFFF>+10%</color>"
@@ -2409,6 +2712,8 @@
    "categories": [],
    "flavor": "항상 같은 나무 아래에 있습니다. 항상 그녀가 좋아하는 형태로 접혀 있습니다.",
    "maxLevel": 2,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "전투 종료 시 HP<sprite=\"Keyword\" name=HP> <color=#0F93FFFF>1→3</color> 회복"
    ]
@@ -2424,6 +2729,8 @@
    ],
    "flavor": "얼음 협곡 중심부에서 채취한 물질을 가공한 반지",
    "maxLevel": 2,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "무기 공격이나 마법서<sprite=\"Keyword\" name=MagicBook>로 피해를 주면 대상에게 <color=#0F93FFFF>10→30</color> 얼음속성 피해<sprite=\"Keyword\" name=IceDamage>를 가함 (재사용 대기시간 2초)"
    ]
@@ -2439,6 +2746,8 @@
    ],
    "flavor": "싸락눈 중 가장 단순한 결정을 모티브로 했습니다.",
    "maxLevel": 2,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "<link=Frostbite></link>동상<sprite=\"Keyword\" name=IceDamage>에 걸린 대상의 이동 속도<sprite=\"Keyword\" name=MoveSpeed>를 <color=#0F93FFFF>5%→15%</color> 추가로 감소",
     "얼음속성 피해<sprite=\"Keyword\" name=IceDamage> <color=#0F93FFFF>+5</color>",
@@ -2456,6 +2765,8 @@
    ],
    "flavor": "따뜻한 곳에 살던 친구들을 위해서야. 색이 섞인 것도 이쁘지?-살론-",
    "maxLevel": 4,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "<link=Frostbite></link>동상<sprite=\"Keyword\" name=IceDamage>에 걸린 대상은 얼음속성 피해<sprite=\"Keyword\" name=IceDamage>에 <color=#0F93FFFF>5%→25%</color> 더 피해를 입음 (동료<sprite=\"Keyword\" name=Companion> 피해에도 적용)"
    ]
@@ -2471,6 +2782,8 @@
    ],
    "flavor": "어느 눈 덮인 섬에는 아직도 조상님들이 잠들어있다죠.",
    "maxLevel": 3,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "<color=#0F93FFFF>5→2.5</color>초마다 주변 적에게 <link=Frostbite></link>동상<sprite=\"Keyword\" name=IceDamage> 부여",
     "방어력<sprite=\"Keyword\" name=Defense> <color=#0F93FFFF>+10</color>"
@@ -2487,6 +2800,8 @@
    ],
    "flavor": "과거 얼음 정령의 날개 모양입니다. 양 날개는 서로 멀어지지도 가까워지지도 않습니다.",
    "maxLevel": 6,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "얼음 무구<sprite=\"Keyword\" name=FrostRelic>가 <color=#0F93FFFF>2</color>회 추가 발동",
     "얼음 무구<sprite=\"Keyword\" name=FrostRelic>의 피해량 <color=#F8F411FF>-20%</color>",
@@ -2504,6 +2819,8 @@
    ],
    "flavor": "물, 바람, 공기가 이 으스스한 작품을 만들었습니다.",
    "maxLevel": 3,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "대상에게 <link=Frostbite></link>동상<sprite=\"Keyword\" name=IceDamage>을 입힐 때마다 얼음 손길 버프를 획득",
     "얼음 손길 : 7초 동안 얼음속성 피해<sprite=\"Keyword\" name=IceDamage> 1 증가 (최대 <color=#0F93FFFF>5→20</color> 중첩)"
@@ -2520,6 +2837,8 @@
    ],
    "flavor": "190번째. 형체는 검과 흡사하다. 에너지는 대칭적인 형태로만 드러나며, 칼날 자체는 나타나지 않는다. -아그마",
    "maxLevel": 7,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "물리 피해<sprite=\"Keyword\" name=PhysicalDamage> <color=#0F93FFFF>+14</color>"
    ]
@@ -2535,6 +2854,8 @@
    ],
    "flavor": "엄니, 뼈, 원석 등을 투박하게 엮은 목걸이.",
    "maxLevel": 4,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "적에게 부여하는 모든 디버프의 지속시간<sprite=\"Keyword\" name=DebuffDuration> <color=#0F93FFFF>+100%</color>"
    ]
@@ -2550,6 +2871,8 @@
    ],
    "flavor": "광신도들이 소지하고 있는 붉은 천 조각",
    "maxLevel": 3,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "적에게 피해를 가할 때 대상에게 부여된 디버프 하나당 <color=#0F93FFFF>4→10</color>%의 추가 피해를 가함"
    ]
@@ -2563,6 +2886,8 @@
    "categories": [],
    "flavor": "이 로브를 입은 자의 목적은 명확하다.",
    "maxLevel": 3,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "같은 행 마법서의 투사체로 적을 공격할 때마다 폭죽 발사 (마법서 수에 따라 폭죽 발사 수도 증가)",
     "피해량: 마법과 연관된 속성 피해의 <color=#0F93FFFF>+20→40%</color>"
@@ -2579,6 +2904,8 @@
    ],
    "flavor": "불꽃 밖의 어둠을 보기 위한 안대",
    "maxLevel": 2,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "화염<sprite=\"Keyword\" name=FlameGround> 속성 피해의 치명타 피해<sprite=\"Keyword\" name=CriticalDamageRate> <color=#0F93FFFF>+11→33%</color> (동료<sprite=\"Keyword\" name=Companion> 피해에도 적용)",
     "공격 속도<sprite=\"Keyword\" name=AttackSpeed> <color=#0F93FFFF>+6%</color>"
@@ -2595,6 +2922,8 @@
    ],
    "flavor": "마법에 따라 색이 변하는 망토. 부드러운 천으로 만들었다.",
    "maxLevel": 5,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "자신이 부여한 버프의 지속시간 <color=#0F93FFFF>+200%</color>"
    ]
@@ -2611,6 +2940,8 @@
    ],
    "flavor": "뜨겁다. 빛난다. 그리고 쏜다.",
    "maxLevel": 3,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "먹구름<sprite=\"Keyword\" name=DarkCloud>의 벼락이 적중한 적에게 <link=Burn></link>화상<sprite=\"Keyword\" name=FlameGround> 디버프 부여",
     "번개속성 피해<sprite=\"Keyword\" name=LightningDamage> <color=#0F93FFFF>+10</color>",
@@ -2626,6 +2957,8 @@
    "categories": [],
    "flavor": "어제 집 가는 길에 로브 쓴 분이 선물이라고 주더라고. 이쁘지?",
    "maxLevel": 3,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "HP 흡수<sprite=\"Keyword\" name=HPSteal> <color=#0F93FFFF>+8</color>",
     "방어력<sprite=\"Keyword\" name=Defense> <color=#F8F411FF>-10</color>"
@@ -2642,6 +2975,8 @@
    ],
    "flavor": "장비를 재료로 다시 분해할 때 땅바닥에 떨어지곤 합니다. 누군가는 기억의 결정이라고 부르기도 해요.",
    "maxLevel": 4,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "고정 피해<sprite=\"Keyword\" name=TrueDamage> <color=#0F93FFFF>+3</color>",
     "이동 속도<sprite=\"Keyword\" name=MoveSpeed> <color=#0F93FFFF>+12%</color>",
@@ -2659,6 +2994,8 @@
    ],
    "flavor": "급할 때 방패로 사용하곤 합니다.",
    "maxLevel": 5,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "MP 재생<sprite=\"Keyword\" name=MPRegen> <color=#0F93FFFF>+15</color>",
     "회피<sprite=\"Keyword\" name=Evasion> <color=#0F93FFFF>+6</color>",
@@ -2676,6 +3013,8 @@
    ],
    "flavor": "가끔 마법용품의 완성도가 실제 마법에 영향을 줄 때가 있지. 도수가 높으니까 사용할 때 반대쪽 눈은 꼭 감도록 해.",
    "maxLevel": 4,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "치명타 확률<sprite=\"Keyword\" name=CriticalChance> <color=#0F93FFFF>+45%</color>",
     "적이 3타일 내에 근접해 있는 경우, 치명타 피해 <color=#F8F411FF>-30</color>%"
@@ -2692,6 +3031,8 @@
    ],
    "flavor": "스스로가 찔리지 않도록 팔을 잘 조절해야 합니다.",
    "maxLevel": 2,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "<link=Thorns>가시<sprite=\"Keyword\" name=Thorns></link> <color=#0F93FFFF>+450%</color>",
     "방어력<sprite=\"Keyword\" name=Defense> <color=#0F93FFFF>+3</color>"
@@ -2708,6 +3049,8 @@
    ],
    "flavor": "정령의 환심을 사기 위해 비효율적으로 제작된 단검 모양 배지",
    "maxLevel": 2,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "화염속성 피해<sprite=\"Keyword\" name=FlameGround> <color=#0F93FFFF>+5</color>",
     "최대 HP<sprite=\"Keyword\" name=HP> <color=#0F93FFFF>+6</color>"
@@ -2724,6 +3067,8 @@
    ],
    "flavor": "우리들의 유대를 위하여. - 도서관 사서 21기 -",
    "maxLevel": 3,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "공격 속도<sprite=\"Keyword\" name=AttackSpeed> <color=#0F93FFFF>+16%</color>",
     "이동 속도<sprite=\"Keyword\" name=MoveSpeed> <color=#F8F411FF>-10%</color>"
@@ -2740,6 +3085,8 @@
    ],
    "flavor": "작은 알알들의 변화무쌍.",
    "maxLevel": 4,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "대상의 슈퍼 아머<sprite=\"Keyword\" name=SuperArmor>에 추가 피해 <color=#0F93FFFF>+55%</color>"
    ]
@@ -2755,6 +3102,8 @@
    ],
    "flavor": "얻는 것은 곧 무언가를 잃는다는 뜻이기도 하지.",
    "maxLevel": 5,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "무기 공격 시 HP<sprite=\"Keyword\" name=HP> 1→1 회복 (재사용 대기시간 1초)",
     "방어력<sprite=\"Keyword\" name=Defense> 수치가 50 이하라면 HP<sprite=\"Keyword\" name=HP> <color=#0F93FFFF>0→3</color> 추가 회복",
@@ -2773,6 +3122,8 @@
    ],
    "flavor": "스승님에게 받은 거야. 계약이 종료되면 자동으로 이름이 지워지게 되어 있지. -콜린-",
    "maxLevel": 2,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "NPC를 동료로 영입함"
    ]
@@ -2789,6 +3140,8 @@
    ],
    "flavor": "세상이 요동치던 밤에 헤어진 나의 동지들아.",
    "maxLevel": 4,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "얼음<sprite=\"Keyword\" name=IceDamage> 투사체를 발사하는 해파리 소환",
     "투사체에 적중한 적은 <link=Frostbite></link>동상<sprite=\"Keyword\" name=IceDamage> 디버프 적용"
@@ -2806,6 +3159,8 @@
    ],
    "flavor": "고요 속에서 함께 춤추던 작은 나의 친구여.",
    "maxLevel": 5,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "화염<sprite=\"Keyword\" name=FlameGround> 투사체를 발사하는 해파리 소환",
     "투사체에 적중한 적은 <link=Burn></link>화상<sprite=\"Keyword\" name=FlameGround> 디버프 적용"
@@ -2823,6 +3178,8 @@
    ],
    "flavor": "물결 없는 그곳. 누구도 상처 주지 않아도 되는 그곳에 다시 가고 싶어라.",
    "maxLevel": 4,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "번개<sprite=\"Keyword\" name=LightningDamage> 투사체를 발사하는 해파리 소환",
     "투사체에 적중한 적은 <link=Electric></link>감전<sprite=\"Keyword\" name=LightningDamage> 디버프 적용"
@@ -2839,6 +3196,8 @@
    ],
    "flavor": "수습 기간 동안 이 완장을 계속 착용해야 합니다.",
    "maxLevel": 4,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "적에게 다이너마이트를 던지는 두더지 소환 (피해량: {DAMAGE}, 사망 시 {REVIVETIME}초 후 자동 부활)"
    ]
@@ -2854,6 +3213,8 @@
    ],
    "flavor": "이 완장은 오직 한 두더지만이 착용할 수 있습니다.",
    "maxLevel": 4,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "두더지 대장 소환"
    ]
@@ -2869,6 +3230,8 @@
    ],
    "flavor": "이 완장을 착용한 두더지가 나타나면 모두 근처에서 도망갑니다.",
    "maxLevel": 4,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "적에게 투사체를 뿌리는 두더지 소환(피해량: {DAMAGE}, 사망 시 {REVIVETIME}초 후 자동 부활)"
    ]
@@ -2884,6 +3247,8 @@
    ],
    "flavor": "붉은 비늘 도마뱀이 걸고 다니던 인식표. 아직 온기가 남아있다.",
    "maxLevel": 2,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "NPC를 동료로 영입함"
    ]
@@ -2899,6 +3264,8 @@
    ],
    "flavor": "푸른 도마뱀들이 나눠 걸던 인식표. 작은 뼛조각이 서로를 알아보게 해준다.",
    "maxLevel": 2,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "NPC를 동료로 영입함"
    ]
@@ -2914,6 +3281,8 @@
    ],
    "flavor": "어느 도마뱀 전사가 남긴 인식표. 이름은 지워졌지만, 싸우려는 의지는 남아있다.",
    "maxLevel": 2,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "NPC를 동료로 영입함"
    ]
@@ -2929,6 +3298,8 @@
    ],
    "flavor": "도끼를 다루던 도마뱀 용병의 인식표. 부르면 여전히 손도끼를 챙겨 달려온다.",
    "maxLevel": 2,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "NPC를 동료로 영입함"
    ]
@@ -2944,6 +3315,8 @@
    ],
    "flavor": "푸른 불을 사용하던 용광로 옆에 놓여있었다고 전해집니다.",
    "maxLevel": 5,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "전투 중 7초마다 충전됨. 충전 이후 대시 시 아래 효과 발동",
     "주변 적에게 망치를 날려 얼음속성 피해<sprite=\"Keyword\" name=IceDamage>를 가함",
@@ -2961,6 +3334,8 @@
    ],
    "flavor": "때가 되면, 심장 속에서 박동이 시작됩니다.",
    "maxLevel": 7,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "얼음 무구<sprite=\"Keyword\" name=FrostRelic> 충전 속도 <color=#0F93FFFF>+100%</color>"
    ]
@@ -2976,6 +3351,8 @@
    ],
    "flavor": "눈 덮인 땅에서만 자란다고 전해지는 꽃",
    "maxLevel": 5,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "얼음 무구<sprite=\"Keyword\" name=FrostRelic>가 <color=#0F93FFFF>1</color>회 추가 발동",
     "얼음 무구<sprite=\"Keyword\" name=FrostRelic>의 피해량 <color=#F8F411FF>-10%</color>",
@@ -2993,6 +3370,8 @@
    ],
    "flavor": "스스로 발화하는 능력을 갖춘 벌레. 조련이 가능하다.",
    "maxLevel": 5,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "<link=Burn></link>화상<sprite=\"Keyword\" name=FlameGround> 중첩 <color=#0F93FFFF>+4</color>"
    ]
@@ -3008,6 +3387,8 @@
    ],
    "flavor": "만지면 정말 차가운 벌레. 조련이 가능하다.",
    "maxLevel": 5,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "<link=Freeze></link>빙결<sprite=\"Keyword\" name=IceDamage> 디버프 피해량 <color=#0F93FFFF>40%</color>"
    ]
@@ -3023,6 +3404,8 @@
    ],
    "flavor": "마그마의 기운을 머금은 구슬.",
    "maxLevel": 3,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "<link=Burn></link>화상<sprite=\"Keyword\" name=FlameGround> 부여 시 <color=#0F93FFFF>2</color>회 추가 부여",
     "<link=Burn></link>화상<sprite=\"Keyword\" name=FlameGround> 중첩 <color=#0F93FFFF>+2</color>"
@@ -3039,6 +3422,8 @@
    ],
    "flavor": "탑 밖에 세상이 있던 시절에도 특별했던 동물의 깃털. 열기가 사라지지 않는다.",
    "maxLevel": 2,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "전투 중 주변 <color=#0F93FFFF>1→3</color>명의 적에게 날아가 <link=Burn></link>화상<sprite=\"Keyword\" name=FlameGround>을 부여하는 깃털 소환 (재사용 대기시간 3.5초)",
     "화염속성 피해<sprite=\"Keyword\" name=FlameGround> <color=#0F93FFFF>+5</color>"
@@ -3055,6 +3440,8 @@
    ],
    "flavor": "두꺼운 재질이 보온이 필요 없는 동물에게도 따뜻함을 줍니다.",
    "maxLevel": 1,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "방어력<sprite=\"Keyword\" name=Defense> <color=#0F93FFFF>+6</color>"
    ]
@@ -3071,6 +3458,8 @@
    ],
    "flavor": "아카데미 경비병들이 착용하는 갑옷.",
    "maxLevel": 5,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "방어력<sprite=\"Keyword\" name=Defense> <color=#0F93FFFF>+10</color>",
     "마법서 가속<sprite=\"Keyword\" name=CooldownRecovey> <color=#0F93FFFF>+35</color>"
@@ -3087,6 +3476,8 @@
    ],
    "flavor": "실력 좋은 도마뱀 장인이 만든 판금 갑옷. 뛰어난 보호력을 자랑한다.",
    "maxLevel": 4,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "방어력<sprite=\"Keyword\" name=Defense> <color=#0F93FFFF>+24</color>",
     "이동 속도<sprite=\"Keyword\" name=MoveSpeed> <color=#F8F411FF>-10%</color>",
@@ -3105,6 +3496,8 @@
    ],
    "flavor": "가방에 넣어두면 자연스러운 꽃향기가 납니다.",
    "maxLevel": 1,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "일반 공격 피해<sprite=\"Keyword\" name=BasicAttackDamage> <color=#0F93FFFF>+10%</color>"
    ]
@@ -3120,6 +3513,8 @@
    ],
    "flavor": "도서관에 전시되어 있던 하얀 행성 모형. 과거 하늘 밖을 보던 자들이 만들었다.",
    "maxLevel": 7,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "얼음<sprite=\"Keyword\" name=IceDamage> 탄환을 발사하는 하얀행성 소환",
     "[피해량: <color=#0F93FFFF>30→72</color>]"
@@ -3136,6 +3531,8 @@
    ],
    "flavor": "시간을 느리게 만들기 위해서 만들어진 수많은 실패작 중 하나.",
    "maxLevel": 5,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "특수 공격 피해<sprite=\"Keyword\" name=SpecialAttackDamage> <color=#0F93FFFF>+42%</color>"
    ]
@@ -3149,6 +3546,8 @@
    "categories": [],
    "flavor": "...",
    "maxLevel": 2,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "탄창 용량<sprite=\"Keyword\" name=AmmoCount> <color=#0F93FFFF>+4</color>"
    ]
@@ -3164,6 +3563,8 @@
    ],
    "flavor": "가볍고 튼튼한 나무를 덧대어 만들어졌습니다.",
    "maxLevel": 3,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "석궁 재장전 속도<sprite=\"Keyword\" name=Reload> <color=#0F93FFFF>+100</color>"
    ]
@@ -3179,6 +3580,8 @@
    ],
    "flavor": "빠르게 재장전하기 위해 미리 화살을 채워 둔 도구.",
    "maxLevel": 4,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "탄창 개수<sprite=\"Keyword\" name=AddMagazine> <color=#0F93FFFF>+2</color>"
    ]
@@ -3194,6 +3597,8 @@
    ],
    "flavor": "과거의 염원이 강하게 남아있다. 부서진 채로 보자기에 싸여 전해진다.",
    "maxLevel": 3,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "특수 공격 소모 MP<sprite=\"Keyword\" name=MP> 감소 <color=#0F93FFFF>+50%</color>"
    ]
@@ -3207,6 +3612,8 @@
    "categories": [],
    "flavor": "‘어린 동물에게 보여주지 마시오’라고 쓰여있다.",
    "maxLevel": 0,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "대시 시 현재 탄창의 탄약 <color=#0F93FFFF>1</color> 충전"
    ]
@@ -3220,6 +3627,8 @@
    "categories": [],
    "flavor": "오래된 랜턴이다.",
    "maxLevel": 0,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "앞이 보이지 않을 때, 주변을 살짝 밝혀줌"
    ]
@@ -3235,6 +3644,8 @@
    ],
    "flavor": "자신을 성장시키려 하지 말고, 지금 이 순간의 자신을 받아들여라.",
    "maxLevel": 3,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "모든 마법서<sprite=\"Keyword\" name=MagicBook>를 동작 없이 즉시 시전 <color=#0F93FFFF></color>",
     "마법서 피해량<sprite=\"Keyword\" name=MagicDamageBonus> <color=#0F93FFFF>+14%</color>"
@@ -3251,6 +3662,8 @@
    ],
    "flavor": "사용자에 맞춰 변하지만 지금은 그 동력을 잃었습니다.",
    "maxLevel": 3,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "<link=FlameSword></link>태양검<sprite=\"Keyword\" name=FlameSword>이 바닥에 <color=#0F93FFFF>40%</color> 더 빨리 떨어짐",
     "화염속성 피해<sprite=\"Keyword\" name=FlameGround> <color=#0F93FFFF>+8</color>"
@@ -3267,6 +3680,8 @@
    ],
    "flavor": "색을 담아내는 천으로 정확한 순간을 잡아냈습니다.",
    "maxLevel": 4,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "<link=FlameSword></link>태양검<sprite=\"Keyword\" name=FlameSword> 투척 시 <color=#0F93FFFF>100%</color> 확률로 크기가 커지고 피해량이 33% 증가"
    ]
@@ -3282,6 +3697,8 @@
    ],
    "flavor": "태양의 형상을 본뜬 결정이 빛나고 있습니다.",
    "maxLevel": 2,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "<color=#0F93FFFF>10→5</color> 초마다 <link=FlameSword></link>태양검<sprite=\"Keyword\" name=FlameSword> 1개 생성 (<link=FlameSword></link>태양검<sprite=\"Keyword\" name=FlameSword> 효과 활성화 시에만)",
     "치명타 확률<sprite=\"Keyword\" name=CriticalChance> <color=#0F93FFFF>+5%</color>"
@@ -3298,6 +3715,8 @@
    ],
    "flavor": "정령과 평등해진 이에게 수여되는 소검 모양 배지",
    "maxLevel": 4,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "<link=FlameSword></link>태양검<sprite=\"Keyword\" name=FlameSword> 개수 상한 <color=#0F93FFFF>+3</color>",
     "이동 속도<sprite=\"Keyword\" name=MoveSpeed> <color=#0F93FFFF>+8%</color>"
@@ -3314,6 +3733,8 @@
    ],
    "flavor": "정령을 능숙히 다루는 이에게 수여되는 쌍검 모양 배지",
    "maxLevel": 3,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "<link=FlameSword></link>태양검<sprite=\"Keyword\" name=FlameSword> 피해량 <color=#0F93FFFF>+20%</color>",
     "치명타 피해<sprite=\"Keyword\" name=CriticalDamageRate> <color=#0F93FFFF>+16%</color>"
@@ -3330,6 +3751,8 @@
    ],
    "flavor": "털 손질 그 이상을 원하는 동물들이 들고 다니는 도구",
    "maxLevel": 2,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "대시<sprite=\"Keyword\" name=DashRecovery> 시 5초 지속되는 보호막 <color=#0F93FFFF>5→10</color> 획득 (재사용 대기시간 5초)",
     "방어력<sprite=\"Keyword\" name=Defense> <color=#0F93FFFF>+9</color>"
@@ -3346,6 +3769,8 @@
    ],
    "flavor": "점과 점 사이를 잇는다는 감각을 느끼는 것이 찌르기의 극의이다.",
    "maxLevel": 0,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "2초마다 대시 공격이 강화되어 피해량이 <color=#0F93FFFF>30→30</color>% 증가하고, 가장 높은 속성에 기반한 공격으로 전환"
    ]
@@ -3361,6 +3786,8 @@
    ],
    "flavor": "운철에 끌어당기는 힘은 없지만, 그렇게 되도록 세공되었습니다.",
    "maxLevel": 2,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "<link=FlameSword></link>태양검<sprite=\"Keyword\" name=FlameSword> 투척 시 자신과 가까운 곳에 떨어짐",
     "화염속성 피해<sprite=\"Keyword\" name=FlameGround> <color=#0F93FFFF>+7</color>"
@@ -3377,6 +3804,8 @@
    ],
    "flavor": "고유의 효과를 지키기 위해 거의 가공하지 않았습니다.",
    "maxLevel": 4,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "<link=ActiveCharm></link>발동형 아티팩트<sprite=\"Keyword\" name=ActiveCharm> (재사용 대기시간 <color=#0F93FFFF>2.5</color>초)",
     "바닥에 떨어진 모든 <link=FlameSword></link>태양검<sprite=\"Keyword\" name=FlameSword>을 회수하고, 그 경로의 적에게 <link=FlameSword></link>태양검<sprite=\"Keyword\" name=FlameSword> 피해"
@@ -3393,6 +3822,8 @@
    ],
    "flavor": "스스로 전기를 일으키는 벌레. 조련이 가능하다.",
    "maxLevel": 5,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "<link=Electric></link>감전<sprite=\"Keyword\" name=LightningDamage> 중첩 <color=#0F93FFFF>+3</color>"
    ]
@@ -3408,6 +3839,8 @@
    ],
    "flavor": "도서관에서 개발한 신소재를 사용해 가볍습니다.",
    "maxLevel": 5,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "4초마다 주변 <color=#0F93FFFF>1→4</color>명의 적에게 번개속성 피해<sprite=\"Keyword\" name=LightningDamage> 30%의 번개 공격을 가하고, <link=Electric></link>감전<sprite=\"Keyword\" name=LightningDamage> 디버프 부여",
     "[피해량: 6 (번개속성 피해<sprite=\"Keyword\" name=LightningDamage>30%)]",
@@ -3425,6 +3858,8 @@
    ],
    "flavor": "정령이 스스로 따르는 이에게 수여되는 쌍날검 모양 배지.",
    "maxLevel": 6,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "<link=FlameSword></link>태양검<sprite=\"Keyword\" name=FlameSword>이 대상의 방어력을 <color=#0F93FFFF>+14%</color> 무시",
     "<link=FlameSword></link>태양검<sprite=\"Keyword\" name=FlameSword> 치명타 확률 <color=#0F93FFFF>+50%</color>"
@@ -3441,6 +3876,8 @@
    ],
    "flavor": "도서관에 전시되어 있던 검은색 행성. 과거 하늘 밖을 보던 자들이 만들었다.",
    "maxLevel": 4,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "<link=Elemental_Chaos></link>혼돈<sprite=\"Keyword\" name=ChaosDamage> 탄환을 발사하는 암흑 행성 소환",
     "[피해량: <color=#0F93FFFF>50→90</color>]"
@@ -3457,6 +3894,8 @@
    ],
    "flavor": "도서관에 전시되어 있던 잿빛 행성 모형. 과거 하늘 밖을 보던 자들이 만들었다.",
    "maxLevel": 5,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "얼음<sprite=\"Keyword\" name=IceDamage> 탄환을 발사하는 잿빛행성 소환",
     "[피해량: <color=#0F93FFFF>15→40</color>]"
@@ -3474,6 +3913,8 @@
    ],
    "flavor": "사나운 불의 정령이 봉인되어 있습니다.",
    "maxLevel": 3,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "<link=Burn></link>화상<sprite=\"Keyword\" name=FlameGround>이 <link=BlueBurn></link>푸른 화상<sprite=\"Keyword\" name=BlueBurn>으로 변경 <color=#0F93FFFF></color>",
     "<link=Burn></link>화상<sprite=\"Keyword\" name=FlameGround> 피해량 <color=#0F93FFFF>+12%</color>"
@@ -3491,6 +3932,8 @@
    ],
    "flavor": "나의 사랑하는 패밀리어. 이런 모습에서라도 내 곁에 있어줘.",
    "maxLevel": 3,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "먹구름<sprite=\"Keyword\" name=DarkCloud>이 <link=SnowCloud></link>눈보라 구름<sprite=\"Keyword\" name=DarkCloudIce>으로 변경됨 <color=#0F93FFFF></color>",
     "얼음속성 피해<sprite=\"Keyword\" name=IceDamage> <color=#0F93FFFF>+8</color>",
@@ -3509,6 +3952,8 @@
    ],
    "flavor": "느껴라, 찰나에 머무는 빛을.",
    "maxLevel": 2,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "먹구름<sprite=\"Keyword\" name=DarkCloud>의 소모 속도는 공격 속도<sprite=\"Keyword\" name=AttackSpeed>의 <color=#0F93FFFF>25→100</color>% 만큼 더 빨라짐",
     "무기 공격 시 <color=#0F93FFFF>5→15</color>의 번개속성 피해<sprite=\"Keyword\" name=LightningDamage>를 가함",
@@ -3527,6 +3972,8 @@
    ],
    "flavor": "뿔이 세밀하게 깎여있어 부서질 것 같지만, 아주 튼튼합니다.",
    "maxLevel": 4,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "<link=ActiveCharm></link>발동형 아티팩트<sprite=\"Keyword\" name=ActiveCharm> (재사용 대기시간 15초, 대시 횟수<sprite=\"Keyword\" name=DashRecovery> 소모 시 3.0초 감소)",
     "방어력<sprite=\"Keyword\" name=Defense>의 <color=#0F93FFFF>70→200</color>%만큼 피해를 주는 바위창을 3개 발사",
@@ -3544,6 +3991,8 @@
    ],
    "flavor": "오랜 시간을 견뎌내면 활을 잡은 이에게만은 냉기를 뿌리지 않습니다.",
    "maxLevel": 5,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "<link=ActiveCharm></link>발동형 아티팩트<sprite=\"Keyword\" name=ActiveCharm>",
     "0.8초마다 1발씩 자동 충전 (최대 7)",
@@ -3563,6 +4012,8 @@
    ],
    "flavor": "얼음 요정이 호수 위에 춤을 출 때, 그 발 아래 생기는 결정 중 하나",
    "maxLevel": 0,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "얼음 무구<sprite=\"Keyword\" name=FrostRelic> 발동 시, MP<sprite=\"Keyword\" name=MP>를 4 소모하여 회전하는 얼음검 소환 (최대 5개)",
     "[피해량: 기본 공격력 x <link=AdditionalMP></link>추가 MP<sprite=\"Keyword\" name=MP>의 50% 만큼 피해 (현재: 1.2)]",
@@ -3581,6 +4032,8 @@
    ],
    "flavor": "도서관에 보관되고 있던 책. 언제 쓰였는지 알 수 없다.",
    "maxLevel": 3,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "플레이어 치명타 확률<sprite=\"Keyword\" name=CriticalChance>, 치명타 피해<sprite=\"Keyword\" name=CriticalDamageRate>가 동료<sprite=\"Keyword\" name=FollowerCritical>에게 <color=#0F93FFFF>+120%</color> 반영",
     "치명타 확률<sprite=\"Keyword\" name=CriticalChance> <color=#0F93FFFF>+8%</color>"
@@ -3598,6 +4051,8 @@
    ],
    "flavor": "형체가 없지만 분명히 잡히고, 가방에 넣어도 빠져나가지 않습니다.",
    "maxLevel": 4,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "치명타 시 '신기루' 스택 획득. 신기루 100% 상태에서 피격 시 공격을 무조건 회피하며, 주변 넓은 적에게 회피<sprite=\"Keyword\" name=Evasion> <color=#0F93FFFF>300→1500</color>% <link=Elemental_Chaos></link>혼돈<sprite=\"Keyword\" name=ChaosDamage> 피해"
    ]
@@ -3614,6 +4069,8 @@
    ],
    "flavor": "하늘의 어둠과 별을 엮어서.",
    "maxLevel": 2,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "공격 속도<sprite=\"Keyword\" name=AttackSpeed> <color=#0F93FFFF>+12%</color>",
     "무기 공격 할 때마다 행성 공격주기가 빨라짐 <color=#0F93FFFF></color>"
@@ -3630,6 +4087,8 @@
    ],
    "flavor": "자연의 기운이 깃들어 푸르른 곳에서 은밀하게 행동할 수 있습니다.",
    "maxLevel": 2,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "대시 횟수<sprite=\"Keyword\" name=DashRecovery> <color=#0F93FFFF>+1</color>",
     "회피<sprite=\"Keyword\" name=Evasion> <color=#0F93FFFF>+8</color>",
@@ -3647,6 +4106,8 @@
    ],
    "flavor": "",
    "maxLevel": 0,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "물리<sprite=\"Keyword\" name=PhysicalDamage> 탄환을 발사하는 푸른행성 소환",
     "[피해량: {DAMAGE}]"
@@ -3664,6 +4125,8 @@
    ],
    "flavor": "",
    "maxLevel": 3,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "행성 공격 시 80% 확률로 공격 속성에 따른 디버프 부여 (화염<sprite=\"Keyword\" name=FlameGround>-<link=Burn></link>화상<sprite=\"Keyword\" name=FlameGround>, 얼음<sprite=\"Keyword\" name=IceDamage>-<link=Frostbite></link>동상<sprite=\"Keyword\" name=IceDamage>, 번개<sprite=\"Keyword\" name=LightningDamage>-<link=Electric></link>감전<sprite=\"Keyword\" name=LightningDamage>)",
     "얼음속성 피해<sprite=\"Keyword\" name=IceDamage> <color=#0F93FFFF>+12</color>"
@@ -3681,6 +4144,8 @@
    ],
    "flavor": "",
    "maxLevel": 3,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "행성 공격 시 80% 확률로 공격 속성에 따른 디버프 부여 (화염<sprite=\"Keyword\" name=FlameGround>-<link=Burn></link>화상<sprite=\"Keyword\" name=FlameGround>, 얼음<sprite=\"Keyword\" name=IceDamage>-<link=Frostbite></link>동상<sprite=\"Keyword\" name=IceDamage>, 번개<sprite=\"Keyword\" name=LightningDamage>-<link=Electric></link>감전<sprite=\"Keyword\" name=LightningDamage>)",
     "번개속성 피해<sprite=\"Keyword\" name=LightningDamage> <color=#0F93FFFF>+12</color>"
@@ -3695,6 +4160,8 @@
    "categories": [],
    "flavor": "만지는 순간부터 종이를 채우고자 하는 욕망이 올라옵니다.",
    "maxLevel": 1,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "양쪽 칸에 배치된 아티팩트가 동일한 콤보인 경우, 해당 콤보 수치 1 증가",
     "모든 피해 증폭<sprite=\"Keyword\" name=FinalDamage> <color=#0F93FFFF>+6%</color>"
@@ -3712,6 +4179,8 @@
    ],
    "flavor": "푸른 달과 태양을 조각한 모형.",
    "maxLevel": 3,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "아이템이 인벤토리 왼편에 있다면 얼음 무구<sprite=\"Keyword\" name=FrostRelic> 아티팩트가 화염속성 피해<sprite=\"Keyword\" name=FlameGround> 기반으로 변경되고, 오른편에 있다면 <link=FlameSword></link>태양검<sprite=\"Keyword\" name=FlameSword> 아티팩트가 얼음속성 피해<sprite=\"Keyword\" name=IceDamage> 기반으로 변경됨",
     "얼음 무구<sprite=\"Keyword\" name=FrostRelic>의 피해량 <color=#0F93FFFF>+30%</color>",
@@ -3730,6 +4199,8 @@
    ],
    "flavor": "",
    "maxLevel": 2,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "<link=ActiveCharm></link>발동형 아티팩트<sprite=\"Keyword\" name=ActiveCharm> (재사용 대기시간 7.5초)"
    ]
@@ -3746,6 +4217,8 @@
    ],
    "flavor": "얼음 요정이 호수 위에 춤을 출 때, 그 발 아래 생기는 결정 중 하나",
    "maxLevel": 0,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "얼음 무구<sprite=\"Keyword\" name=FrostRelic> 발동 시 MP<sprite=\"Keyword\" name=MP>를 4 소모하고 증가된 최대 MP<sprite=\"Keyword\" name=MP> 수치만큼 피해량 증가"
    ]
@@ -3761,6 +4234,8 @@
    ],
    "flavor": "천칭의 맞은편 물건의 무게를 그대로 따라 하는 마법이 걸려 있습니다.",
    "maxLevel": 4,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "일반 공격 피해<sprite=\"Keyword\" name=BasicAttackDamage> <color=#0F93FFFF>+50%</color>",
     "공격 속도<sprite=\"Keyword\" name=AttackSpeed> <color=#F8F411FF>-10%</color>"
@@ -3778,6 +4253,8 @@
    ],
    "flavor": "낡은 장치. 뒤편에는 다음과 같이 쓰여있다: '표준 규격 - 대부분의 개체와 호환됨'",
    "maxLevel": 3,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "동료가 번개<sprite=\"Keyword\" name=LightningDamage> 피해를 입힐 때 먹구름<sprite=\"Keyword\" name=DarkCloud> 1→1회 발동 (동료별 재사용 대기시간 0.1초)",
     "동료가 입히는 피해량<sprite=\"Keyword\" name=FollowerDamage> <color=#0F93FFFF>+12%</color>"
@@ -3794,6 +4271,8 @@
    ],
    "flavor": "단 하나를 위하여.",
    "maxLevel": 3,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "인벤토리 내 동일 가로줄<sprite=\"Keyword\" name=InventoryRow>에 배치된 동료가 <link=Elemental_Chaos></link>혼돈<sprite=\"Keyword\" name=ChaosDamage> 피해를 가함",
     "동료들의 방어력<sprite=\"Keyword\" name=FollowerDefense> <color=#0F93FFFF>+24</color>"
@@ -3808,6 +4287,8 @@
    "categories": [],
    "flavor": "숲의 동물들이 지니고 있는 물건. 숲에서 오래 살다 보면 어느 순간 품에 생겨납니다.",
    "maxLevel": 0,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "<link=ActiveCharm></link>발동형 아티팩트<sprite=\"Keyword\" name=ActiveCharm> (재사용 대기시간 20초)",
     "사용 시 10초 동안 <link=MPShield></link>MP 실드 활성화"
@@ -3825,6 +4306,8 @@
    ],
    "flavor": "...",
    "maxLevel": 4,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "마법서<sprite=\"Keyword\" name=MagicBook>가 소모하는 MP 10당 주는 피해가 <color=#0F93FFFF>10%</color> 증가"
    ]
@@ -3840,6 +4323,8 @@
    ],
    "flavor": "과거에는 다른 용도로 사용되었지만, 현재는 부수기 어려운 돌을 부술 때나 사용되고 있습니다.",
    "maxLevel": 14,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "고정 피해<sprite=\"Keyword\" name=TrueDamage> <color=#0F93FFFF>+14</color>"
    ]
@@ -3856,6 +4341,8 @@
    ],
    "flavor": "흙 속에 묻혀있었어. 이 세상 물건이 아닌 것 같군. - 타가",
    "maxLevel": 2,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "일반 공격 적중 시, <color=#0F93FFFF>80→180%</color> 확률로 추가 피해를 가함.",
     "[피해량 : 물리 피해<sprite=\"Keyword\" name=PhysicalDamage> <color=#0F93FFFF>40→125%</color> + 얼음속성 피해<sprite=\"Keyword\" name=IceDamage> <color=#0F93FFFF>80→250%</color> (일반 공격 피해로 간주됨)]"
@@ -3873,6 +4360,8 @@
    ],
    "flavor": "...",
    "maxLevel": 4,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "적에게 부여된 디버프 총 중첩 수당 무기 피해량<sprite=\"Keyword\" name=FinalWeaponDamage> {DAMAGE}% 증가"
    ]
@@ -3888,6 +4377,8 @@
    ],
    "flavor": "흰 수정의 힘을 흉내 내려다 원본에 붙어버렸어. 그림자를 만들어 버렸지. - <tag=TEXT:SocialID_CutScene_Chapter3_Lion_Name>",
    "maxLevel": 1,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "근처 8칸 아티팩트 레벨 1당 모든 피해 증폭<sprite=\"Keyword\" name=FinalDamage> <color=#0F93FFFF>+1→2</color>% 증가"
    ]
@@ -3903,6 +4394,8 @@
    ],
    "flavor": "바닥에 떨어진 잎을 찾아내는 행운의 증표.",
    "maxLevel": 2,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "상인과 거래 시, <color=#0F93FFFF>+100→200</color> 잎<sprite=\"Keyword\" name=Leaf> 생성 (상인당 1회 발동)",
     "협상력<sprite=\"Keyword\" name=Negotiation> <color=#0F93FFFF>+10</color>"
@@ -3919,6 +4412,8 @@
    ],
    "flavor": "지닌 자의 폭발적인 분노를 잠재운다.",
    "maxLevel": 3,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "번개속성 피해<sprite=\"Keyword\" name=LightningDamage> <color=#0F93FFFF>+8</color>"
    ]
@@ -3934,6 +4429,8 @@
    ],
    "flavor": "보이는 것보다 더 많이 물을 넣을 수 있습니다.",
    "maxLevel": 1,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "<link=ActiveCharm></link>발동형 아티팩트<sprite=\"Keyword\" name=ActiveCharm> (재사용 대기시간 30초, MP 재생<sprite=\"Keyword\" name=MPRegen> 수치 1당 3% 가속)",
     "사용 시 MP<sprite=\"Keyword\" name=MP> <color=#0F93FFFF>50→100</color>%를 즉시 회복"
@@ -3950,6 +4447,8 @@
    ],
    "flavor": "주로 훈련소 교관과 마법진 선생님이 사용했습니다.",
    "maxLevel": 6,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "치명타 확률<sprite=\"Keyword\" name=CriticalChance> <color=#0F93FFFF>+21%</color>"
    ]
@@ -3965,6 +4464,8 @@
    ],
    "flavor": "집이 없는 게 아니라 여행 중인 거야.",
    "maxLevel": 2,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "공격 속도<sprite=\"Keyword\" name=AttackSpeed> <color=#0F93FFFF>+18%</color>",
     "가장 높은 속성 피해<sprite=\"Keyword\" name=HighestElementalDamage> <color=#0F93FFFF>+6</color>"
@@ -3981,6 +4482,8 @@
    ],
    "flavor": "동물을 본뜬 기계 인형을 만들기 위한 장치.\r\n단단해 보이지만 내부가 비어있어 조심해야 합니다.",
    "maxLevel": 4,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "방어력<sprite=\"Keyword\" name=Defense> <color=#0F93FFFF>+20</color>",
     "모든 피해 증폭<sprite=\"Keyword\" name=FinalDamage> <color=#0F93FFFF>+10%</color>",
@@ -3998,6 +4501,8 @@
    ],
    "flavor": "항상 어린 동물의 손에 닿지 않는 곳에 존재합니다.",
    "maxLevel": 3,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "<link=ActiveCharm></link>발동형 아티팩트<sprite=\"Keyword\" name=ActiveCharm> (재사용 대기시간 6초)",
     "가장 높은 속성 피해의 <color=#0F93FFFF>100→250</color>%만큼 피해를 주는 속성 폭탄을 <color=#0F93FFFF>1→4</color>개 발사"
@@ -4014,6 +4519,8 @@
    ],
    "flavor": "먼 과거, 실을 잣거나 제례에 사용되었습니다.",
    "maxLevel": 4,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "MP를 소모하는 능력의 피해량<sprite=\"Keyword\" name=MP> <color=#0F93FFFF>+30%</color>"
    ]
@@ -4029,6 +4536,8 @@
    ],
    "flavor": "착용 후 발을 무겁게 하기 위해 노력해야 합니다.",
    "maxLevel": 3,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "대시 횟수<sprite=\"Keyword\" name=DashRecovery> <color=#0F93FFFF>+2</color>",
     "고정 피해<sprite=\"Keyword\" name=TrueDamage> <color=#0F93FFFF>+3</color>",
@@ -4045,6 +4554,8 @@
    "categories": [],
    "flavor": "생당근, 삶은 당근, 구운 당근이 들어있는 것 같다.",
    "maxLevel": 4,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "HP 흡수<sprite=\"Keyword\" name=HPSteal> <color=#0F93FFFF>+2</color>"
    ]
@@ -4060,6 +4571,8 @@
    ],
    "flavor": "소지하면 왠지 힘이 샘솟는 것 같다.",
    "maxLevel": 2,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "무기 피해량<sprite=\"Keyword\" name=FinalWeaponDamage> <color=#0F93FFFF>+10%</color>",
     "HP 흡수<sprite=\"Keyword\" name=HPSteal> <color=#0F93FFFF>+1</color>"
@@ -4076,6 +4589,8 @@
    ],
    "flavor": "뻣뻣한 동물들을 위해서 만들어졌습니다.",
    "maxLevel": 2,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "회피<sprite=\"Keyword\" name=Evasion> 발동 시 대시 횟수<sprite=\"Keyword\" name=DashRecovery> <color=#0F93FFFF>1→2</color> 회복",
     "치명타 피해<sprite=\"Keyword\" name=CriticalDamageRate> <color=#0F93FFFF>+6%</color>",
@@ -4091,6 +4606,8 @@
    "categories": [],
    "flavor": "무거운 통나무입니다.",
    "maxLevel": 0,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "이동 속도<sprite=\"Keyword\" name=MoveSpeed> <color=#0F93FFFF>-40→-40</color>%"
    ]
@@ -4106,6 +4623,8 @@
    ],
    "flavor": "늘 긴장의 끈을 놓지 말 것.",
    "maxLevel": 2,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "퍼펙트 가드 시, 7초간 모든 피해 증폭<sprite=\"Keyword\" name=FinalDamage> <color=#0F93FFFF>+4→12</color>% 증가"
    ]
@@ -4121,6 +4640,8 @@
    ],
    "flavor": "소유자의 움직임을 방해하지 않는 정교한 봉 파편.",
    "maxLevel": 5,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "카운터 : 가드 시 전방으로 짧은 근접 공격 생성함 (물리 피해의 <color=#0F93FFFF>50→550</color>%)"
    ]
@@ -4134,6 +4655,8 @@
    "categories": [],
    "flavor": "자성은 없지만, 언제나 북쪽을 가리키는 붉은 침을 품은 나침반.",
    "maxLevel": 2,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "윗 칸 아티팩트의 피해량 <color=#0F93FFFF>+6→10%</color>",
     "등급이 고급 이하라면 추가 피해량 <color=#0F93FFFF>+15→25%</color>",
@@ -4149,6 +4672,8 @@
    "categories": [],
    "flavor": "자성은 없지만, 언제나 북쪽을 가리키는 푸른 침을 품은 나침반.",
    "maxLevel": 2,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "윗 칸 아티팩트의 피해량 <color=#0F93FFFF>+6→10%</color>",
     "등급이 고급 이하라면 추가 피해량 <color=#0F93FFFF>+15→25%</color>",
@@ -4167,6 +4692,8 @@
    ],
    "flavor": "비상시에 사용할 수 있는 호신 기능이 있습니다.",
    "maxLevel": 4,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "회피<sprite=\"Keyword\" name=Evasion> 수치 <color=#0F93FFFF>1</color>당 마법서 피해량<sprite=\"Keyword\" name=MagicDamageBonus> 1% 획득",
     "회피<sprite=\"Keyword\" name=Evasion> 성공 시 모든 마법서<sprite=\"Keyword\" name=MagicBook> 재사용 대기시간 <color=#0F93FFFF>25%</color> 가속"
@@ -4184,6 +4711,8 @@
    ],
    "flavor": "식물에게 정확히 필요한 양의 물만 뿌려집니다.",
    "maxLevel": 4,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "최대 MP<sprite=\"Keyword\" name=MP>가 <color=#0F93FFFF>500→200</color> 이상인 경우, 마법서<sprite=\"Keyword\" name=MagicBook> 1회 추가 시전",
     "마법서 피해량<sprite=\"Keyword\" name=MagicDamageBonus> <color=#0F93FFFF>+15%</color>"
@@ -4201,6 +4730,8 @@
    ],
    "flavor": "매우 빠르게 날 수 있지만, 느긋한 걸 좋아합니다.",
    "maxLevel": 4,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "0.5초마다 <link=Frostbite></link>동상<sprite=\"Keyword\" name=IceDamage>에 걸린 적에게 얼음 투사체를 발사",
     "[피해량: <color=#0F93FFFF>0</color> (얼음속성 피해<sprite=\"Keyword\" name=IceDamage>의 45% × 공격 속도<sprite=\"Keyword\" name=AttackSpeed>의 <color=#0F93FFFF>200</color>%)]",
@@ -4220,6 +4751,8 @@
    ],
    "flavor": "착용자가 공포를 극복한다면, 막강한 힘을 휘두를 수 있습니다.",
    "maxLevel": 4,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "<link=Burn></link>화상<sprite=\"Keyword\" name=FlameGround>과 <link=Electric></link>감전<sprite=\"Keyword\" name=LightningDamage>이 <link=Plasma></link>플라즈마<sprite=\"Keyword\" name=Plasma>로 변경 <color=#0F93FFFF></color>",
     "<link=Plasma></link>플라즈마<sprite=\"Keyword\" name=Plasma> 피해량 <color=#0F93FFFF>+5%</color>"
@@ -4237,6 +4770,8 @@
    ],
    "flavor": "행성이 붉은빛으로 반짝였다는 내용 이후의 기록은 없습니다.",
    "maxLevel": 0,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "행성 공격 적중 시, <link=Burn></link>화상<sprite=\"Keyword\" name=FlameGround> 틱 피해량에 비례하여 피해량 증가",
     "아티팩트 등급이 높을수록 증가량 상승",
@@ -4258,6 +4793,8 @@
    ],
    "flavor": "평소에는 동그란 물구슬 안에서 놀고 있습니다.",
    "maxLevel": 4,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "<link=ActiveCharm></link>발동형 아티팩트<sprite=\"Keyword\" name=ActiveCharm> (재사용 대기시간 8초)",
     "최대 MP<sprite=\"Keyword\" name=MP> 30%를 사용하여, 조준 지점에 '워터 그랩' 시전",
@@ -4274,6 +4811,8 @@
    "categories": [],
    "flavor": "아카데미에서 열정을 보인 학생에게 주어지는 배지",
    "maxLevel": 4,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "무기 피해량<sprite=\"Keyword\" name=FinalWeaponDamage> <color=#0F93FFFF>+10%</color>",
     "화염속성 피해<sprite=\"Keyword\" name=FlameGround> <color=#0F93FFFF>+6</color>"
@@ -4288,6 +4827,8 @@
    "categories": [],
    "flavor": "아카데미에서 총명을 보인 학생에게 주어지는 배지",
    "maxLevel": 4,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "무기 피해량<sprite=\"Keyword\" name=FinalWeaponDamage> <color=#0F93FFFF>+10%</color>",
     "번개속성 피해<sprite=\"Keyword\" name=LightningDamage> <color=#0F93FFFF>+6</color>"
@@ -4302,6 +4843,8 @@
    "categories": [],
    "flavor": "아카데미에서 인내를 보인 학생에게 주어지는 배지",
    "maxLevel": 4,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "무기 피해량<sprite=\"Keyword\" name=FinalWeaponDamage> <color=#0F93FFFF>+10%</color>",
     "얼음속성 피해<sprite=\"Keyword\" name=IceDamage> <color=#0F93FFFF>+6</color>"
@@ -4318,6 +4861,8 @@
    ],
    "flavor": "물 대신 다양한 포션을 먹여 키운 감자.",
    "maxLevel": 3,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "방어 관통<sprite=\"Keyword\" name=IgnoreDefense> <color=#0F93FFFF>+15%</color>",
     "행운<sprite=\"Keyword\" name=Luck> <color=#0F93FFFF>+4</color>",
@@ -4335,6 +4880,8 @@
    ],
    "flavor": "나그네가 쓰다듬어 주었다.",
    "maxLevel": 2,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "무기 피해량<sprite=\"Keyword\" name=FinalWeaponDamage> <color=#0F93FFFF>+12%</color>",
     "마법서 피해량<sprite=\"Keyword\" name=MagicDamageBonus> <color=#0F93FFFF>+12%</color>",
@@ -4353,6 +4900,8 @@
    ],
    "flavor": "단순하지만 수많은 실험을 통해 계량된 유리병",
    "maxLevel": 2,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "포션을 마시면 15초 동안 모든 피해 증폭<sprite=\"Keyword\" name=FinalDamage> <color=#0F93FFFF>5→15</color> 증가 버프 획득"
    ]
@@ -4369,6 +4918,8 @@
    ],
    "flavor": "동물의 평등을 위해 만들어진 마법 장치",
    "maxLevel": 2,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "6초마다 주변 적 최대 4명에게 얼음<sprite=\"Keyword\" name=IceDamage>+번개<sprite=\"Keyword\" name=LightningDamage> 속성 칼날을 소환. 적에게 <link=Electric></link>감전<sprite=\"Keyword\" name=LightningDamage> 피해를 입히면 대기시간 1초 감소",
     "피해량 : (번개속성 피해<sprite=\"Keyword\" name=LightningDamage>, 얼음속성 피해<sprite=\"Keyword\" name=IceDamage> 중 높은 피해 + 낮은 피해의 30%) × <color=#0F93FFFF>150→250</color>%"
@@ -4383,6 +4934,8 @@
    "categories": [],
    "flavor": "내려놓을 수 없는 무게도 있는 법이다.",
    "maxLevel": 0,
+   "criteria": null,
+   "magicBook": false,
    "effects": [],
    "effectsRaw": true
   },
@@ -4395,6 +4948,8 @@
    "categories": [],
    "flavor": "스튜로 만들기에는 수상한 색을 띠고 있습니다.",
    "maxLevel": 3,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "디버프로 주는 피해량<sprite=\"Keyword\" name=DebuffDamage> <color=#0F93FFFF>1%</color>당 공격 속도<sprite=\"Keyword\" name=AttackSpeed> 1% 증가"
    ]
@@ -4408,6 +4963,8 @@
    "categories": [],
    "flavor": "시간과 공간이 휘몰아치는 곳에서 왔다고 전해지는 돌",
    "maxLevel": 3,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "모든 피해 증폭<sprite=\"Keyword\" name=FinalDamage> <color=#0F93FFFF>+8%</color>",
     "이동 속도<sprite=\"Keyword\" name=MoveSpeed> <color=#0F93FFFF>+24%</color>"
@@ -4422,6 +4979,8 @@
    "categories": [],
    "flavor": "소지자의 힘을 <tag=TEXT:Elemental_Fire> 속성으로 바꾸는 책. 처음의 무력감은 금방 사라집니다.",
    "maxLevel": 4,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "<link=AdditionalPhysicalDamage></link>추가 물리 피해<sprite=\"Keyword\" name=PhysicalDamage>가 0이 되고, 그 <color=#0F93FFFF>100%</color>가 화염속성 피해<sprite=\"Keyword\" name=FlameGround>로 변환"
    ]
@@ -4435,6 +4994,8 @@
    "categories": [],
    "flavor": "소지자의 힘을 <tag=TEXT:Elemental_Ice> 속성으로 바꾸는 책. 처음의 무력감은 금방 사라집니다.",
    "maxLevel": 4,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "<link=AdditionalPhysicalDamage></link>추가 물리 피해<sprite=\"Keyword\" name=PhysicalDamage>가 0이 되고, 그 <color=#0F93FFFF>100%</color>가 얼음속성 피해<sprite=\"Keyword\" name=IceDamage>로 변환"
    ]
@@ -4448,6 +5009,8 @@
    "categories": [],
    "flavor": "소지자의 힘을 <tag=TEXT:Elemental_Lightning> 속성으로 바꾸는 책. 처음의 무력감은 금방 사라집니다.",
    "maxLevel": 4,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "<link=AdditionalPhysicalDamage></link>추가 물리 피해<sprite=\"Keyword\" name=PhysicalDamage>가 0이 되고, 그 <color=#0F93FFFF>100%</color>가 번개속성 피해<sprite=\"Keyword\" name=LightningDamage>로 변환"
    ]
@@ -4461,6 +5024,8 @@
    "categories": [],
    "flavor": "나흘째 떠나지 못한 편지. 찌릿찌릿한 원한이 느껴집니다.",
    "maxLevel": 2,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "<link=Thorns>가시<sprite=\"Keyword\" name=Thorns></link> <color=#0F93FFFF>+200%</color>",
     "공격 속도<sprite=\"Keyword\" name=AttackSpeed> <color=#F8F411FF>-4%</color>"
@@ -4478,6 +5043,8 @@
    ],
    "flavor": "수많은 기록과 연구가 태양의 정령을 현현시킨 순간을 기념한 모형.",
    "maxLevel": 4,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "마법서 피해량<sprite=\"Keyword\" name=MagicDamageBonus> 1%당 <link=FlameSword></link>태양검<sprite=\"Keyword\" name=FlameSword> 피해량 1% 증가 <color=#0F93FFFF></color>",
     "마법서 피해를 입힐 시, <link=FlameSword></link>태양검<sprite=\"Keyword\" name=FlameSword> <color=#0F93FFFF>2</color>회 추가 발동"
@@ -4492,6 +5059,8 @@
    "categories": [],
    "flavor": "",
    "maxLevel": 0,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "Charm_BlankCheck_Effect"
    ]
@@ -4507,6 +5076,8 @@
    ],
    "flavor": "수많은 공격을 막아낸 문장. 아직 옛 주인의 실력에는 미치지 못한다.",
    "maxLevel": 2,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "무기 피해량<sprite=\"Keyword\" name=FinalWeaponDamage> <color=#0F93FFFF>+15%</color>",
     "퍼펙트 가드 50회 성공 시 철벽의 문장으로 변함"
@@ -4523,6 +5094,8 @@
    ],
    "flavor": "완벽한 방어를 증명한 자에게만 빛나는 문장.",
    "maxLevel": 2,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "무기 피해량<sprite=\"Keyword\" name=FinalWeaponDamage> <color=#0F93FFFF>+25%</color>",
     "가드 비용 <color=#0F93FFFF>20→40</color>% 감소",
@@ -4540,6 +5113,8 @@
    ],
    "flavor": "오래된 도의 코등이. 수련의 흔적이 남아있다.",
    "maxLevel": 2,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "무기 피해량<sprite=\"Keyword\" name=FinalWeaponDamage> <color=#0F93FFFF>+6%</color>",
     "발도나 납도로 적의 공격을 30회 막으면 명인의 코등이로 변함"
@@ -4556,6 +5131,8 @@
    ],
    "flavor": "천 번의 흘리기가 벼려낸 물건. 이 작은 코등이가 곧 방패다.",
    "maxLevel": 2,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "무기 피해량<sprite=\"Keyword\" name=FinalWeaponDamage> <color=#0F93FFFF>+15%</color>",
     "납도, 발도 무적 판정 시간 <color=#0F93FFFF>40→120</color>% 증가"
@@ -4572,6 +5149,8 @@
    ],
    "flavor": "반격이 몸에 밸 때까지 주인을 지켜본다.",
    "maxLevel": 0,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "특수 공격: 패리 성공 시 가장 가까운 적에게 검 영혼 발사",
     "[피해량: 가장 높은 속성 피해<sprite=\"Keyword\" name=HighestElementalDamage>의 <color=#FFFFFFFF>250→250</color>% <link=Elemental_Chaos></link>혼돈<sprite=\"Keyword\" name=ChaosDamage> 피해]",
@@ -4589,6 +5168,8 @@
    ],
    "flavor": "받은 것은 몇 배로 돌려주는 것이 결투가의 예의다.",
    "maxLevel": 0,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "다음 상황에서 가장 가까운 적에게 검 영혼 발사",
     "- 특수 공격: 패리 성공",
@@ -4608,6 +5189,8 @@
    ],
    "flavor": "아직 울림이 무디다. 질주하는 심장 박동에 공명해 깨어난다고 한다.",
    "maxLevel": 3,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "가장 높은 속성 피해<sprite=\"Keyword\" name=HighestElementalDamage> <color=#0F93FFFF>+8</color>",
     "이동 속도<sprite=\"Keyword\" name=MoveSpeed>가 140% 이상이 되면 공명석으로 변함"
@@ -4624,6 +5207,8 @@
    ],
    "flavor": "가장 강한 기운과 공명하며 맑게 울린다.",
    "maxLevel": 3,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "가장 높은 속성 피해<sprite=\"Keyword\" name=HighestElementalDamage> <color=#0F93FFFF>+14</color>"
    ]
@@ -4639,6 +5224,8 @@
    ],
    "flavor": "햇볕이 가장 뜨거운 시각에 다듬어 만든 숫돌.",
    "maxLevel": 4,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "무기 피해를 입힐 시, <link=FlameSword></link>태양검<sprite=\"Keyword\" name=FlameSword> <color=#0F93FFFF>2</color>회 추가 발동",
     "공격 속도<sprite=\"Keyword\" name=AttackSpeed> <color=#0F93FFFF>+15%</color>",
@@ -4656,6 +5243,8 @@
    ],
    "flavor": "흩어진 것을 도로 불러 모으는 제례에 쓰이던 거울.",
    "maxLevel": 3,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "<link=FlameSword></link>태양검<sprite=\"Keyword\" name=FlameSword> 회수 시 <color=#0F93FFFF>1</color>개가 추가로 회수",
     "<link=FlameSword></link>태양검<sprite=\"Keyword\" name=FlameSword> 피해량 <color=#0F93FFFF>+12%</color>"
@@ -4672,6 +5261,8 @@
    ],
    "flavor": "기름칠한 지 오래됐다. 수없이 감다 보면 길이 든다.",
    "maxLevel": 1,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "석궁 재장전 속도<sprite=\"Keyword\" name=Reload> <color=#0F93FFFF>+10</color>",
     "재장전 50회 완료 시 명사수의 크랭크로 변함"
@@ -4688,6 +5279,8 @@
    ],
    "flavor": "천 번의 장전이 길들인 크랭크. 물 흐르듯 감긴다.",
    "maxLevel": 1,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "석궁 재장전 속도<sprite=\"Keyword\" name=Reload> <color=#0F93FFFF>+20</color>",
     "재장전 완료 시 10초 동안 일반 공격 피해<sprite=\"Keyword\" name=BasicAttackDamage> <color=#0F93FFFF>30→40</color>%, 특수 공격 피해<sprite=\"Keyword\" name=SpecialAttackDamage> <color=#0F93FFFF>30→40</color>% 증가"
@@ -4704,6 +5297,8 @@
    ],
    "flavor": "달아오른 쇠는 집게로 붙잡아 두드려야 모양이 잡힌다.",
    "maxLevel": 2,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "<link=Burn></link>화상<sprite=\"Keyword\" name=FlameGround>에 걸린 대상에게 주는 무기 공격 피해량이 <color=#0F93FFFF>5%→15%</color> 증가"
    ]
@@ -4719,6 +5314,8 @@
    ],
    "flavor": "육체를 갈망하는 영혼이 들어 있습니다",
    "maxLevel": 3,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "소지한 포션 하나당 모든 피해 증폭<sprite=\"Keyword\" name=FinalDamage> <color=#0F93FFFF>1→2</color>% 증가",
     "현재 포션 개수 : 0개"
@@ -4733,6 +5330,8 @@
    "categories": [],
    "flavor": "격을 가리지 않고 북쪽을 꿰뚫는 침을 품은 나침반.",
    "maxLevel": 0,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "아래에 이어진 침의 효과를 등급 조건 없이 윗 칸에 전달",
     "직접 피해를 주는 아티팩트에만 적용"
@@ -4747,6 +5346,8 @@
    "categories": [],
    "flavor": "{MAGIC_NAME} 마법이 적혀 있는 책.",
    "maxLevel": 1,
+   "criteria": null,
+   "magicBook": true,
    "effects": [
     "스킬 <color=#99F2E4FF>에어 볼트</color> 획득"
    ]
@@ -4762,6 +5363,8 @@
    ],
    "flavor": "{MAGIC_NAME} 마법이 적혀 있는 책.",
    "maxLevel": 1,
+   "criteria": null,
+   "magicBook": true,
    "effects": [
     "스킬 <color=#99F2E4FF>파이어 볼트</color> 획득"
    ]
@@ -4775,6 +5378,8 @@
    "categories": [],
    "flavor": "{MAGIC_NAME} 마법이 적혀 있는 책.",
    "maxLevel": 0,
+   "criteria": null,
+   "magicBook": true,
    "effects": [
     "스킬 <color=#99F2E4FF>빛의 활</color> 획득"
    ]
@@ -4790,6 +5395,8 @@
    ],
    "flavor": "{MAGIC_NAME} 마법이 적혀 있는 책.",
    "maxLevel": 2,
+   "criteria": null,
+   "magicBook": true,
    "effects": [
     "스킬 <color=#99F2E4FF>바위 토끼</color> 획득"
    ]
@@ -4803,6 +5410,8 @@
    "categories": [],
    "flavor": "{MAGIC_NAME} 마법이 적혀 있는 책.",
    "maxLevel": 0,
+   "criteria": null,
+   "magicBook": true,
    "effects": [
     "스킬 <color=#99F2E4FF>회복의 물줄기</color> 획득",
     "소모된 MP<sprite=\"Keyword\" name=MP>가 <color=red>영구 <link=ReservedMP></link>점유<sprite=\"Keyword\" name=ReservedMP></color>됨"
@@ -4817,6 +5426,8 @@
    "categories": [],
    "flavor": "{MAGIC_NAME} 마법이 적혀 있는 책.",
    "maxLevel": 0,
+   "criteria": "TopInInventory",
+   "magicBook": true,
    "effects": [
     "스킬 <color=#99F2E4FF>해골 되살리기</color> 획득"
    ]
@@ -4830,6 +5441,8 @@
    "categories": [],
    "flavor": "{MAGIC_NAME} 마법이 적혀 있는 책.",
    "maxLevel": 0,
+   "criteria": null,
+   "magicBook": true,
    "effects": [
     "스킬 <color=#99F2E4FF>콜 라이트닝</color> 획득"
    ]
@@ -4843,6 +5456,8 @@
    "categories": [],
    "flavor": "{MAGIC_NAME} 마법이 적혀 있는 책.",
    "maxLevel": 0,
+   "criteria": null,
+   "magicBook": true,
    "effects": [
     "스킬 <color=#99F2E4FF>폭풍</color> 획득"
    ]
@@ -4856,6 +5471,8 @@
    "categories": [],
    "flavor": "{MAGIC_NAME} 마법이 적혀 있는 책.",
    "maxLevel": 0,
+   "criteria": null,
+   "magicBook": true,
    "effects": [
     "스킬 <color=#99F2E4FF>공격력 증가 버프</color> 획득"
    ]
@@ -4869,6 +5486,8 @@
    "categories": [],
    "flavor": "{MAGIC_NAME} 마법이 적혀 있는 책.",
    "maxLevel": 1,
+   "criteria": null,
+   "magicBook": true,
    "effects": [
     "스킬 <color=#99F2E4FF>어스 볼트</color> 획득"
    ]
@@ -4884,6 +5503,8 @@
    ],
    "flavor": "{MAGIC_NAME} 마법이 적혀 있는 책.",
    "maxLevel": 1,
+   "criteria": null,
+   "magicBook": true,
    "effects": [
     "스킬 <color=#99F2E4FF>라이트닝 볼트</color> 획득"
    ]
@@ -4899,6 +5520,8 @@
    ],
    "flavor": "{MAGIC_NAME} 마법이 적혀 있는 책.",
    "maxLevel": 2,
+   "criteria": null,
+   "magicBook": true,
    "effects": [
     "스킬 <color=#99F2E4FF>파이어 애로우</color> 획득"
    ]
@@ -4914,6 +5537,8 @@
    ],
    "flavor": "{MAGIC_NAME} 마법이 적혀 있는 책.",
    "maxLevel": 3,
+   "criteria": null,
+   "magicBook": true,
    "effects": [
     "스킬 <color=#99F2E4FF>불 서커스</color> 획득"
    ]
@@ -4927,6 +5552,8 @@
    "categories": [],
    "flavor": "{MAGIC_NAME} 마법이 적혀 있는 책.",
    "maxLevel": 1,
+   "criteria": null,
+   "magicBook": true,
    "effects": [
     "스킬 <color=#99F2E4FF>스톤 웨이브</color> 획득"
    ]
@@ -4942,6 +5569,8 @@
    ],
    "flavor": "{MAGIC_NAME} 마법이 적혀 있는 책.",
    "maxLevel": 0,
+   "criteria": null,
+   "magicBook": true,
    "effects": [
     "스킬 <color=#99F2E4FF>바위 오잉크</color> 획득"
    ]
@@ -4955,6 +5584,8 @@
    "categories": [],
    "flavor": "{MAGIC_NAME} 마법이 적혀 있는 책.",
    "maxLevel": 1,
+   "criteria": null,
+   "magicBook": true,
    "effects": [
     "스킬 <color=#99F2E4FF>워터 볼트</color> 획득"
    ]
@@ -4970,6 +5601,8 @@
    ],
    "flavor": "{MAGIC_NAME} 마법이 적혀 있는 책.",
    "maxLevel": 2,
+   "criteria": null,
+   "magicBook": true,
    "effects": [
     "스킬 <color=#99F2E4FF>샤프 아이</color> 획득"
    ]
@@ -4985,6 +5618,8 @@
    ],
    "flavor": "{MAGIC_NAME} 마법이 적혀 있는 책.",
    "maxLevel": 2,
+   "criteria": null,
+   "magicBook": true,
    "effects": [
     "스킬 <color=#99F2E4FF>헤이스트</color> 획득"
    ]
@@ -5000,6 +5635,8 @@
    ],
    "flavor": "{MAGIC_NAME} 마법이 적혀 있는 책.",
    "maxLevel": 4,
+   "criteria": null,
+   "magicBook": true,
    "effects": [
     "스킬 <color=#99F2E4FF>서리 단검</color> 획득"
    ]
@@ -5015,6 +5652,8 @@
    ],
    "flavor": "{MAGIC_NAME} 마법이 적혀 있는 책.",
    "maxLevel": 3,
+   "criteria": null,
+   "magicBook": true,
    "effects": [
     "스킬 <color=#99F2E4FF>토네이도</color> 획득"
    ]
@@ -5030,6 +5669,8 @@
    ],
    "flavor": "{MAGIC_NAME} 마법이 적혀 있는 책.",
    "maxLevel": 3,
+   "criteria": null,
+   "magicBook": true,
    "effects": [
     "스킬 <color=#99F2E4FF>메테오 샤워</color> 획득"
    ]
@@ -5045,6 +5686,8 @@
    ],
    "flavor": "{MAGIC_NAME} 마법이 적혀 있는 책.",
    "maxLevel": 3,
+   "criteria": null,
+   "magicBook": true,
    "effects": [
     "스킬 <color=#99F2E4FF>애로우 레인</color> 획득"
    ]
@@ -5058,6 +5701,8 @@
    "categories": [],
    "flavor": "뜨개질용 {MAGIC_NAME} 마법이 적혀 있는 책.",
    "maxLevel": 1,
+   "criteria": null,
+   "magicBook": true,
    "effects": [
     "스킬 <color=#99F2E4FF>화염 바늘</color> 획득"
    ]
@@ -5071,6 +5716,8 @@
    "categories": [],
    "flavor": "뜨개질용 {MAGIC_NAME} 마법이 적혀 있는 책.",
    "maxLevel": 1,
+   "criteria": null,
+   "magicBook": true,
    "effects": [
     "스킬 <color=#99F2E4FF>얼음 바늘</color> 획득"
    ]
@@ -5084,6 +5731,8 @@
    "categories": [],
    "flavor": "뜨개질용 {MAGIC_NAME} 마법이 적혀 있는 책.",
    "maxLevel": 1,
+   "criteria": null,
+   "magicBook": true,
    "effects": [
     "스킬 <color=#99F2E4FF>전기 바늘</color> 획득"
    ]
@@ -5099,6 +5748,8 @@
    ],
    "flavor": "{MAGIC_NAME} 마법이 적혀 있는 책.",
    "maxLevel": 1,
+   "criteria": null,
+   "magicBook": true,
    "effects": [
     "스킬 <color=#99F2E4FF>아이스 볼트</color> 획득"
    ]
@@ -5114,6 +5765,8 @@
    ],
    "flavor": "{MAGIC_NAME} 마법이 적혀 있는 책.",
    "maxLevel": 4,
+   "criteria": null,
+   "magicBook": true,
    "effects": [
     "스킬 <color=#99F2E4FF>천둥 갑옷</color> 획득"
    ]
@@ -5127,6 +5780,8 @@
    "categories": [],
    "flavor": "{MAGIC_NAME} 마법이 적혀 있는 책.",
    "maxLevel": 2,
+   "criteria": null,
+   "magicBook": true,
    "effects": [
     "스킬 <color=#99F2E4FF>영혼 토끼 전사</color> 획득"
    ]
@@ -5142,6 +5797,8 @@
    ],
    "flavor": "{MAGIC_NAME} 마법이 적혀 있는 책.",
    "maxLevel": 0,
+   "criteria": null,
+   "magicBook": true,
    "effects": [
     "스킬 <color=#99F2E4FF>연막</color> 획득"
    ]
@@ -5155,6 +5812,8 @@
    "categories": [],
    "flavor": "{MAGIC_NAME} 마법이 적혀 있는 책.",
    "maxLevel": 2,
+   "criteria": null,
+   "magicBook": true,
    "effects": [
     "스킬 <color=#99F2E4FF>축복</color> 획득"
    ]
@@ -5170,6 +5829,8 @@
    ],
    "flavor": "{MAGIC_NAME} 마법이 적혀 있는 책.",
    "maxLevel": 2,
+   "criteria": null,
+   "magicBook": true,
    "effects": [
     "스킬 <color=#99F2E4FF>대축복</color> 획득"
    ]
@@ -5185,6 +5846,8 @@
    ],
    "flavor": "{MAGIC_NAME} 마법이 적혀 있는 책.",
    "maxLevel": 1,
+   "criteria": null,
+   "magicBook": true,
    "effects": [
     "스킬 <color=#99F2E4FF>보호막</color> 획득"
    ]
@@ -5200,6 +5863,8 @@
    ],
    "flavor": "{MAGIC_NAME} 마법이 적혀 있는 책.",
    "maxLevel": 4,
+   "criteria": null,
+   "magicBook": true,
    "effects": [
     "스킬 <color=#99F2E4FF>번개 부메랑</color> 획득"
    ]
@@ -5213,6 +5878,8 @@
    "categories": [],
    "flavor": "{MAGIC_NAME} 마법이 적혀 있는 책.",
    "maxLevel": 3,
+   "criteria": null,
+   "magicBook": true,
    "effects": [
     "스킬 <color=#99F2E4FF>불 서커스</color> 획득"
    ]
@@ -5228,6 +5895,8 @@
    ],
    "flavor": "{MAGIC_NAME} 마법이 적혀 있는 책.",
    "maxLevel": 4,
+   "criteria": null,
+   "magicBook": true,
    "effects": [
     "스킬 <color=#99F2E4FF>천둥의 심판</color> 획득"
    ]
@@ -5243,6 +5912,8 @@
    ],
    "flavor": "{MAGIC_NAME} 마법이 적혀 있는 책.",
    "maxLevel": 4,
+   "criteria": null,
+   "magicBook": true,
    "effects": [
     "스킬 <color=#99F2E4FF>얼음 폭풍</color> 획득"
    ]
@@ -5256,6 +5927,8 @@
    "categories": [],
    "flavor": "크게 베기 체술이 적혀 있는 대나무 책.",
    "maxLevel": 0,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "체술 <color=#808080FF>WeaponSkill_0000_Name</color> 획득"
    ]
@@ -5269,6 +5942,8 @@
    "categories": [],
    "flavor": "도약 휘두르기 체술이 적혀 있는 대나무 책.",
    "maxLevel": 0,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "체술 <color=#808080FF>WeaponSkill_0001_Name</color> 획득"
    ]
@@ -5282,6 +5957,8 @@
    "categories": [],
    "flavor": "에어슬래시 체술이 적혀 있는 대나무 책.",
    "maxLevel": 0,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "체술 <color=#808080FF>WeaponSkill_0002_Name</color> 획득"
    ]
@@ -5295,6 +5972,8 @@
    "categories": [],
    "flavor": "상인 연합 긴급 공문: 최근 동료가 의문의 동물에게 죽임을 당한 끔찍한 일이 일어났음. …{NAME}…라는 이름의 동물을 조심하기를 바람.",
    "maxLevel": 1,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "이동 속도<sprite=\"Keyword\" name=MoveSpeed> <color=#0F93FFFF>+8%</color>"
    ]
@@ -5308,6 +5987,8 @@
    "categories": [],
    "flavor": "마을을 되찾기 위해 결의를 다졌습니다.",
    "maxLevel": 2,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "NPC를 동료로 영입함"
    ]
@@ -5321,6 +6002,8 @@
    "categories": [],
    "flavor": "마을을 되찾기 위해 결의를 다졌습니다.",
    "maxLevel": 2,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "NPC를 동료로 영입함"
    ]
@@ -5334,6 +6017,8 @@
    "categories": [],
    "flavor": "마을을 되찾기 위해 결의를 다졌습니다.",
    "maxLevel": 2,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "NPC를 동료로 영입함"
    ]
@@ -5347,6 +6032,8 @@
    "categories": [],
    "flavor": "마을을 되찾기 위해 결의를 다졌습니다.",
    "maxLevel": 2,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "NPC를 동료로 영입함"
    ]
@@ -5360,6 +6047,8 @@
    "categories": [],
    "flavor": "마을을 되찾기 위해 결의를 다졌습니다.",
    "maxLevel": 2,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "NPC를 동료로 영입함"
    ]
@@ -5373,6 +6062,8 @@
    "categories": [],
    "flavor": "마을을 되찾기 위해 결의를 다졌습니다.",
    "maxLevel": 2,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "NPC를 동료로 영입함"
    ]
@@ -5386,6 +6077,8 @@
    "categories": [],
    "flavor": "마을을 되찾기 위해 결의를 다졌습니다.",
    "maxLevel": 2,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "NPC를 동료로 영입함"
    ]
@@ -5399,6 +6092,8 @@
    "categories": [],
    "flavor": "마을을 되찾기 위해 결의를 다졌습니다.",
    "maxLevel": 2,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "NPC를 동료로 영입함"
    ]
@@ -5412,6 +6107,8 @@
    "categories": [],
    "flavor": "",
    "maxLevel": 4,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "골렘 코어를 통해 활성화 가능",
     "조준 방향으로 탄환 발사"
@@ -5426,6 +6123,8 @@
    "categories": [],
    "flavor": "",
    "maxLevel": 4,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "골렘 코어를 통해 활성화 가능",
     "조준 방향으로 탄환 발사"
@@ -5440,6 +6139,8 @@
    "categories": [],
    "flavor": "",
    "maxLevel": 6,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "골렘 코어를 통해 활성화 가능",
     "조준 방향으로 탄환 발사"
@@ -5454,6 +6155,8 @@
    "categories": [],
    "flavor": "",
    "maxLevel": 10,
+   "criteria": null,
+   "magicBook": false,
    "effects": [
     "골렘 코어를 통해 활성화 가능",
     "충전 후 조준 방향으로 레이저 발사"

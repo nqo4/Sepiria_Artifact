@@ -124,15 +124,67 @@
     }
     for (const [k, m] of mult) if (m !== 0 && level.has(k)) level.set(k, level.get(k) * m);
 
-    let score = 0;
-    const perItem = items.map(it => {
+    // 게임 점수(GridInventory.EvaluateCurrentAutoArrangeScore)를 그대로: 켜진 아티팩트 레벨 합이 1순위
+    const storage = board.storage ?? w * h;
+    let levelSum = 0, onCount = 0, offCount = 0, rawSum = 0, overflow = 0, negative = 0;
+    const enabled = items.map(it => {
       if (it.kind !== 'artifact') return null;
       const k = key(it.x, it.y);
-      const lv = Math.max(0, Math.min(level.get(k) || 0, it.maxLevel ?? 0));
-      if (!disabled.has(k)) score += lv;
-      return disabled.has(k) ? 0 : lv;
+      return !disabled.has(k) && (ignore.has(k) || criteriaMet(it, at, w, storage));
     });
-    return { score, levels: level, disabled, ignore, perItem };
+    const perItem = items.map((it, i) => {
+      if (it.kind !== 'artifact') return null;
+      const raw = level.get(key(it.x, it.y)) || 0, max = it.maxLevel ?? 0;
+      const lv = Math.max(0, Math.min(raw, max));
+      rawSum += raw;
+      if (raw < 0) negative += -raw;
+      if (raw > max) overflow += raw - max;
+      if (enabled[i]) { onCount++; levelSum += lv; } else offCount++;
+      return enabled[i] ? lv : 0;
+    });
+    const score = levelSum * 10000 + onCount * 1000 + rawSum * 10 + overflow - offCount * 750 - negative * 250;
+
+    // 사용자 설정(아이템별 minLevel·priority): 1순위 최소 레벨 부족분 없애기, 2순위 우선도×레벨, 3순위 게임 점수.
+    // 가중치를 크게 벌려서 앞 순위가 항상 이기게 한다(레벨 1 = 게임 점수 10000).
+    let shortfall = 0, prioSum = 0;
+    const unmet = [];
+    items.forEach((it, i) => {
+      if (it.kind !== 'artifact') return;
+      const need = Math.min(it.minLevel || 0, it.maxLevel ?? 0);
+      if (perItem[i] < need) { shortfall += need - perItem[i]; unmet.push({ item: it, level: perItem[i], need }); }
+      prioSum += (it.priority || 0) * perItem[i];
+    });
+    const objective = score - shortfall * 1e8 + prioSum * 1e6;
+    return { score, objective, levelSum, shortfall, prioSum, unmet, levels: level, disabled, ignore, enabled, perItem };
+  }
+
+  // ---------- 아티팩트 발동 조건 (CharmActivateCriteria_XXX.GetCriteria) ----------
+  // 숫자 6·7·5 는 게임 코드에 박혀 있는 값(가로 6칸 가방 기준) 그대로.
+  const N8 = [[0, 1], [1, 1], [1, 0], [1, -1], [0, -1], [-1, -1], [-1, 0], [-1, 1]];
+  function criteriaMet(it, at, w, storage) {
+    const { x, y } = it, idx = y * w + x;
+    const get = (cx, cy) => at.get(key(cx, cy));
+    const inBag = (cx, cy) => cx >= 0 && cy >= 0 && cx < w && cy * w + cx < storage;
+    switch (it.criteria) {
+      case undefined: case null: case '': return true;
+      case 'TopInInventory': return y === 0;
+      case 'BottomInInventory': return idx >= storage - 6;
+      case 'SideEnd': return x === 0 || x === 5;
+      case 'Inside': return x > 0 && y > 0 && x < w - 1 && idx + 7 <= storage - 1;
+      case 'Outlined': return x <= 0 || y <= 0 || x >= w - 1 || idx >= storage - 6;
+      case 'BothSideCharm': {
+        const l = get(x - 1, y), r = get(x + 1, y);
+        return x > 0 && x < w - 1 && !!l && !!r && l.kind === 'artifact' && r.kind === 'artifact';
+      }
+      case 'BothSidesAreEmpty': {
+        // 마지막 줄이 덜 찼으면 그 줄의 오른쪽 끝은 storage 로 정해진다
+        const rowEnd = Math.min(w, storage - y * w);
+        return x > 0 && x < rowEnd - 1 && !get(x - 1, y) && !get(x + 1, y);
+      }
+      case 'NeighborsAreFull': return N8.every(([dx, dy]) => inBag(x + dx, y + dy) && !!get(x + dx, y + dy));
+      case 'Near8MagicBook': return N8.some(([dx, dy]) => { const n = get(x + dx, y + dy); return !!n && !!n.magicBook; });
+      default: return true; // shortcut: FullHP 등 배치와 무관한 조건은 켜졌다고 본다 — 새 조건이 생기면 여기에 추가
+    }
   }
 
   // ---------- 최적화 (시뮬레이티드 어닐링) ----------
@@ -154,15 +206,17 @@
     const { iterations = 20000, seed = 1, startTemp = 2, endTemp = 0.05 } = opts;
     const rnd = mulberry32(seed);
     const { w, h } = board;
+    const storage = board.storage ?? w * h;
     const movable = board.items.filter(it => it.x >= 0 && it.y >= 0 && it.x < w && it.y < h);
     const fixed = board.items.filter(it => !movable.includes(it)); // 포션 칸(y=100) 등
     const cells = [];
-    for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) cells.push([x, y]);
+    for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) if (y * w + x < storage) cells.push([x, y]); // 잠긴 칸 제외
 
     let cur = movable.map(it => ({ ...it, origin: [it.x, it.y], originRot: it.rotation || 0 }));
-    const score = items => evaluate({ w, h, items: items.concat(fixed) }).score;
+    const evalOf = items => evaluate({ w, h, storage, items: items.concat(fixed) });
+    const score = items => evalOf(items).objective / 10000; // 레벨 1 = 1 단위로 맞춰 온도 설정을 그대로 쓴다(최소 레벨·우선도 포함)
     let curScore = score(cur);
-    const before = curScore;
+    const before = evalOf(cur).levelSum;
     let best = cur.map(it => ({ ...it })), bestScore = curScore;
     const rotatable = cur.map((it, i) => (it.kind === 'tablet' && it.rotatable ? i : -1)).filter(i => i >= 0);
 
@@ -215,24 +269,33 @@
       if (rotated) p.rotation = (4 - (it.rotation || 0)) % 4; // 엔진 회전(시계 방향)
       placements.push(p);
     }
-    return { before, after: bestScore, board: { w, h, items: best.concat(fixed) }, placements };
+    // before/after = 켜진 아티팩트 레벨 합(게임 점수 1순위). 최적화 자체는 게임 점수 전체(동점 처리 포함)로 한다.
+    const fin = evalOf(best);
+    return { before, after: fin.levelSum, shortfall: fin.shortfall, unmet: fin.unmet, board: { w, h, storage, items: best.concat(fixed) }, placements };
   }
 
   // ---------- /inv 스냅샷 → board ----------
-  /** snapshot: /inv 응답, slabDb: placement_db.json 의 slabs (assetName 으로 query/조건 조회) */
-  function boardFromSnapshot(snapshot, slabDb) {
+  /**
+   * snapshot: /inv 응답, slabDb: placement_db.json 의 slabs (assetName 으로 query/조건 조회),
+   * artifactDb: data.json 의 artifacts (v 로 발동 조건 cr / 마법서 mb 조회, 없으면 조건 없음으로 봄)
+   */
+  function boardFromSnapshot(snapshot, slabDb, artifactDb) {
     const byAsset = new Map((slabDb || []).map(s => [s.assetName, s]));
+    const artByV = new Map((artifactDb || []).map(a => [a.v, a]));
     const items = (snapshot.items || []).map(it => {
       if (it.isTablet) {
         const s = byAsset.get(it.assetName) || {};
         return { x: it.x, y: it.y, kind: 'tablet', name: it.name, assetName: it.assetName, rotation: it.rotation || 0,
                  rotatable: !!it.rotatable, query: s.query || '', cond: s.conditionQuery || '' };
       }
-      if (it.itemType === 'Charm') return { x: it.x, y: it.y, kind: 'artifact', name: it.name, assetName: it.assetName, maxLevel: it.maxLevel ?? 0 };
+      if (it.itemType === 'Charm') {
+        const a = artByV.get(it.assetName) || {};
+        return { x: it.x, y: it.y, kind: 'artifact', name: it.name, assetName: it.assetName, instanceId: it.instanceId, maxLevel: it.maxLevel ?? 0, criteria: a.cr || null, magicBook: !!a.mb };
+      }
       return { x: it.x, y: it.y, kind: 'other', name: it.name, assetName: it.assetName };
     });
-    return { w: snapshot.width, h: snapshot.height, items };
+    return { w: snapshot.width, h: snapshot.height, storage: snapshot.storage ?? snapshot.width * snapshot.height, items };
   }
 
-  return { parseQuery, evaluate, optimize, boardFromSnapshot, rotate: rot };
+  return { parseQuery, evaluate, optimize, boardFromSnapshot, criteriaMet, rotate: rot };
 });

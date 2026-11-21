@@ -238,6 +238,77 @@ void Check(string name, bool ok, string detail = "")
     Check("같은 목표 칸 중복 명령은 거부", !result.Ok && result.Moved == 0);
 }
 
+// ---------- [추가] GradeCalculator: 페이지와 같은 등급 계산(절대평가) ----------
+{
+    JObj Art(string tier, int l, string[] s, string[] kw) => new JObj { ["t"] = tier, ["l"] = l, ["s"] = s.Cast<object>().ToList(), ["kw"] = kw.Cast<object>().ToList() };
+    var inv = new[] { Art("Common", 1, new[] { "PRECISION" }, new string[0]), Art("Common", 1, new[] { "PRECISION", "STURDY" }, new string[0]) };
+    var counts = GradeCalculator.TagCounts(inv);
+    Check("GradeCalculator: 가방 태그 수", counts["PRECISION"] == 2 && counts["STURDY"] == 1);
+    var crossbow = new JObj { ["type"] = "Crossbow", ["kw"] = new List<object> { "guard" }, ["redef"] = new List<object> { "basic_attack" } };
+    var synergy = GradeCalculator.Score(Art("Rare", 3, new[] { "PRECISION" }, new[] { "guard" }), counts, crossbow);
+    // 빌드 점수 = 태그 2×3 + 무기 지원 1.5 = 7.5 (희귀도·최대 레벨은 등급에 안 씀, TieBreak = 희귀 3 + 레벨 3×0.1)
+    Check("GradeCalculator: 빌드 점수 = 태그×3 + 무기 지원 1.5, 희귀도·레벨은 TieBreak 로만", Math.Abs(synergy.Total - 7.5) < 1e-9 && Math.Abs(synergy.TieBreak - 3.3) < 1e-9 && !synergy.Caution, synergy.Total.ToString());
+    var conflict = GradeCalculator.Score(Art("Legend", 3, new[] { "PRECISION" }, new[] { "guard", "basic_attack" }), counts, crossbow);
+    Check("GradeCalculator: 무기가 바꾸는 동작에 의존 → 충돌", conflict.Caution && conflict.Unusable.Count == 0);
+    var dashAttack = GradeCalculator.Score(Art("Common", 3, new[] { "PRECISION" }, new[] { "dash", "dash_attack" }), counts, crossbow);
+    Check("GradeCalculator: 원거리 무기에서 대시 공격은 못 씀 → 감점·주의", dashAttack.Caution && dashAttack.Unusable.SequenceEqual(new[] { "dash_attack" })
+        && Math.Abs(dashAttack.Total - (6 - 3)) < 1e-9, dashAttack.Total.ToString());
+    var sword = new JObj { ["type"] = "GreatSword", ["kw"] = new List<object>(), ["redef"] = new List<object>() };
+    Check("GradeCalculator: 근접 무기는 대시 공격 사용 가능", !GradeCalculator.Score(Art("Common", 3, new string[0], new[] { "dash_attack" }), counts, sword).Caution);
+
+    // 빌드와 무관한 아이템은 희귀도가 달라도 같은 점수(마그마 구슬 vs 차가운 자물쇠 사례)
+    var legendOff = GradeCalculator.Score(Art("Legend", 3, new[] { "EMBER" }, new[] { "status" }), counts, crossbow);
+    var uncommonOff = GradeCalculator.Score(Art("Uncommon", 4, new string[0], new string[0]), counts, crossbow);
+    Check("GradeCalculator: 빌드와 무관하면 희귀도와 상관없이 같은 빌드 점수", legendOff.Total == 0 && uncommonOff.Total == 0 && legendOff.TieBreak > uncommonOff.TieBreak);
+
+    // 한 줄 요약: 주의(못 씀·충돌) → 겹치는 콤보 묶음(많은 태그 순) → 무기 지원
+    var tagKo = new JObj { ["PRECISION"] = "정밀", ["STURDY"] = "견고" };
+    var kwKo = new JObj { ["guard"] = "가드", ["dash_attack"] = "대시공격", ["basic_attack"] = "일반공격" };
+    var many = GradeCalculator.Score(Art("Rare", 3, new[] { "STURDY", "PRECISION" }, new[] { "guard" }), counts, crossbow);
+    Check("GradeCalculator: 요약 = '정밀/견고 콤보, 가드'", GradeCalculator.Summary(many, counts, tagKo, kwKo) == "정밀/견고 콤보, 가드", GradeCalculator.Summary(many, counts, tagKo, kwKo));
+    Check("GradeCalculator: 요약은 못 씀·충돌이 먼저", GradeCalculator.Summary(dashAttack, counts, tagKo, kwKo) == "대시공격 못 씀, 정밀 콤보"
+        && GradeCalculator.Summary(conflict, counts, tagKo, kwKo).StartsWith("일반공격 충돌"), GradeCalculator.Summary(dashAttack, counts, tagKo, kwKo));
+    Check("GradeCalculator: 근거가 없으면 빈 요약", GradeCalculator.Summary(legendOff, counts, tagKo, kwKo) == "");
+
+    // 주요 피해 방식: 고른 것과 맞으면 +2, 요약에 "화염 피해"
+    var fireArt = new JObj { ["t"] = "Rare", ["l"] = 3, ["s"] = new List<object> { "PRECISION" }, ["kw"] = new List<object>(), ["dt"] = new List<object> { "fire", "ice" } };
+    var noFocus = GradeCalculator.Score(fireArt, counts, crossbow);
+    var focus = GradeCalculator.Score(fireArt, counts, crossbow, new HashSet<string> { "fire", "lightning" });
+    Check("GradeCalculator: 고른 피해 방식과 맞으면 맞는 방식당 +2", Math.Abs(focus.Total - noFocus.Total - 2) < 1e-9 && focus.DamageHits.SequenceEqual(new[] { "fire" }), focus.Total + " vs " + noFocus.Total);
+    var dmgKo = new JObj { ["fire"] = "화염" };
+    Check("GradeCalculator: 요약에 '화염 피해'", GradeCalculator.Summary(focus, counts, tagKo, kwKo, 3, dmgKo) == "정밀 콤보, 화염 피해", GradeCalculator.Summary(focus, counts, tagKo, kwKo, 3, dmgKo));
+
+    // 절대평가: 전체 점수 분포(0..99)에서의 위치
+    var all = Enumerable.Range(0, 100).Select(i => (double)i).ToList();
+    var top = new GradeCalculator.Result { Total = 95 };
+    var mid = new GradeCalculator.Result { Total = 60 };
+    var low = new GradeCalculator.Result { Total = 3 };
+    var capped = new GradeCalculator.Result { Total = 99, Caution = true };
+    GradeCalculator.AssignGrades(new[] { top, mid, low, capped }, all);
+    Check("GradeCalculator: 절대평가 상위 8% S, 50% 이상 B, 하위 D", top.Grade == "S" && mid.Grade == "B" && low.Grade == "D", top.Grade + mid.Grade + low.Grade);
+    Check("GradeCalculator: 주의 표시가 있으면 점수가 높아도 C 이하", capped.Grade == "C", capped.Grade);
+    Check("GradeCalculator: 백분위(같은 값은 절반)", Math.Abs(GradeCalculator.Percentile(new[] { 1.0, 2, 2, 3 }, 2) - 0.5) < 1e-9);
+}
+
+// ---------- [추가] InventoryReader: storage(쓸 수 있는 칸 수)와 아티팩트 켜짐 상태 ----------
+{
+    var bag = new FakeBag();
+    bag.Put(0, 0, "A"); bag.Put(1, 0, "B");
+    bag.charms[new FakePos(0, 0)] = new FakeCharmOnBoard { IsEffectEnabled = true };
+    bag.charms[new FakePos(1, 0)] = new FakeCharmOnBoard { IsEffectEnabled = false };
+    var (oldNames, oldFinder) = (InventoryReader.InventoryTypeNames, InventoryReader.InstanceFinder);
+    InventoryReader.InventoryTypeNames = new[] { nameof(FakeBag) };
+    InventoryReader.InstanceFinder = _ => new object[] { bag };
+    try
+    {
+        var snap = InventoryReader.BuildSnapshot(out _);
+        var items = MiniJson.AsList(snap["items"]).Select(MiniJson.AsObj).ToList();
+        Check("InventoryReader: storage", (int?)snap["storage"] == 28, MiniJson.Write(snap));
+        Check("InventoryReader: 아티팩트 enabled(IsEffectEnabled)", items.Count == 2 && (bool)items[0]["enabled"] && !(bool)items[1]["enabled"], MiniJson.Write(items));
+    }
+    finally { (InventoryReader.InventoryTypeNames, InventoryReader.InstanceFinder) = (oldNames, oldFinder); }
+}
+
 // ---------- [추가] TabletReader: 석판 query / 회전 query / 적용 범위 ----------
 {
     var t = new FakeStoneTablet { xIdx = 2, yIdx = 0, rotation = 1, query = "Q" };
@@ -271,6 +342,10 @@ void Check(string name, bool ok, string detail = "")
     var eff = MiniJson.AsList(a["effects"]);
     Check("ItemReader: 아티팩트 기본 정보", (int)a["id"] == 1188 && (string)a["name"] == "혈석 귀걸이" && (int)a["maxLevel"] == 3 && (string)MiniJson.AsList(a["categories"])[0] == "CURSE", MiniJson.Write(a));
     Check("ItemReader: BuildEffectString 줄 단위", eff.Count == 2 && (string)eff[1] == "HP 3" && a["effectsRaw"] == null, MiniJson.Write(eff));
+
+    Check("ItemReader: 발동 조건 없음 · 마법서 아님", a["criteria"] == null && (bool)a["magicBook"] == false, MiniJson.Write(a));
+    var book = ItemReader.DescribeCharm(entity, new Charm_Magic { maxLevel = 1, criteria = new CharmActivateCriteria_TopInInventory() });
+    Check("ItemReader: 발동 조건 이름(접두어 제거) · 마법서(Charm_Magic)", (string)book["criteria"] == "TopInInventory" && (bool)book["magicBook"], MiniJson.Write(book));
 
     var raw = ItemReader.DescribeCharm(entity, new FakeCharmRaw { maxLevel = 2 });
     var reff = MiniJson.AsList(raw["effects"]);
@@ -443,6 +518,17 @@ class FakeCharm
 {
     public int maxLevel;
     public string BuildEffectString(object avatar, string bullet, string endl, int level, int virtualLevelOffset, bool showAllLevel, bool ignoreAvatarStatus) => $"MP {level}{endl}HP {level}{endl}";
+}
+class CharmActivateCriteria_TopInInventory { }
+class Charm_Magic : FakeCharm { public object criteria; }
+class FakeCharmOnBoard { public bool IsEffectEnabled; }
+// 스냅샷 테스트용: 실제 GridInventory 처럼 CurrentInventoryStorage 와 charms(위치 → Charm_Basic)를 가진 가방
+class FakeBag : FakeGameInventory
+{
+    public byte Width = 6;
+    public int Height => 5;
+    public int CurrentInventoryStorage = 28;
+    public Dictionary<FakePos, FakeCharmOnBoard> charms = new();
 }
 class FakeCharmRaw
 {

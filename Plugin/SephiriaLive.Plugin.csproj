@@ -40,6 +40,18 @@
       <HintPath>$(SephiriaManagedDir)\UnityEngine.ImageConversionModule.dll</HintPath>
       <Private>false</Private>
     </Reference>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>$(SephiriaManagedDir)\UnityEngine.UI.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.UIModule">
+      <HintPath>$(SephiriaManagedDir)\UnityEngine.UIModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.TextRenderingModule">
+      <HintPath>$(SephiriaManagedDir)\UnityEngine.TextRenderingModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
     <Reference Include="UnityEngine.InputLegacyModule">
       <HintPath>$(SephiriaManagedDir)\UnityEngine.InputLegacyModule.dll</HintPath>
       <Private>false</Private>
@@ -53,6 +65,11 @@
   <ItemGroup>
     <!-- 동반 웹페이지. 게임 폴더에선 DLL 옆 companion/recommend.html 로 놓여야 "/" 라우트가 서빙한다.
          recommend.html 은 scripts/assemble_recommend.py 로 생성(아직 data.json/engine.js 재구축 전이면 없음). -->
+    <!-- 게임 안 등급 표시(아이템 선택 화면)가 읽는 아이템 요약 -->
+    <None Include="companion\data.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Link>companion\data.json</Link>
+    </None>
     <None Include="companion\recommend.html" Condition="Exists('companion\recommend.html')">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Link>companion\recommend.html</Link>

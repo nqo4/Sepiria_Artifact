@@ -30,6 +30,10 @@ namespace SephiriaLive.Core
 
             int maxLevel = ReadInt(charm, "maxLevel") ?? 0;
             o["maxLevel"] = maxLevel;
+            // 발동 조건(CharmActivateCriteria_XXX → "XXX", 없으면 null)과 마법서 여부(Near8MagicBook 조건이 보는 Charm_Magic)
+            var criteria = ReflectionFinder.GetMember(charm, "criteria");
+            o["criteria"] = criteria?.GetType().Name.Replace("CharmActivateCriteria_", "");
+            o["magicBook"] = IsOrInherits(charm.GetType(), "Charm_Magic");
             // 1순위: 게임 툴팁과 같은 BuildEffectString(avatar=null, bullet, endl, level, offset, showAllLevel, ignoreAvatarStatus) — {MP} 같은 값이 채워짐.
             var build = ReflectionFinder.FindMethod(charm.GetType(), "BuildEffectString", 7);
             string berr = null;
@@ -118,6 +122,12 @@ namespace SephiriaLive.Core
         };
 
         static string Str(object v) => v?.ToString();
+
+        static bool IsOrInherits(Type t, string name)
+        {
+            for (; t != null; t = t.BaseType) if (t.Name == name) return true;
+            return false;
+        }
 
         static int? ReadInt(object obj, string name)
         {

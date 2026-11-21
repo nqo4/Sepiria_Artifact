@@ -31,6 +31,8 @@ namespace SephiriaLive.Core
         public static string[] ExtraMatrixNames = { "disableMatrix", "multiplyLevelMatrix", "dungeonTempLevels" };
         public static string[] WidthNames = { "Width", "NetworkWidth", "width" };
         public static string[] HeightNames = { "Height", "height" };
+        public static string[] StorageNames = { "CurrentInventoryStorage" };
+        public static string[] CharmCollectionNames = { "charms" };
 
         /// <summary>타입 → 씬에 존재하는 인스턴스들. 플러그인이 UnityEngine.Object.FindObjectsByType으로 채운다.</summary>
         public static Func<Type, object[]> InstanceFinder;
@@ -127,6 +129,7 @@ namespace SephiriaLive.Core
         {
             snap["width"] = ReadInt(inv, WidthNames);
             snap["height"] = ReadInt(inv, HeightNames);
+            snap["storage"] = ReadInt(inv, StorageNames); // 쓸 수 있는 칸 수: 칸 번호(y*width+x) < storage
 
             var itemsSrc = ReflectionFinder.GetFirstMember(inv, ItemMatrixNames, out var itemsName);
             var levelSrc = ReflectionFinder.GetFirstMember(inv, LevelMatrixNames, out _);
@@ -137,12 +140,19 @@ namespace SephiriaLive.Core
             var levels = MatrixExtractor.ToPositionMap(levelSrc);
             var maxLevels = MatrixExtractor.ToPositionMap(maxLevelSrc);
             var tablets = MatrixExtractor.ToPositionMap(ReflectionFinder.GetFirstMember(inv, InventoryWriter.TabletCollectionNames, out _));
+            var charms = MatrixExtractor.ToPositionMap(ReflectionFinder.GetFirstMember(inv, CharmCollectionNames, out _));
 
             var itemList = new List<object>();
             foreach (var kv in items.OrderBy(k => k.Key.y).ThenBy(k => k.Key.x))
             {
                 if (kv.Key.x < 0 || kv.Key.y < 0) continue;
-                try { itemList.Add(DescribeItem(kv.Key.x, kv.Key.y, kv.Value, levels, maxLevels, tablets)); }
+                try
+                {
+                    var o = DescribeItem(kv.Key.x, kv.Key.y, kv.Value, levels, maxLevels, tablets);
+                    // 아티팩트 효과가 켜졌는지(Charm_Basic.IsEffectEnabled: 비활성·발동 조건 반영) — 엔진 검증용
+                    if (charms.TryGetValue(kv.Key, out var charm) && charm != null) o["enabled"] = ReflectionFinder.GetMember(charm, "IsEffectEnabled");
+                    itemList.Add(o);
+                }
                 catch (Exception ex) { errors.Add($"아이템 ({kv.Key.x},{kv.Key.y}) 읽기 실패: {ex.Message}"); }
             }
             snap["items"] = itemList;

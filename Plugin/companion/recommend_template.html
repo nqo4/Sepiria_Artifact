@@ -42,6 +42,10 @@
   .pin-list{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
   .pin-chip{font-size:11px;padding:2px 8px;border-radius:999px;border:1px solid var(--border);color:var(--muted);cursor:pointer;user-select:none}
   .pin-chip.on{border-color:var(--s);color:var(--s)}
+  .sub-h{font-size:11px;color:var(--muted);margin:12px 0 4px;font-weight:600}
+  .dmg-chip{font-size:11.5px;padding:3px 10px;border-radius:999px;border:1px solid var(--border);color:var(--muted);cursor:pointer;user-select:none;background:none}
+  .dmg-chip.on{border-color:var(--warn);color:var(--warn);font-weight:700}
+  .kwicon{height:1.15em;vertical-align:-0.2em;image-rendering:pixelated;margin:0 1px}
   .icon{width:26px;height:26px;image-rendering:pixelated;object-fit:contain;flex:none}
   .search-row{display:flex;gap:6px;margin-bottom:8px}
   .search-row input{flex:1;min-width:0;background:#140a1e;border:1px solid var(--border);color:var(--text);border-radius:8px;padding:7px 10px;font:inherit}
@@ -52,6 +56,21 @@
   .search-results .name{display:flex;align-items:center;gap:6px;min-width:0}
   .search-results .tier{color:var(--muted);font-size:11px;white-space:nowrap}
   .weapon-box{background:var(--panel2);border:1px solid var(--border);border-radius:10px;padding:10px;margin-bottom:12px}
+  .wtypes{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+  .wtypes button{padding:4px 10px;font-size:12px}
+  .wtypes button.on{background:var(--accent);color:#1a1022;border-color:var(--accent);font-weight:700}
+  .wtree{display:flex;flex-direction:column;gap:8px;max-height:420px;overflow:auto;padding-right:2px}
+  .wtree[hidden]{display:none}
+  .wtree h3{font-size:11px;color:var(--muted);margin:6px 0 2px;font-weight:600}
+  .wbranch{display:flex;flex-direction:column;align-items:flex-start;gap:3px;padding-left:10px;border-left:2px solid var(--border)}
+  .wnext{display:flex;flex-wrap:wrap;gap:4px;padding-left:16px;position:relative}
+  .wnext::before{content:"└";position:absolute;left:2px;top:4px;color:var(--muted);font-size:11px}
+  .wgrid{display:flex;flex-wrap:wrap;gap:4px}
+  .wcard{display:flex;align-items:center;gap:4px;padding:3px 7px 3px 3px;font-size:11.5px;border-radius:8px;max-width:100%;text-align:left}
+  .wcard .icon{width:24px;height:24px}
+  .wcard.root{font-weight:700}
+  .wcard.on{border-color:var(--accent);background:#3a2752;box-shadow:0 0 0 1px var(--accent) inset}
+  .wcard .t{color:var(--muted);font-size:10px}
   .weapon-box .wname{font-weight:700;font-size:13.5px;margin-bottom:3px;display:flex;align-items:center;gap:6px}
   .weapon-box .wtext{font-size:12px;color:var(--muted);line-height:1.5;margin-bottom:6px}
   .weapon-box .wkw{display:flex;flex-wrap:wrap;gap:5px}
@@ -64,9 +83,10 @@
   .cands{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
   .cand{background:var(--panel2);border:1px solid var(--border);border-radius:12px;padding:12px;position:relative;min-width:0}
   .cand .grade{position:absolute;top:10px;right:10px;width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px;color:#1a1022}
-  .cand .grade.S{background:var(--s)} .cand .grade.A{background:var(--a);color:#fff}
-  .cand .grade.B{background:var(--b);color:#fff} .cand .grade.C{background:var(--c);color:#06201b}
-  .cand .grade.D{background:var(--d);color:#fff}
+  .cand .grade{background:#140a1e;border:3px solid currentColor}
+  .cand .grade.S{color:#ff4545} .cand .grade.A{color:#ffd933}
+  .cand .grade.B{color:#4d99ff} .cand .grade.C{color:#59d966}
+  .cand .grade.D{color:#9e9e9e}
   .cand h3{margin:0 44px 2px 0;font-size:14px;display:flex;align-items:center;gap:6px}
   .cand .tier-lbl{font-size:11px;color:var(--muted);margin-bottom:8px}
   .cand .effect{font-size:11.5px;color:var(--text);opacity:.85;line-height:1.45;margin-bottom:8px;white-space:pre-line}
@@ -80,6 +100,7 @@
   .compat-row .verdict{font-size:10px;padding:1px 6px;border-radius:999px;white-space:nowrap}
   .compat-row .verdict.conflict{background:#3b1d1d;color:#ff8a8a;border:1px solid #5c2e2e}
   .compat-row .verdict.synergy{background:#1d3b24;color:var(--s);border:1px solid #2e5c3a}
+  .compat-row .verdict.unusable{background:#3b1d1d;color:#ff8a8a;border:1px solid #5c2e2e}
   .compat-row .verdict.neutral{background:#1a1a1a;color:var(--muted);border:1px solid var(--border)}
   .cand .tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px}
   .cand .tag.hit{color:var(--s);border-color:var(--s)}
@@ -101,6 +122,8 @@
   .grid-cell .nm{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .grid-cell .lv{color:var(--s);font-weight:700;font-size:11px}
   .grid-cell .lv.low{color:var(--muted)}
+  .grid-cell .lv.off{color:var(--warn)}
+  .grid-cell.locked{opacity:.08}
   .grid-cell.slab{background:#1d2c40;border-color:#2a4a6e}
   .grid-cell.virtual{border-style:dashed;border-color:var(--warn)}
   .grid-cell.moved::after{content:"";position:absolute;top:3px;left:3px;width:6px;height:6px;border-radius:50%;background:var(--accent)}
@@ -124,10 +147,10 @@
 <main>
   <aside>
     <div class="panel">
-      <h2>무기</h2>
-      <div class="search-row"><input id="weaponSearch" placeholder="무기 이름 검색" autocomplete="off" aria-label="무기 검색"></div>
-      <div class="search-results" id="weaponResults"></div>
+      <h2>무기 (등급 기준)</h2>
       <div id="weaponBox"></div>
+      <div class="wtypes" id="weaponTypes" role="group" aria-label="무기 종류 — 누르면 강화 트리가 펼쳐짐"></div>
+      <div class="wtree" id="weaponTree"></div>
     </div>
     <div class="panel">
       <h2>핵심 아이템</h2>
@@ -139,6 +162,8 @@
       <h2>현재 빌드 방향</h2>
       <div id="buildTags"></div>
       <div class="pin-list" id="pinList" aria-label="태그 고정"></div>
+      <div class="sub-h">주요 피해 방식 (여러 개 선택)</div>
+      <div class="pin-list" id="dmgList" role="group" aria-label="주요 피해 방식"></div>
     </div>
   </aside>
 
@@ -192,6 +217,15 @@ __SEPHIRIA_ENGINE_JS__
   const DATA = JSON.parse(document.getElementById('sephiria-data').textContent);
   const PLACEMENT = JSON.parse(document.getElementById('sephiria-placement-data').textContent);
   const { artifacts: ARTIFACTS, slabs: SLABS, weapons: WEAPONS, tagKo: TAG_KO, kwKo: KW_KO } = DATA;
+  const DMG_KO = DATA.dmgKo || {};
+  const damageFocus = new Set(); // 사용자가 고른 주요 피해 방식(data.json dt 값)
+
+  // 효과 문장의 {kw:MP} → 게임 키워드 아이콘(플러그인 /keyword-icon). 연결 안 됐으면 아이콘만 빼고 글자는 그대로.
+  function richText(t) {
+    return esc(t || '').replace(/\{kw:([A-Za-z0-9_]+)\}/g, (_, n) =>
+      apiBase === null ? '' : `<img class="kwicon" src="${esc(apiBase)}/keyword-icon?name=${n}" alt="" loading="lazy" onerror="this.remove()">`);
+  }
+  const plainText = t => (t || '').replace(/\{kw:[A-Za-z0-9_]+\}/g, '');
   const byValue = new Map(ARTIFACTS.map(a => [a.v, a]));
   const slabByValue = new Map(SLABS.map(s => [s.v, s]));
   const weaponByValue = new Map(WEAPONS.map(w => [w.v, w]));
@@ -254,6 +288,38 @@ __SEPHIRIA_ENGINE_JS__
     } finally { clearTimeout(t); }
   }
 
+  // 게임 안 선택지 등급의 기준 무기 = 여기서 고른 무기. 플러그인이 저장해 두므로 게임을 다시 켜도 유지된다.
+  async function pushGradeWeapon() {
+    if (apiBase === null || demoMode) return;
+    try {
+      const r = await fetchJson(apiBase + '/grade-weapon', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ weapon: weapon ? weapon.v : null }) });
+      if (r && r.ok) toast(weapon ? `게임 안 등급 기준 무기: ${weapon.k}` : '게임 안 등급은 지금 든 무기를 기준으로 합니다');
+    } catch (e) { toast('기준 무기를 게임에 알리지 못했습니다: ' + e.message); }
+  }
+
+  // 연결될 때: 이 페이지에서 아직 무기를 안 골랐으면 플러그인에 저장된 무기를 불러온다
+  // 게임 안 등급의 주요 피해 방식 — 기준 무기처럼 플러그인이 저장
+  async function pushGradeDamage() {
+    if (apiBase === null || demoMode) return;
+    try { await fetchJson(apiBase + '/grade-damage', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ damage: [...damageFocus] }) }); }
+    catch (e) { toast('주요 피해 방식을 게임에 알리지 못했습니다: ' + e.message); }
+  }
+  async function pullGradeDamage() {
+    if (damageFocus.size) return;
+    try {
+      const r = await fetchJson(apiBase + '/grade-damage');
+      if (r && r.ok) for (const d of r.damage || []) if (DMG_KO[d]) damageFocus.add(d);
+    } catch (e) { /* 이전 버전 플러그인 — 무시 */ }
+  }
+
+  async function pullGradeWeapon() {
+    if (weapon) return;
+    try {
+      const r = await fetchJson(apiBase + '/grade-weapon');
+      if (r && r.ok && r.weapon && weaponByValue.has(r.weapon)) weapon = weaponByValue.get(r.weapon);
+    } catch (e) { /* 이전 버전 플러그인 등 — 무시 */ }
+  }
+
   async function tryConnect() {
     if (demoMode) return;
     for (const base of candidateBases()) {
@@ -263,12 +329,12 @@ __SEPHIRIA_ENGINE_JS__
           const changed = apiBase !== base;
           apiBase = base;
           onSnapshot(snap.ok ? snap : null, snap.ok ? null : (snap.message || snap.error));
-          if (changed) { renderWeaponBox(); renderCandidates(); }
+          if (changed) { await pullGradeWeapon(); await pullGradeDamage(); weaponType = null; renderWeaponBox(); renderWeaponPicker(); renderDamageList(); renderCandidates(); }
           return;
         }
       } catch (e) { /* 다음 후보 */ }
     }
-    if (apiBase !== null) { apiBase = null; renderCandidates(); renderWeaponBox(); }
+    if (apiBase !== null) { apiBase = null; renderCandidates(); renderWeaponBox(); renderWeaponPicker(); }
     lastSnapshot = null;
     setConn('', '게임에 연결 안 됨 — 플러그인이 켜진 게임을 실행하거나 데모 모드를 쓰세요.');
     renderBasket(); renderBuildTags();
@@ -351,6 +417,17 @@ __SEPHIRIA_ENGINE_JS__
     renderPinList(entries.map(e => e[0]));
   }
 
+  function renderDamageList() {
+    const el = document.getElementById('dmgList');
+    el.innerHTML = Object.entries(DMG_KO).map(([d, ko]) =>
+      `<button class="dmg-chip ${damageFocus.has(d) ? 'on' : ''}" data-d="${esc(d)}" aria-pressed="${damageFocus.has(d)}">${esc(ko)}</button>`).join('');
+    el.querySelectorAll('.dmg-chip').forEach(b => b.addEventListener('click', () => {
+      const d = b.dataset.d;
+      damageFocus.has(d) ? damageFocus.delete(d) : damageFocus.add(d);
+      renderDamageList(); renderCandidates(); pushGradeDamage();
+    }));
+  }
+
   function renderPinList(knownTags) {
     const all = new Set([...knownTags, ...Object.keys(TAG_KO)]);
     const el = document.getElementById('pinList');
@@ -370,7 +447,7 @@ __SEPHIRIA_ENGINE_JS__
   function renderWeaponBox() {
     const el = document.getElementById('weaponBox');
     if (!weapon) {
-      el.innerHTML = '<div class="empty-hint">무기를 고르면 효과 텍스트와 키워드가 여기 표시됩니다. 안 골라도 추천은 작동하지만, 무기 특성과 충돌하는 아이템을 걸러주지 못합니다.</div>';
+      el.innerHTML = '<div class="empty-hint">아래에서 종류를 고른 뒤 최종으로 쓸 무기(대개 강화 트리 끝의 3티어)를 누르세요. 여기서 고른 무기가 이 페이지와 게임 안 선택 화면 등급의 기준이 됩니다. 안 고르면 게임에서는 지금 든 무기를 기준으로 합니다.</div>';
       return;
     }
     const kwHtml = (weapon.kw || []).map(k => `<span class="tag kw">${esc(KW_KO[k] || k)}</span>`).join('');
@@ -381,11 +458,11 @@ __SEPHIRIA_ENGINE_JS__
       <div class="weapon-box">
         <div class="wname">${iconHtml(weapon)}${esc(weapon.k)} <span style="color:var(--muted);font-weight:400">(${weapon.tier}티어)</span>
           <button id="weaponClear" style="margin-left:auto;padding:0 6px" aria-label="무기 선택 해제">✕</button></div>
-        <div class="wtext">${esc(weapon.c || '효과 텍스트 없음')}</div>
+        <div class="wtext">${weapon.c ? richText(weapon.c) : '효과 텍스트 없음'}</div>
         <div class="wkw">${kwHtml}</div>
         ${redefHtml}
       </div>`;
-    document.getElementById('weaponClear').addEventListener('click', () => { weapon = null; renderWeaponBox(); renderCandidates(); });
+    document.getElementById('weaponClear').addEventListener('click', () => { weapon = null; renderWeaponBox(); renderWeaponPicker(); renderCandidates(); pushGradeWeapon(); });
   }
 
   function renderSearch(resultsId, hits, label, onPick) {
@@ -401,12 +478,62 @@ __SEPHIRIA_ENGINE_JS__
   const matches = (d, q) => (d.k || '').includes(q.trim()) || (d.v || '').toLowerCase().includes(q.trim().toLowerCase());
   function hide(id, inputId) { const r = document.getElementById(id); r.style.display = 'none'; r.innerHTML = ''; if (inputId) document.getElementById(inputId).value = ''; }
 
-  function doWeaponSearch(q) {
-    if (!q.trim()) return hide('weaponResults');
-    renderSearch('weaponResults', WEAPONS.filter(w => matches(w, q)).slice(0, 25), w => `${w.tier}티어`, v => {
-      weapon = weaponByValue.get(v);
-      renderWeaponBox(); renderCandidates(); hide('weaponResults', 'weaponSearch');
-    });
+  // ---------- 무기 직접 고르기: 종류 → 강화 트리(기본 → 2티어 → 3티어) + 단독 무기 ----------
+  const WEAPON_TYPES = [
+    ['SwordAndShield', '검과 방패'], ['GreatSword', '대검'], ['Dagger', '단검'], ['Katana', '카타나'],
+    ['Crossbow', '석궁'], ['Staff', '지팡이'], ['etc', '기타'],
+  ];
+  const typeOf = w => (WEAPON_TYPES.some(([t]) => t === w.type) ? w.type : 'etc');
+  let weaponType = null;
+  let weaponPickerOpen = false; // 종류 버튼을 눌러야 강화 트리가 펼쳐지고, 무기를 고르면 다시 접힌다
+
+  function pickWeapon(v) {
+    weapon = weaponByValue.get(v) || null;
+    weaponPickerOpen = false;
+    pushGradeWeapon();
+    renderWeaponBox(); renderWeaponPicker(); renderCandidates();
+  }
+
+  function weaponCard(w, extraClass = '') {
+    const on = weapon && weapon.v === w.v ? ' on' : '';
+    return `<button class="wcard${extraClass}${on}" data-v="${esc(w.v)}" title="${esc(plainText(w.c) || w.k)}" aria-pressed="${on ? 'true' : 'false'}">${iconHtml(w)}<span>${esc(w.k)}</span><span class="t">${w.tier}티어</span></button>`;
+  }
+
+  function renderWeaponPicker() {
+    if (!weaponType) weaponType = weapon ? typeOf(weapon) : 'SwordAndShield';
+    const types = document.getElementById('weaponTypes');
+    const shown = t => weaponPickerOpen && t === weaponType;
+    types.innerHTML = WEAPON_TYPES.map(([t, ko]) => `<button data-t="${t}" class="${shown(t) ? 'on' : ''}" aria-expanded="${shown(t)}" aria-controls="weaponTree">${ko}</button>`).join('');
+    // 같은 종류를 다시 누르면 접고, 다른 종류면 그 종류로 펼친다
+    types.querySelectorAll('button').forEach(b => b.addEventListener('click', () => {
+      weaponPickerOpen = !(weaponPickerOpen && weaponType === b.dataset.t);
+      weaponType = b.dataset.t;
+      renderWeaponPicker();
+    }));
+
+    const tree = document.getElementById('weaponTree');
+    tree.hidden = !weaponPickerOpen;
+    if (!weaponPickerOpen) { tree.innerHTML = ''; return; }
+
+    const pool = WEAPONS.filter(w => typeOf(w) === weaponType);
+    const kids = new Map();
+    for (const w of pool) if (w.parent) (kids.get(w.parent) || kids.set(w.parent, []).get(w.parent)).push(w);
+    const desc = w => (kids.get(w.v) || []).reduce((n, c) => n + 1 + desc(c), 0);
+    const roots = pool.filter(w => !w.parent || !pool.some(x => x.v === w.parent));
+    const trees = roots.filter(r => desc(r) > 0).sort((a, b) => desc(b) - desc(a));
+    const singles = roots.filter(r => desc(r) === 0);
+
+    let html = '';
+    for (const r of trees) {
+      html += `<h3>강화 트리</h3>${weaponCard(r, ' root')}`;
+      for (const t2 of kids.get(r.v) || []) {
+        const t3 = kids.get(t2.v) || [];
+        html += `<div class="wbranch">${weaponCard(t2)}${t3.length ? `<div class="wnext">${t3.map(w => weaponCard(w)).join('')}</div>` : ''}</div>`;
+      }
+    }
+    if (singles.length) html += `<h3>단독 무기 (강화 없음)</h3><div class="wgrid">${singles.map(w => weaponCard(w)).join('')}</div>`;
+    tree.innerHTML = html || '<div class="empty-hint">이 종류의 무기가 없습니다.</div>';
+    tree.querySelectorAll('.wcard').forEach(b => b.addEventListener('click', () => pickWeapon(b.dataset.v)));
   }
 
   // ---------- 핵심 아이템(앵커) ----------
@@ -431,32 +558,39 @@ __SEPHIRIA_ENGINE_JS__
   // ---------- 무기 호환성 점검 (등급과 별도 단계) ----------
   // 콤보 태그 겹침만으로는 "이 아이템이 지금 무기에서 실제로 작동하는가"를 판단할 수 없다.
   // 아이템 키워드 하나하나를 무기의 kw(제공)/redef(재정의·제거) 목록과 대조해 충돌/시너지/무관을 따로 보여준다.
+  // 무기 종류가 정해 주는 동작 → 쓸 수 있는 무기 종류 (Core GradeCalculator.WeaponOnly 와 같게 유지)
+  const MELEE = ['SwordAndShield', 'GreatSword', 'Dagger', 'Katana'];
+  const WEAPON_ONLY = { dash_attack: MELEE, melee: MELEE, reload: ['Crossbow'] };
+
   function checkCompatibility(def) {
     const itemKw = def.kw || [];
     if (!weapon || itemKw.length === 0) {
-      return { verdicts: itemKw.map(k => ({ kw: k, status: 'neutral' })), hasConflict: false, conflictKw: [] };
+      return { verdicts: itemKw.map(k => ({ kw: k, status: 'neutral' })), hasConflict: false, conflictKw: [], unusableKw: [] };
     }
     const verdicts = itemKw.map(k => {
+      if (weapon.type && WEAPON_ONLY[k] && !WEAPON_ONLY[k].includes(weapon.type)) return { kw: k, status: 'unusable' };
       if ((weapon.redef || []).includes(k)) return { kw: k, status: 'conflict' };
       if ((weapon.kw || []).includes(k)) return { kw: k, status: 'synergy' };
       return { kw: k, status: 'neutral' };
     });
     const conflictKw = verdicts.filter(v => v.status === 'conflict').map(v => v.kw);
-    return { verdicts, hasConflict: conflictKw.length > 0, conflictKw };
+    const unusableKw = verdicts.filter(v => v.status === 'unusable').map(v => v.kw);
+    return { verdicts, hasConflict: conflictKw.length > 0, conflictKw, unusableKw };
   }
 
   function renderCompatBlock(compat, kind) {
     if (kind !== 'artifact' || !compat.verdicts.length) return '';
     const rows = compat.verdicts.map(v => {
-      const label = v.status === 'conflict' ? '⚠ 충돌 의심' : v.status === 'synergy' ? '✓ 무기가 지원' : '무기 언급 없음';
+      const label = v.status === 'unusable' ? '✕ 이 무기로는 못 씀' : v.status === 'conflict' ? '⚠ 충돌 의심' : v.status === 'synergy' ? '✓ 무기가 지원' : '무기 언급 없음';
       return `<div class="compat-row"><span class="kwname">${esc(KW_KO[v.kw] || v.kw)}</span><span class="verdict ${v.status}">${label}</span></div>`;
     }).join('');
     return `<div class="compat-block"><div class="compat-head">무기 호환성 점검${weapon ? '' : ' (무기 미선택 — 전부 무관 처리)'}</div><div class="compat-rows">${rows}</div></div>`;
   }
 
-  // ---------- 후보 점수 ----------
-  function scoreArtifactCandidate(def) {
-    const counts = buildTagCounts();
+  // ---------- 후보 점수 (Core GradeCalculator.Score 와 같은 식, 페이지는 앵커·태그 고정이 더해짐) ----------
+  // 빌드 점수 = 태그 시너지×3 + 무기 지원×1.5 − 무기가 못 쓰는 효과×3.
+  // 희귀도·최대 레벨은 빌드와 무관한 아이템을 끌어올려서 등급에서 뺐다 — 같은 점수끼리 정렬(tieBreak)에만 쓴다.
+  function scoreArtifactCandidate(def, counts = buildTagCounts()) {
     let synergy = 0; const hitTags = [];
     for (const tag of (def.s || [])) {
       const c = counts[tag] || 0;
@@ -465,7 +599,7 @@ __SEPHIRIA_ENGINE_JS__
       synergy += c + pinBonus;
     }
     const tierRank = TIER_RANK[def.t] ?? 1;
-    const base = tierRank * 1.4 + Math.min(def.l || 0, 8) * 0.5;
+    const tieBreak = tierRank + Math.min(def.l || 0, 8) * 0.1;
 
     const compat = checkCompatibility(def);
     let weaponBonus = 0; const kwHits = [];
@@ -473,10 +607,13 @@ __SEPHIRIA_ENGINE_JS__
       for (const v of compat.verdicts) if (v.status === 'synergy') { kwHits.push(v.kw); weaponBonus += 1.5; }
       if (compat.hasConflict) weaponBonus = Math.min(weaponBonus, 0.5); // 충돌 의심되면 무기 가점은 거의 주지 않음
     }
-    const caution = compat.hasConflict
-      ? `⚠ 선택한 무기가 ${compat.conflictKw.map(k => KW_KO[k] || k).join(', ')} 방식을 바꾸거나 없앱니다 — 아래 "무기 호환성 점검"에서 어느 조건이 걸리는지 확인하세요.`
-      : null;
-    return { total: synergy * 3 + base + weaponBonus, hitTags, synergy, base, kwHits, caution, compat };
+    const penalty = compat.unusableKw.length * 3;
+    const cautions = [];
+    if (compat.unusableKw.length) cautions.push(`선택한 무기로는 ${compat.unusableKw.map(k => KW_KO[k] || k).join(', ')} 효과를 쓸 수 없습니다 — 태그(콤보) 효과만 남습니다.`);
+    if (compat.hasConflict) cautions.push(`선택한 무기가 ${compat.conflictKw.map(k => KW_KO[k] || k).join(', ')} 방식을 바꾸거나 없앱니다 — 아래 "무기 호환성 점검"에서 어느 조건이 걸리는지 확인하세요.`);
+    const caution = cautions.length ? '⚠ ' + cautions.join(' ') : null;
+    const dmgHits = [...new Set(def.dt || [])].filter(d => damageFocus.has(d));
+    return { total: synergy * 3 + dmgHits.length * 2 + weaponBonus - penalty, tieBreak, hitTags, synergy, kwHits, dmgHits, caution, compat };
   }
 
   function scoreSlabCandidate(def) {
@@ -484,13 +621,19 @@ __SEPHIRIA_ENGINE_JS__
     return { total, hitTags: [], synergy: 0, base: total, kwHits: [], caution: null, compat: { verdicts: [], hasConflict: false, conflictKw: [] } };
   }
 
-  function gradeFor(total, maxPossible) {
-    const pct = maxPossible > 0 ? total / maxPossible : 0;
-    if (pct >= 0.85) return 'S'; if (pct >= 0.62) return 'A'; if (pct >= 0.4) return 'B'; if (pct >= 0.2) return 'C'; return 'D';
+  // 절대평가: 같은 빌드·무기 기준으로 전체 아티팩트를 점수 매긴 분포에서의 백분위(같은 값은 절반) — Core GradeCalculator 와 같음
+  function percentile(sortedTotals, value) {
+    if (!sortedTotals.length) return 0;
+    let less = 0, equal = 0;
+    for (const t of sortedTotals) { if (t < value - 1e-9) less++; else if (Math.abs(t - value) <= 1e-9) equal++; }
+    return (less + equal * 0.5) / sortedTotals.length;
+  }
+  function gradeFor(pct) {
+    if (pct >= 0.92) return 'S'; if (pct >= 0.75) return 'A'; if (pct >= 0.5) return 'B'; if (pct >= 0.25) return 'C'; return 'D';
   }
 
   const GRADE_ORDER = ['S', 'A', 'B', 'C', 'D'];
-  // 무기 충돌 경고가 붙은 후보는 상대 점수가 높아도 S/A로 강추하지 않도록 C 이하로 낮춘다.
+  // 무기 충돌·못 쓰는 효과가 있는 후보는 점수가 높아도 S/A/B 로 강추하지 않도록 C 이하로 낮춘다.
   function capGradeForCaution(grade, hasCaution) {
     if (!hasCaution) return grade;
     return GRADE_ORDER.indexOf(grade) < GRADE_ORDER.indexOf('C') ? 'C' : grade;
@@ -506,31 +649,36 @@ __SEPHIRIA_ENGINE_JS__
   function renderCandidates() {
     const el = document.getElementById('cands');
     if (candidates.length === 0) { el.innerHTML = '<div class="empty-hint">위 검색창에서 지금 화면에 뜬 후보를 추가해보세요.</div>'; return; }
-    const scored = candidates.map(c => ({ ...c, ...(c.kind === 'artifact' ? scoreArtifactCandidate(c.def) : scoreSlabCandidate(c.def)) }));
-    const maxTotal = Math.max(...scored.map(s => s.total), 1);
-    scored.sort((a, b) => b.total - a.total);
+    // 등급(S~D)은 아티팩트끼리만 매긴다. 석판은 등급 없이 뒤에(가치는 배치 계산으로 확인).
+    const counts = buildTagCounts();
+    const scored = candidates.map(c => ({ ...c, ...(c.kind === 'artifact' ? scoreArtifactCandidate(c.def, counts) : scoreSlabCandidate(c.def)) }));
+    const allTotals = ARTIFACTS.map(d => scoreArtifactCandidate(d, counts).total).sort((a, b) => a - b);
+    scored.sort((a, b) => (a.kind === 'artifact' ? 0 : 1) - (b.kind === 'artifact' ? 0 : 1) || b.total - a.total || (b.tieBreak || 0) - (a.tieBreak || 0));
 
     el.innerHTML = scored.map((c, i) => {
-      const grade = capGradeForCaution(gradeFor(c.total, maxTotal * 1.05), !!c.caution);
+      const pctile = c.kind === 'artifact' ? percentile(allTotals, c.total) : 0;
+      const grade = c.kind === 'artifact' ? capGradeForCaution(gradeFor(pctile), !!c.caution) : null;
       const def = c.def;
       const tagsHtml = c.kind === 'artifact'
         ? (def.s || []).map(t => `<span class="tag ${c.hitTags.includes(t) ? 'hit' : ''}">${esc(TAG_KO[t] || t)}</span>`).join('')
           + (c.kwHits || []).map(k => `<span class="tag kw">${esc(KW_KO[k] || k)}</span>`).join('')
+          + (c.dmgHits || []).map(d => `<span class="tag hit">${esc(DMG_KO[d] || d)} 피해</span>`).join('')
         : '';
       const whyParts = [];
       if (c.synergy > 0) whyParts.push(`빌드/앵커의 ${c.hitTags.map(t => TAG_KO[t] || t).join(', ')} 태그와 겹침`);
+      if (c.dmgHits && c.dmgHits.length) whyParts.push(`주요 피해 방식(${c.dmgHits.map(d => DMG_KO[d] || d).join(', ')})과 맞음`);
       if (c.kwHits && c.kwHits.length) whyParts.push(`무기 텍스트와 ${c.kwHits.map(k => KW_KO[k] || k).join(', ')} 키워드 겹침`);
-      const why = whyParts.length ? whyParts.join(' · ') + '.' : (c.kind === 'artifact' ? '지금 방향과 겹치는 게 없습니다 — 새 방향을 열거나 범용 전력으로만 활용.' : '석판은 희귀도 기준으로만 비교했습니다. 실제 가치는 아래 배치 계산으로 확인하세요.');
-      const pct = Math.round(Math.max(5, c.total / maxTotal * 100));
+      const why = whyParts.length ? whyParts.join(' · ') + '.' : (c.kind === 'artifact' ? '지금 방향과 겹치는 게 없습니다 — 새 방향을 열거나 범용 전력으로만 활용.' : '석판은 등급을 매기지 않습니다. 배치 목록에 담아 아래 배치 계산으로 레벨이 얼마나 오르는지 확인하세요.');
+      const pct = Math.round(Math.max(5, pctile * 100)); // 전체 아티팩트 중 위치
       const inBasket = basket.some(b => b.kind === c.kind && b.def.v === def.v);
       const effect = c.kind === 'artifact' ? def.c : slabSummary(def);
       return `
         <div class="cand">
-          <span class="grade ${grade}" aria-label="등급 ${grade}">${grade}</span>
+          ${grade ? `<span class="grade ${grade}" aria-label="등급 ${grade}">${grade}</span>` : ''}
           <h3>${iconHtml(def)}${esc(def.k || def.v)}</h3>
           <div class="tier-lbl">${esc(tierKo(def.t))}${c.kind === 'artifact' ? ' · 최대 레벨 ' + (def.l ?? '?') : (def.r ? ' · 회전 가능' : ' · 회전 불가')}</div>
-          <div class="score-bar"><i style="width:${pct}%"></i></div>
-          ${effect ? `<div class="effect">${esc(effect)}</div>` : ''}
+          ${grade ? `<div class="score-bar"><i style="width:${pct}%"></i></div>` : ''}
+          ${effect ? `<div class="effect">${c.kind === 'artifact' ? richText(effect) : esc(effect)}</div>` : ''}
           ${c.caution ? `<div class="caution">${esc(c.caution)}</div>` : ''}
           ${renderCompatBlock(c.compat, c.kind)}
           <div class="why">${esc(why)}</div>
@@ -593,19 +741,20 @@ __SEPHIRIA_ENGINE_JS__
   function runPlacement() {
     const status = document.getElementById('placementStatus');
     const useLive = document.getElementById('includeLiveInv').checked && !!lastSnapshot;
-    const board = useLive ? Engine.boardFromSnapshot(lastSnapshot, PLACEMENT.slabs) : { w: 6, h: 5, items: [] };
+    const board = useLive ? Engine.boardFromSnapshot(lastSnapshot, PLACEMENT.slabs, ARTIFACTS) : { w: 6, h: 5, storage: 30, items: [] };
 
-    // 가방에 없는 담은 아이템은 빈 칸에 "가상"으로 넣는다(적용은 불가)
+    // 가방에 없는 담은 아이템은 빈 칸에 "가상"으로 넣는다(적용은 불가). 잠긴 칸(칸 번호 ≥ storage)은 빼고.
     const occupied = new Set(board.items.map(i => i.x + ',' + i.y));
     const free = [];
-    for (let y = 0; y < board.h; y++) for (let x = 0; x < board.w; x++) if (!occupied.has(x + ',' + y)) free.push([x, y]);
+    for (let y = 0; y < board.h; y++) for (let x = 0; x < board.w; x++)
+      if (!occupied.has(x + ',' + y) && y * board.w + x < board.storage) free.push([x, y]);
     let virtualCount = 0, noRoom = 0;
     for (const b of basket) {
       if (useLive && inLiveInventory(b.def)) continue;
       const cell = free.shift();
       if (!cell) { noRoom++; continue; }
       virtualCount++;
-      if (b.kind === 'artifact') board.items.push({ x: cell[0], y: cell[1], kind: 'artifact', name: b.def.k, assetName: b.def.v, maxLevel: b.def.l || 0, virtual: true });
+      if (b.kind === 'artifact') board.items.push({ x: cell[0], y: cell[1], kind: 'artifact', name: b.def.k, assetName: b.def.v, maxLevel: b.def.l || 0, criteria: b.def.cr || null, magicBook: !!b.def.mb, virtual: true });
       else {
         const s = slabDbByAsset.get(b.def.v) || {};
         board.items.push({ x: cell[0], y: cell[1], kind: 'tablet', name: b.def.k, assetName: b.def.v, rotation: 0, rotatable: !!b.def.r, query: s.query || '', cond: s.conditionQuery || '', virtual: true });
@@ -629,7 +778,7 @@ __SEPHIRIA_ENGINE_JS__
       const ms = Math.round(performance.now() - t0);
       lastPlan = { result, virtualCount, live: useLive };
       const gain = result.after - result.before;
-      status.innerHTML = `레벨 합 <b>${result.before}</b> → <b>${result.after}</b>` +
+      status.innerHTML = `켜진 아티팩트 레벨 합 <b>${result.before}</b> → <b>${result.after}</b>` +
         (gain > 0 ? ` (+${gain})` : ' (이미 최적이거나 더 나은 배치를 못 찾음)') +
         ` · 이동/회전 ${result.placements.length}건 · ${ms}ms` +
         (virtualCount ? ` · 점선 칸은 가방에 없는 담은 아이템(가정)` : '') +
@@ -649,14 +798,20 @@ __SEPHIRIA_ENGINE_JS__
     let html = `<div class="grid-view" style="grid-template-columns:repeat(${w},66px)" role="grid" aria-label="배치 결과">`;
     for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
       const it = at.get(x + ',' + y);
-      if (!it) { html += '<div class="grid-cell empty" role="gridcell"></div>'; continue; }
+      if (!it) {
+        const locked = y * w + x >= (result.board.storage ?? w * h);
+        html += `<div class="grid-cell empty${locked ? ' locked' : ''}" role="gridcell"${locked ? ' title="잠긴 칸"' : ''}></div>`;
+        continue;
+      }
       const def = defFor(it.assetName);
       const moved = it.origin && (it.origin[0] !== it.x || it.origin[1] !== it.y);
       const cls = ['grid-cell', it.kind === 'tablet' ? 'slab' : '', it.virtual ? 'virtual' : '', moved ? 'moved' : ''].join(' ');
       let extra = '';
       if (it.kind === 'artifact') {
         const lv = levelOf.get(it) ?? 0;
-        extra = `<span class="lv ${lv === 0 ? 'low' : ''}">Lv ${lv}/${it.maxLevel}</span>`;
+        const on = ev.enabled[items.indexOf(it)];
+        extra = on ? `<span class="lv ${lv === 0 ? 'low' : ''}">Lv ${lv}/${it.maxLevel}</span>`
+          : `<span class="lv off" title="발동 조건 불만족 또는 비활성 — 레벨 합에서 빠짐">꺼짐</span>`;
       } else if (it.kind === 'tablet') {
         const engineRot = (4 - (it.rotation || 0)) % 4;
         extra = `<span class="rot" title="시계 방향 ${engineRot * 90}°">${['↑', '→', '↓', '←'][engineRot]}</span>`;
@@ -722,7 +877,6 @@ __SEPHIRIA_ENGINE_JS__
 
   // ---------- 이벤트 ----------
   const debounce = (fn, ms = 120) => { let t; return v => { clearTimeout(t); t = setTimeout(() => fn(v), ms); }; };
-  document.getElementById('weaponSearch').addEventListener('input', debounce(e => doWeaponSearch(e.target.value)));
   document.getElementById('anchorSearch').addEventListener('input', debounce(e => doAnchorSearch(e.target.value)));
   document.getElementById('searchBox').addEventListener('input', debounce(e => doSearch(e.target.value)));
   document.getElementById('kindArtifact').addEventListener('click', () => setKind('artifact'));
@@ -733,7 +887,7 @@ __SEPHIRIA_ENGINE_JS__
   document.getElementById('applyBtn').addEventListener('click', applyPlan);
   document.getElementById('includeLiveInv').addEventListener('change', () => { lastPlan = null; updateApplyBtn(); });
 
-  renderWeaponBox(); renderAnchorChips(); renderBuildTags(); renderCandidates(); renderBasket(); renderSlabConfidenceNote(); updateApplyBtn();
+  renderWeaponBox(); renderWeaponPicker(); renderDamageList(); renderAnchorChips(); renderBuildTags(); renderCandidates(); renderBasket(); renderSlabConfidenceNote(); updateApplyBtn();
   tryConnect();
   setInterval(() => { if (!demoMode) tryConnect(); }, POLL_MS);
 })();

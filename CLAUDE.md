@@ -69,6 +69,10 @@ dotnet build Plugin -c Release -p:DeployToGame=true   # BepInEx/plugins/Sephiria
 - 레벨 규칙(엔진이 재현): `StoneTablet.ApplyEffect` — conditionQuery 칸 중 PLACED가 있으면 그중 하나가 석판 자기 칸이어야 하고,
   나머지 조건 칸은 아이템이 있어야 함 → query 칸에 숫자는 levelMatrix +=, X=disable, IGNORECRITERIA, MUL/n=multiplyLevelMatrix += n.
   `ReleasePermission`에서 multiply≠0 칸은 level *= multiply. ParseQuery는 rotation을 직접 받아 회전(고정 칸은 보드 밖도 그대로).
+- 게임 자동 배치 점수 `EvaluateCurrentAutoArrangeScore` = 10000×켜진 아티팩트 레벨 합 + 1000×켜짐 수 + 10×원래 레벨 합 + 초과분 − 750×꺼짐 수 − 250×음수 레벨(엔진이 그대로 씀).
+  켜짐(`Charm_Basic.RefreshCharm`) = disable 아님 && (ignoreCriteria || criteria 없음 || `criteria.GetCriteria`) && 무기 관련이면 무기 종류 일치.
+  발동 조건 `CharmActivateCriteria_*` 10종(Top/Bottom/SideEnd/Inside/Outlined/BothSideCharm/BothSidesAreEmpty/NeighborsAreFull/Near8MagicBook/FullHP) — 6·7·5 같은 가로 6칸 기준 숫자가 박혀 있음.
+  쓸 수 있는 칸 = 칸 번호(y×Width+x) < `CurrentInventoryStorage`(마지막 줄이 덜 찰 수 있음, `/inv`의 `storage`).
 - 게임 메타데이터 재조사: `BepInEx/core/Mono.Cecil.dll`을 스크래치로 복사 → `[Reflection.Assembly]::Load(bytes)` → `ModuleDefinition.ReadModule`.
   (게임 폴더에서 바로 Add-Type 하면 0x80131515로 막힘)
 - 게임 환경: Unity 6000.3, BepInEx 5.4.23.2, Mirror 네트워킹(싱글도 호스트).
