@@ -202,6 +202,20 @@ namespace SephiriaLive.Core
             return ReflectionFinder.HasMember(inst, "x") && ReflectionFinder.HasMember(inst, "y") ? m : null;
         }
 
+        // ---------------- 게임 자동 배치 (엔진 비교용) ----------------
+
+        /// <summary>
+        /// 게임 자체 자동 배치 GridInventory.AutoArrangeInventoryForBestCharmLevels(maxIterations, allowTabletRotation) 호출.
+        /// 서버(호스트)에서만 동작하고 가방을 실제로 바꾼다. 반환: (호출 성공, 게임 반환값, 에러).
+        /// </summary>
+        public static bool TryAutoArrange(object inventory, int maxIterations, bool allowTabletRotation, out object gameResult, out string error)
+        {
+            gameResult = null; error = null;
+            var m = inventory == null ? null : ReflectionFinder.FindMethod(inventory.GetType(), "AutoArrangeInventoryForBestCharmLevels", 2);
+            if (m == null) { error = "AutoArrangeInventoryForBestCharmLevels(2) 없음"; return false; }
+            return ReflectionFinder.TryInvoke(inventory, m, new object[] { maxIterations, allowTabletRotation }, out gameResult, out error);
+        }
+
         // ---------------- field 모드 ----------------
 
         static void ApplyFieldMode(object inventory, List<PlacementCommand> commands, ApplyResult result)

@@ -129,6 +129,27 @@ namespace SephiriaLive.Plugin
             server.Route("GET", "/", ctx => ServeCompanionPage());
             server.Route("GET", "/recommend.html", ctx => ServeCompanionPage());
 
+            // POST /autoarrange {"iterations":50,"allowRotation":true}: 게임 자체 자동 배치 실행(가방을 바꿈) — 엔진 결과 비교용.
+            // 응답에 실행 전/후 스냅샷을 담는다(되돌리기는 호출 측이 /apply 로).
+            server.Route("POST", "/autoarrange", ctx =>
+            {
+                JObj body;
+                try { body = MiniJson.AsObj(MiniJson.Parse(string.IsNullOrWhiteSpace(ctx.Body) ? "{}" : ctx.Body)) ?? new JObj(); }
+                catch (FormatException ex) { return HttpResponseData.Json(new JObj { ["ok"] = false, ["error"] = "bad_json", ["message"] = ex.Message }, 400); }
+                int iterations = Math.Max(1, Math.Min(500, body["iterations"] == null ? 50 : MiniJson.AsInt(body["iterations"])));
+                bool allowRotation = !(body["allowRotation"] is bool b && !b);
+                return RunOnMainThread(() =>
+                {
+                    var before = InventoryReader.BuildSnapshot(false, out var inv);
+                    if (inv == null) return HttpResponseData.Json(new JObj { ["ok"] = false, ["error"] = "no_inventory", ["before"] = before }, 409);
+                    _cachedInventoryInstance = inv;
+                    var ok = InventoryWriter.TryAutoArrange(inv, iterations, allowRotation, out var gameResult, out var err);
+                    Logger.LogInfo($"[SephiriaLive] /autoarrange iterations={iterations} rotation={allowRotation} ok={ok} result={gameResult} err={err}");
+                    var after = InventoryReader.BuildSnapshot(false, out _);
+                    return HttpResponseData.Json(new JObj { ["ok"] = ok, ["gameResult"] = gameResult, ["error"] = err, ["iterations"] = iterations, ["before"] = before, ["after"] = after });
+                });
+            });
+
             server.Route("POST", "/apply", ctx =>
             {
                 List<InventoryWriter.PlacementCommand> commands;

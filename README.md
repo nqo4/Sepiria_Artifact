@@ -40,6 +40,7 @@ dotnet build Plugin -c Release -p:SephiriaGameDir="D:\Games\Sephiria"   # 게임
 | `GET /inv` | 인벤토리 스냅샷 (폴링용) |
 | `GET /items` | 아티팩트·무기 정의(이름, 등급, 태그, 최대 레벨, 효과 문장, 무기 강화 트리) |
 | `GET /icon?name=<에셋 이름>` | 아이템·무기·석판 아이콘 PNG (게임 Sprite에서 변환, 캐시) |
+| `POST /autoarrange` | 게임 자체 자동 배치 실행(가방을 바꿈, 엔진 비교용 — `scripts/compare_autoarrange.js`) |
 | `GET /tablets` | 석판 효과 범위(query, 게임 ParseQuery 칸) — 가방 석판 + 전체 석판 카탈로그 |
 | `POST /apply` | `{"placements":[{"fromX","fromY","toX","toY","rotation"?}]}` 배치 적용 |
 | `GET /` | 동반 추천 페이지 |

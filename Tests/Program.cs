@@ -223,6 +223,12 @@ void Check(string name, bool ok, string detail = "")
     Check("game-api: DoClickAction은 이동 후 위치 (1,0)으로 3번 호출", inv.Clicks == "(1,0)(1,0)(1,0)", inv.Clicks);
 }
 {
+    var inv = new FakeGameInventoryWithClick();
+    var called = InventoryWriter.TryAutoArrange(inv, 7, true, out var gameResult, out var aerr);
+    Check("TryAutoArrange: 게임 자동 배치 메서드 호출", called && aerr == null && (bool)gameResult && inv.Clicks == "auto(7,True)", inv.Clicks + aerr);
+    Check("TryAutoArrange: 메서드 없으면 에러", !InventoryWriter.TryAutoArrange(new FakeGameInventory(), 1, true, out _, out var nerr) && nerr != null);
+}
+{
     var cmds = new List<InventoryWriter.PlacementCommand>
     {
         new() { FromX = 0, FromY = 0, ToX = 1, ToY = 1 },
@@ -460,4 +466,5 @@ class FakeGameInventoryWithClick : FakeGameInventory
         Clicks += $"({pos.x},{pos.y})";
         if (inventoryMatrix.TryGetValue(pos, out var item)) item.StoneTablet?.Rotate();
     }
+    public bool AutoArrangeInventoryForBestCharmLevels(int maxIterations, bool allowTabletRotation) { Clicks += $"auto({maxIterations},{allowTabletRotation})"; return true; }
 }
