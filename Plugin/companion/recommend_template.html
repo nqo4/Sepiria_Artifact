@@ -160,6 +160,8 @@
   .grid-cell .need{font-size:11px}
   .grid-cell .need.ok{color:var(--s)}
   .grid-cell .need.bad{color:var(--warn);font-weight:700}
+  .grid-cell .ench{position:absolute;bottom:2px;right:4px;color:#c79bff;font-size:11px;font-weight:700}
+  .bag-card .enchant{color:#c79bff;font-size:9.5px;font-weight:700}
   .grid-cell .rot{position:absolute;top:2px;right:4px;font-size:11px;color:#8ec9ff}
   .placement-summary{font-size:12.5px;color:var(--muted);margin-bottom:10px}
   .placement-summary b{color:var(--text)}
@@ -292,16 +294,23 @@ __SEPHIRIA_ENGINE_JS__
   // ---------- 유틸 ----------
   const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const tierKo = t => TIER_KO[t] || t || '?';
-  function iconHtml(def) {
+  // rotation: 석판이면 게임 rotation(0~3) — 그림을 바라보는 방향대로 돌림(게임 rotation r = 시계 방향 (4-r)%4 번)
+  function iconHtml(def, rotation) {
     if (!def || !def.img || apiBase === null) return '';
-    return `<img class="icon" src="${esc(apiBase + def.img)}" alt="" loading="lazy" onerror="this.remove()">`;
+    const turn = rotation == null ? 0 : (4 - (rotation % 4)) % 4;
+    return `<img class="icon" src="${esc(apiBase + def.img)}" alt="" loading="lazy" onerror="this.remove()"${turn ? ` style="transform:rotate(${turn * 90}deg)"` : ''}>`;
   }
   function toast(msg) {
     const el = document.getElementById('toast');
     el.textContent = msg; el.style.display = 'block';
     clearTimeout(toast.t); toast.t = setTimeout(() => { el.style.display = 'none'; }, 3500);
   }
-  function defFor(assetName) { return byValue.get(assetName) || slabByValue.get(assetName) || weaponByValue.get(assetName); }
+  // data.json 에 없는 아이템(융합 석판 2101_CUSTOM 등)은 플러그인 /icon 으로 그림만이라도
+  const isFused = assetName => /_CUSTOM$/.test(assetName || '');
+  function defFor(assetName) {
+    return byValue.get(assetName) || slabByValue.get(assetName) || weaponByValue.get(assetName)
+      || (assetName ? { v: assetName, k: isFused(assetName) ? '융합 석판' : assetName, img: '/icon?name=' + encodeURIComponent(assetName) } : undefined);
+  }
 
   // ---------- 연결 / 폴링 ----------
   function candidateBases() {
@@ -398,6 +407,8 @@ __SEPHIRIA_ENGINE_JS__
 
   let lastSnapKey = '';
   function onSnapshot(snap, error) {
+    // 게임이 융합 석판 이름을 "..."(자리표시자)로 줘서 알아볼 수 있게 바꿈
+    for (const i of (snap && snap.items) || []) if (isFused(i.assetName) && (!i.name || i.name === '...')) i.name = '융합 석판';
     if (!snap) {
       lastSnapshot = null;
       setConn('live', '게임 연결됨 · ' + (error || '인벤토리 없음'));
@@ -708,8 +719,11 @@ __SEPHIRIA_ENGINE_JS__
     return GRADE_ORDER.indexOf(grade) < GRADE_ORDER.indexOf('C') ? 'C' : grade;
   }
 
-  function slabSummary(def) {
-    const s = slabDbByAsset.get(def.v);
+  function slabSummary(def, instanceId) {
+    // 융합 석판은 효과가 석판마다 달라 DB 에 없음 — 지금 가방 스냅샷의 query(플러그인 GetQuery) 사용, 같은 종류가 여럿이면 instanceId 로
+    const items = (lastSnapshot && lastSnapshot.items) || [];
+    const live = items.find(i => instanceId != null && String(i.instanceId) === String(instanceId) && i.query) || items.find(i => i.assetName === def.v && i.query);
+    const s = slabDbByAsset.get(def.v) || (live && { query: live.query, conditionQuery: live.conditionQuery });
     if (!s) return '';
     const parts = (s.query || '').split('\n').map(l => l.trim()).filter(Boolean);
     return parts.join(' · ') + (s.conditionQuery ? `\n조건: ${s.conditionQuery}` : '');
@@ -801,12 +815,13 @@ __SEPHIRIA_ENGINE_JS__
     const inBag = (lastSnapshot.items || []).filter(i => i.y < lastSnapshot.height); // 포션 보관함(y=100) 제외
     const arts = inBag.filter(i => i.itemType === 'Charm'), slabs = inBag.filter(i => i.isTablet), others = inBag.filter(i => i.itemType !== 'Charm' && !i.isTablet);
     const byPos = (a, b) => (a.name || '').localeCompare(b.name || '', 'ko') || a.y - b.y || a.x - b.x; // 이름 가나다순
-    const icon = it => `<div class="ic" data-v="${esc(it.assetName)}" tabindex="0" aria-label="${esc(it.name)} 효과 보기">${iconHtml(defFor(it.assetName))}</div>`;
+    const icon = it => `<div class="ic" data-v="${esc(it.assetName)}" data-iid="${esc(it.instanceId ?? '')}" tabindex="0" aria-label="${esc(it.name)} 효과 보기">${iconHtml(defFor(it.assetName), it.isTablet ? it.rotation : null)}</div>`;
     const artCard = it => {
       const pr = prefOf(it), max = it.maxLevel ?? 0, min = Math.min(pr.min || 0, max), combos = comboChoices(it.assetName), goal = Engine.GOALS[it.assetName];
       return `<div class="bag-card ${pr.important ? 'important' : ''}" data-k="${esc(prefKey(it))}" data-max="${max}">${icon(it)}`
         + `<div class="nm" title="${esc(it.name)}">${esc(it.name)}</div>`
         + `<div class="cur ${it.enabled === false ? 'off' : ''}">${it.enabled === false ? '꺼짐' : '지금 Lv ' + (it.level ?? 0)} / ${max}</div>`
+        + (it.enchant ? `<div class="enchant" title="제단에서 인챈트됨">✦ 인챈트 +${it.enchant}</div>` : '')
         + `<div class="stepper"><button class="dec" aria-label="${esc(it.name)} 최소 레벨 낮추기" ${min <= 0 ? 'disabled' : ''}>◀</button>`
         + `<span class="val" aria-live="polite">${min}</span>`
         + `<button class="inc" aria-label="${esc(it.name)} 최소 레벨 올리기" ${min >= max ? 'disabled' : ''}>▶</button></div>`
@@ -858,7 +873,7 @@ __SEPHIRIA_ENGINE_JS__
   function showTip(target) {
     const v = target.dataset.v, def = defFor(v);
     if (!def) return;
-    const body = byValue.has(v) ? richText(def.c || '') : esc(slabSummary(def));
+    const body = byValue.has(v) ? richText(def.c || '') : esc(slabSummary(def, target.dataset.iid));
     const tags = (def.s || []).map(t => TAG_KO[t] || t).join(' · ');
     tipEl.innerHTML = `<div class="tt">${esc(def.k)}</div>${tags ? `<div class="tg">${esc(tags)}</div>` : ''}<div>${body || '효과 정보 없음'}</div>`;
     tipEl.hidden = false;
@@ -903,6 +918,13 @@ __SEPHIRIA_ENGINE_JS__
     return board;
   }
 
+  // 레벨이 음수인 아티팩트 경고: 효과만 꺼지고 콤보 수에는 들어감(실게임 확인)
+  function negativeHtml(board) {
+    const ev = Engine.evaluate(board);
+    const neg = board.items.map((it, i) => [it, ev.rawLevels[i]]).filter(([it, raw]) => it.kind === 'artifact' && raw < 0);
+    return neg.length ? `<br><span style="color:var(--warn)">⚠ 레벨이 음수라 아티팩트 효과 없음(콤보는 적용): ${neg.map(([it, raw]) => `${esc(it.name)}(Lv ${raw})`).join(', ')}</span>` : '';
+  }
+
   function unmetHtml(unmet, board) {
     if (unmet && unmet.length) return `<br><span style="color:var(--warn)">⚠ 못 맞춘 설정: ${unmet.map(u => u.goal ? `${esc(u.item.name)}(목표: ${esc(u.goal)})` : u.combo
       ? `${esc(u.item.name)}(목표 콤보 ${esc(TAG_KO[u.combo] || u.combo)} — 지금 ${esc(TAG_KO[u.got] || u.got || '없음')})`
@@ -923,7 +945,7 @@ __SEPHIRIA_ENGINE_JS__
       updateApplyBtn(); return;
     }
     const ev = Engine.evaluate(board);
-    status.innerHTML = `지금 켜진 아티팩트 레벨 합 <b>${ev.levelSum}</b>` + unmetHtml(ev.unmet, board);
+    status.innerHTML = `지금 켜진 아티팩트 레벨 합 <b>${ev.levelSum}</b>` + negativeHtml(board) + unmetHtml(ev.unmet, board);
     renderPlacementGrid({ board, placements: [] });
     updateApplyBtn();
   }
@@ -973,13 +995,19 @@ __SEPHIRIA_ENGINE_JS__
         ` · 이동/회전 ${result.placements.length}건 · ${ms}ms` +
         (virtualCount ? ` · 점선 칸은 가방에 없는 담은 아이템(가정)` : '') +
         (noRoom ? ` · 빈 칸이 없어 ${noRoom}개는 넣지 못함` : '') +
-        (useLive ? '' : ' · 현재 인벤토리 미포함') + unmetHtml(result.unmet, board) +
+        (useLive ? '' : ' · 현재 인벤토리 미포함') + negativeHtml(result.board) + unmetHtml(result.unmet, board) +
         (result.placements.length ? '<br>아래가 계산된 배치입니다(아직 게임에 적용 안 됨). 괜찮으면 <b>게임에 적용</b>을 누르세요.' : '');
       document.getElementById('bagViewTitle').textContent = result.placements.length ? '최적 배치 미리보기 (적용 전)' : '현재 가방 배치 현황';
       document.getElementById('cancelPlanBtn').hidden = !result.placements.length;
       renderPlacementGrid(result);
       updateApplyBtn();
     }, 10);
+  }
+
+  // 가방 스냅샷의 인챈트(instanceId 기준 — 배치 미리보기에서 자리가 바뀌어도 따라감)
+  function enchantOf(it) {
+    const src = lastSnapshot && (lastSnapshot.items || []).find(i => it.instanceId != null ? i.instanceId === it.instanceId : i.x === it.x && i.y === it.y);
+    return src && src.enchant || 0;
   }
 
   function renderPlacementGrid(result) {
@@ -1003,11 +1031,15 @@ __SEPHIRIA_ENGINE_JS__
       if (it.kind === 'artifact') {
         const lv = levelOf.get(it) ?? 0;
         const on = ev.enabled[items.indexOf(it)];
-        extra = on ? `<span class="lv ${lv === 0 ? 'low' : ''}">Lv ${lv}/${it.maxLevel}</span>`
+        const raw = ev.rawLevels[items.indexOf(it)];
+        extra = raw < 0 ? `<span class="lv off" title="레벨이 음수라 아티팩트 효과 없음 — 콤보 수에는 들어감">Lv ${raw} ⚠</span>`
+          : on ? `<span class="lv ${lv === 0 ? 'low' : ''}">Lv ${lv}/${it.maxLevel}</span>`
           : `<span class="lv off" title="발동 조건 불만족 또는 비활성 — 레벨 합에서 빠짐">꺼짐</span>`;
         const need = Math.min(it.minLevel || 0, it.maxLevel ?? 0);
         if (need) extra += `<span class="need ${lv >= need ? 'ok' : 'bad'}">최소 ${need} ${lv >= need ? '✓' : '미달'}</span>`;
         if (it.priority) extra += '<span class="imp" title="중요">★</span>';
+        const ench = enchantOf(it);
+        if (ench) extra += `<span class="ench" title="인챈트 +${ench}">✦${ench}</span>`;
         if (it.goal) {
           const g = Engine.GOALS[it.assetName];
           const lvAt = new Map(); items.forEach(o => { if (levelOf.has(o)) lvAt.set(o.x + ',' + o.y, levelOf.get(o)); });
@@ -1023,7 +1055,7 @@ __SEPHIRIA_ENGINE_JS__
         const engineRot = (4 - (it.rotation || 0)) % 4;
         extra = `<span class="rot" title="시계 방향 ${engineRot * 90}°">${['↑', '→', '↓', '←'][engineRot]}</span>`;
       }
-      html += `<div class="${cls}" role="gridcell" data-v="${esc(it.assetName)}" tabindex="0" aria-label="${esc(it.name)}">${iconHtml(def)}<span class="nm">${esc(it.name)}</span>${extra}</div>`;
+      html += `<div class="${cls}" role="gridcell" data-v="${esc(it.assetName)}" data-iid="${esc(it.instanceId ?? '')}" tabindex="0" aria-label="${esc(it.name)}">${iconHtml(def, it.kind === 'tablet' ? it.rotation : null)}<span class="nm">${esc(it.name)}</span>${extra}</div>`;
     }
     html += '</div>';
     document.getElementById('placementGrid').innerHTML = html;

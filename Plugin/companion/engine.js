@@ -136,9 +136,10 @@
       const k = key(it.x, it.y);
       return !disabled.has(k) && (ignore.has(k) || criteriaMet(it, at, w, storage));
     });
+    const rawLevels = items.map(it => it.kind === 'artifact' ? level.get(key(it.x, it.y)) || 0 : null);
     const perItem = items.map((it, i) => {
       if (it.kind !== 'artifact') return null;
-      const raw = level.get(key(it.x, it.y)) || 0, max = it.maxLevel ?? 0;
+      const raw = rawLevels[i], max = it.maxLevel ?? 0;
       const lv = Math.max(0, Math.min(raw, max));
       rawSum += raw;
       if (raw < 0) negative += -raw;
@@ -181,8 +182,9 @@
       if (g.kind === 'count') goalCount += v;
       else if (!v) { comboMiss++; unmet.push({ item: it, goal: g.label }); }
     });
-    const objective = score - importantShortfall * 1e10 - comboMiss * 1e9 - shortfall * 1e8 + goalCount * 1e7 + prioSum * 1e6;
-    return { score, objective, levelSum, shortfall, comboMiss, goalCount, prioSum, unmet, levels: level, disabled, ignore, enabled, perItem };
+    // 아티팩트 레벨이 음수면 아티팩트 효과가 없음(콤보 수에는 들어감, 석판은 상관없음) — 음수 1당 최소 레벨 부족 1과 같은 무게로 피한다
+    const objective = score - importantShortfall * 1e10 - comboMiss * 1e9 - (shortfall + negative) * 1e8 + goalCount * 1e7 + prioSum * 1e6;
+    return { score, objective, levelSum, shortfall, negative, rawLevels, comboMiss, goalCount, prioSum, unmet, levels: level, disabled, ignore, enabled, perItem };
   }
 
   // ---------- 위치로 콤보가 정해지는 아티팩트 ----------
@@ -346,7 +348,7 @@
     const items = (snapshot.items || []).map(it => {
       if (it.isTablet) {
         const s = byAsset.get(it.assetName) || {};
-        return { x: it.x, y: it.y, kind: 'tablet', name: it.name, assetName: it.assetName, rotation: it.rotation || 0,
+        return { x: it.x, y: it.y, kind: 'tablet', name: it.name, assetName: it.assetName, instanceId: it.instanceId, rotation: it.rotation || 0,
                  // 가방 속 석판의 query 우선(커스텀 석판은 프리팹 DB 에 효과가 없음), 없으면 DB
                  rotatable: !!it.rotatable, query: it.query ?? s.query ?? '', cond: it.conditionQuery ?? s.conditionQuery ?? '' };
       }

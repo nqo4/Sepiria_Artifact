@@ -76,6 +76,14 @@ for (const f of fs.readdirSync(FX).filter(f => /^inv_.*\.json$/.test(f))) {
     { x: 5, y: 3, kind: 'artifact', maxLevel: 7 }, { x: 0, y: 0, kind: 'artifact', maxLevel: 3 } ] });
   check('커스텀 석판(실게임): 위 +5, 맨 위 줄 +1', ev.perItem[1] === 5 && ev.perItem[2] === 1, JSON.stringify(ev.perItem));
 }
+// 아티팩트 레벨 음수 피하기: 석판(왼쪽 −1, 오른쪽 +1) 옆 아티팩트는 −1 칸이 아닌 +1 칸으로(석판 자신의 음수는 상관없음)
+{
+  const o = E.optimize({ w: 3, h: 1, storage: 3, items: [
+    { x: 1, y: 0, kind: 'tablet', query: 'LEFT -1\nRIGHT 1', name: 't' },
+    { x: 0, y: 0, kind: 'artifact', maxLevel: 3, name: 'A' } ] }, { iterations: 2000, seed: 1 });
+  const ev = E.evaluate(o.board);
+  check('아티팩트 레벨이 음수가 되지 않게 배치', ev.negative === 0 && Math.min(...ev.rawLevels.filter(v => v != null)) >= 0, JSON.stringify(o.placements));
+}
 check('회전: 게임 rotation 1 은 UP→LEFT', JSON.stringify(E.parseQuery('UP 1', 6, 5, 2, 2, 1)) === JSON.stringify([{ x: 1, y: 2, value: '1' }]));
 check('조건 PLACED: 맨 윗줄이 아니면 효과 없음',
   E.evaluate({ w: 3, h: 3, items: [{ x: 1, y: 1, kind: 'tablet', query: 'LEFT 1', cond: 'TOP PLACED' }, { x: 0, y: 1, kind: 'artifact', maxLevel: 3 }] }).levelSum === 0);

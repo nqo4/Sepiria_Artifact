@@ -142,6 +142,16 @@ namespace SephiriaLive.Core
             var tablets = MatrixExtractor.ToPositionMap(ReflectionFinder.GetFirstMember(inv, InventoryWriter.TabletCollectionNames, out _));
             var charms = MatrixExtractor.ToPositionMap(ReflectionFinder.GetFirstMember(inv, CharmCollectionNames, out _));
 
+            // 인챈트(제단에서 부여): DungeonManager.Instance.GetGlobalItemStatValue(instanceID, "Enchant") — 게임 결과 화면(UI_GameOverLabel)과 같은 경로
+            object dungeon = null; System.Reflection.MethodInfo statValue = null;
+            try
+            {
+                var dmType = ReflectionFinder.FindTypeByName("DungeonManager");
+                dungeon = dmType?.GetProperty("Instance", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static)?.GetValue(null, null);
+                if (dungeon != null) statValue = ReflectionFinder.FindMethod(dungeon.GetType(), "GetGlobalItemStatValue", 2);
+            }
+            catch (Exception ex) { errors.Add("인챈트 읽기 준비 실패: " + ex.Message); }
+
             var itemList = new List<object>();
             foreach (var kv in items.OrderBy(k => k.Key.y).ThenBy(k => k.Key.x))
             {
@@ -158,6 +168,10 @@ namespace SephiriaLive.Core
                         if (cat is string cs) { if (cs.Length > 0) o["assignedCategory"] = cs; }
                         else if (cat != null) o["assignedCategory"] = string.Join(",", ReflectionFinder.EnumerateValues(cat).OfType<string>());
                     }
+                    if (statValue != null && o.TryGetValue("instanceId", out var iid) && iid != null
+                        && ReflectionFinder.TryInvoke(dungeon, statValue, new[] { iid, (object)"Enchant" }, out var ev, out _)
+                        && int.TryParse(ev as string, NumberStyles.Integer, CultureInfo.InvariantCulture, out var enchant) && enchant != 0)
+                        o["enchant"] = enchant;
                     itemList.Add(o);
                 }
                 catch (Exception ex) { errors.Add($"아이템 ({kv.Key.x},{kv.Key.y}) 읽기 실패: {ex.Message}"); }
