@@ -117,16 +117,48 @@
   .basket-chip.missing{border-color:var(--warn);color:var(--warn)}
   .grid-wrap{overflow-x:auto;padding-bottom:4px}
   .grid-view{display:inline-grid;gap:3px;background:#0e0716;padding:8px;border-radius:10px;border:1px solid var(--border)}
-  .grid-cell{width:66px;height:66px;background:#2c1d40;border:1px solid var(--border);border-radius:6px;font-size:9.5px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:2px;overflow:hidden;color:var(--text);position:relative}
+  .grid-cell{width:96px;height:96px;background:#2c1d40;border:1px solid var(--border);border-radius:6px;font-size:11.5px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:2px;overflow:hidden;color:var(--text);position:relative}
   .grid-cell.empty{opacity:.25}
   .grid-cell .nm{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .grid-cell .lv{color:var(--s);font-weight:700;font-size:11px}
+  .grid-cell .lv{color:var(--s);font-weight:700;font-size:13px}
+  .grid-cell .icon{width:40px;height:40px}
   .grid-cell .lv.low{color:var(--muted)}
   .grid-cell .lv.off{color:var(--warn)}
   .grid-cell.locked{opacity:.08}
   .grid-cell.slab{background:#1d2c40;border-color:#2a4a6e}
   .grid-cell.virtual{border-style:dashed;border-color:var(--warn)}
   .grid-cell.moved::after{content:"";position:absolute;top:3px;left:3px;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+  .my-bag{margin-bottom:12px}
+  .bag-group{margin-bottom:10px}
+  .bag-group .gh{font-size:11px;color:var(--muted);font-weight:600;margin:6px 0 6px}
+  .bag-cards{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:5px}
+  @media (max-width:700px){.bag-cards{grid-template-columns:repeat(3,minmax(0,1fr))}}
+  .bag-card{background:var(--panel2);border:1px solid var(--border);border-radius:6px;padding:5px 3px;display:flex;flex-direction:column;align-items:center;gap:3px;text-align:center;font-size:10.5px;min-width:0}
+  .bag-card.important{border-color:#ffd23f;box-shadow:inset 0 0 0 1px #ffd23f}
+  .bag-card .ic{width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:6px;background:var(--bg);cursor:help}
+  .bag-card .ic .icon,.bag-card .ic img{width:28px;height:28px}
+  .bag-card .nm{width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600}
+  .bag-card .cur{color:var(--muted);font-size:9.5px}
+  .bag-card .cur.off{color:var(--warn)}
+  .stepper{display:flex;align-items:center;gap:2px}
+  .stepper button{width:24px;height:24px;padding:0;border:1px solid var(--border);border-radius:4px;background:var(--bg);color:var(--text);font-size:11px;cursor:pointer}
+  .stepper button:disabled{opacity:.35;cursor:default}
+  .stepper .val{min-width:20px;height:24px;line-height:22px;border:1px solid var(--border);border-radius:4px;font-size:12px;font-weight:700;background:var(--bg)}
+  .stepper-label{font-size:9px;color:var(--muted);margin-top:-2px}
+  .star-btn{background:none;border:1px solid var(--border);border-radius:4px;color:var(--muted);cursor:pointer;padding:2px 6px;font-size:10px;min-height:22px}
+  .star-btn.on{color:#ffd23f;border-color:#ffd23f}
+  .combo-sel{width:100%;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:4px;padding:2px;font-size:9.5px;min-height:22px}
+  .plan-actions{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}
+  .item-tip{position:fixed;z-index:50;max-width:320px;background:#120a19;border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-size:12px;line-height:1.55;color:var(--text);box-shadow:0 6px 20px rgba(0,0,0,.5);pointer-events:none;white-space:pre-line}
+  .item-tip .tt{font-weight:700;margin-bottom:4px}
+  .item-tip .tg{color:var(--muted);font-size:11px;margin-bottom:4px}
+  .grid-cell .combo{font-size:11px;color:#8ec9ff}
+  .grid-cell .combo.bad{color:var(--warn);font-weight:700}
+  .grid-cell.important{border-color:#ffd23f;box-shadow:inset 0 0 0 1px #ffd23f}
+  .grid-cell .imp{position:absolute;top:1px;left:4px;color:#ffd23f;font-size:11px}
+  .grid-cell .need{font-size:11px}
+  .grid-cell .need.ok{color:var(--s)}
+  .grid-cell .need.bad{color:var(--warn);font-weight:700}
   .grid-cell .rot{position:absolute;top:2px;right:4px;font-size:11px;color:#8ec9ff}
   .placement-summary{font-size:12.5px;color:var(--muted);margin-bottom:10px}
   .placement-summary b{color:var(--text)}
@@ -173,42 +205,27 @@
 
   <section style="min-width:0">
     <div class="panel">
-      <h2>지금 화면의 선택지</h2>
-      <div class="kind-toggle">
-        <button id="kindArtifact" class="on">아티팩트</button>
-        <button id="kindSlab">석판</button>
-      </div>
-      <div class="search-row"><input id="searchBox" placeholder="선택지 이름 검색해서 추가" autocomplete="off" aria-label="후보 검색"></div>
-      <div class="search-results" id="searchResults"></div>
-      <div class="cands" id="cands"></div>
-      <div class="note">
-        등급은 op.gg처럼 실전 승률 통계가 아니라, <b>선택한 무기/핵심 아이템과 겹치는 태그·키워드</b> + 희귀도를 섞은 휴리스틱입니다.
-        "무기 호환성 점검"은 등급 계산과 <b>별도 단계</b>로, 아이템이 의존하는 조건(일반공격/연격/탄환 등) 각각을
-        선택한 무기가 그대로 제공하는지(✓), 바꾸거나 없애버리는지(⚠ 충돌), 아니면 무기 텍스트에 아예 언급이 없는지(무관)
-        하나씩 대조해서 보여줍니다. 텍스트 키워드 매칭이라 완벽하지 않으니 ⚠가 붙은 조합은 꼭 직접 확인해주세요.
-        석판 후보의 등급은 희귀도만 반영하지만(선택 단계에선 아직 어디 놓일지 모르므로), 아래 배치 계산은 게임에서 읽은 석판 효과 범위를 그대로 씁니다.
-      </div>
-    </div>
-
-    <div class="panel">
-      <h2>배치 계산 (담은 아이템 + 현재 인벤토리)</h2>
-      <div class="empty-hint" style="margin-bottom:8px">후보 카드에서 "배치 목록에 담기"를 누르면 여기 추가됩니다. 게임 레벨 규칙을 그대로 재현한 엔진으로 레벨 합이 가장 큰 배치를 찾습니다.</div>
-      <div class="basket-list" id="basketList"></div>
-      <div style="display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;align-items:center">
-        <button class="primary" id="computeBtn">최적 배치 계산</button>
-        <label style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted)">
-          <input type="checkbox" id="includeLiveInv" checked> 현재 인벤토리 포함
-        </label>
-        <button id="applyBtn" disabled>게임에 적용</button>
-      </div>
+      <h2 id="bagViewTitle">현재 가방 배치 현황</h2>
       <div id="placementStatus" class="placement-summary"></div>
       <div class="grid-wrap"><div id="placementGrid"></div></div>
       <div id="placementMoves" class="moves"></div>
+      <div class="plan-actions">
+        <button class="primary" id="applyBtn" disabled>게임에 적용</button>
+        <button id="cancelPlanBtn" hidden>취소 (현재 배치로)</button>
+      </div>
       <div class="confidence-note" id="slabConfidenceNote"></div>
+    </div>
+    <div class="panel">
+      <h2>배치 계산</h2>
+      <div class="empty-hint" style="margin-bottom:8px">아티팩트마다 최소 레벨(◀ ▶)·★ 중요·목표 콤보를 정하고 <b>최적 배치 계산</b>을 누르면 위 "가방 배치 현황"에 결과가 미리 표시됩니다. 확인 후 <b>게임에 적용</b>을 누르세요.
+        순서: ① 최소 레벨(다 못 채우면 ★ 것부터) ② 목표 콤보 ③ 남는 레벨은 ★에 ④ 나머지 레벨 합. 아이콘에 마우스를 올리면 효과가 보입니다. 설정은 이 브라우저에 저장됩니다.</div>
+      <div id="myBag" class="my-bag"></div>
+      <button class="primary" id="computeBtn">최적 배치 계산</button>
     </div>
   </section>
 </main>
 <div class="toast" id="toast" role="alert"></div>
+<div class="item-tip" id="itemTip" role="tooltip" hidden></div>
 
 <script id="sephiria-data" type="application/json">__SEPHIRIA_DATA_JSON__</script>
 <script id="sephiria-placement-data" type="application/json">__SEPHIRIA_PLACEMENT_JSON__</script>
@@ -264,7 +281,7 @@ __SEPHIRIA_ENGINE_JS__
   let candidates = [];
   let basket = [];
   const pinnedTags = new Set();
-  let candidateKind = 'artifact';
+
   let demoMode = false;
   let lastSnapshot = null;
   let apiBase = null;           // 연결된 플러그인 주소 ('' = 같은 출처)
@@ -374,7 +391,7 @@ __SEPHIRIA_ENGINE_JS__
     if (apiBase !== null) { apiBase = null; renderCandidates(); renderWeaponBox(); renderWeaponPicker(); }
     lastSnapshot = null;
     setConn('', '게임에 연결 안 됨 — 플러그인이 켜진 게임을 실행하거나 데모 모드를 쓰세요.');
-    renderBasket(); renderBuildTags();
+    renderBasket(); renderBuildTags(); renderMyBag(); lastPlan = null; renderCurrentBag();
   }
 
   let lastSnapKey = '';
@@ -388,7 +405,7 @@ __SEPHIRIA_ENGINE_JS__
       setConn('live', `게임 연결됨 · 가방 ${snap.width}×${snap.height}, 아이템 ${n}개`);
     }
     const key = JSON.stringify(snap && snap.items);
-    if (key !== lastSnapKey) { lastSnapKey = key; renderBuildTags(); renderBasket(); renderCandidates(); }
+    if (key !== lastSnapKey) { lastSnapKey = key; lastPlan = null; renderBuildTags(); renderBasket(); renderCandidates(); renderMyBag(); renderCurrentBag(); }
   }
 
   function setConn(cls, text) {
@@ -698,6 +715,7 @@ __SEPHIRIA_ENGINE_JS__
 
   function renderCandidates() {
     const el = document.getElementById('cands');
+    if (!el) return; // 선택지 패널 제거됨
     if (candidates.length === 0) { el.innerHTML = '<div class="empty-hint">위 검색창에서 지금 화면에 뜬 후보를 추가해보세요.</div>'; return; }
     // 등급(S~D)은 아티팩트끼리만 매긴다. 석판은 등급 없이 뒤에(가치는 배치 계산으로 확인).
     const counts = buildTagCounts();
@@ -755,30 +773,102 @@ __SEPHIRIA_ENGINE_JS__
     }));
   }
 
-  function doSearch(q) {
-    if (!q.trim()) return hide('searchResults');
-    const pool = candidateKind === 'artifact' ? ARTIFACTS : SLABS;
-    renderSearch('searchResults', pool.filter(d => matches(d, q)).slice(0, 25), d => tierKo(d.t), v => {
-      const def = candidateKind === 'artifact' ? byValue.get(v) : slabByValue.get(v);
-      if (def && !candidates.some(c => c.kind === candidateKind && c.def.v === v)) { candidates.push({ kind: candidateKind, def }); renderCandidates(); }
-      hide('searchResults', 'searchBox');
-    });
-  }
-
-  function setKind(kind) {
-    candidateKind = kind;
-    document.getElementById('kindArtifact').classList.toggle('on', kind === 'artifact');
-    document.getElementById('kindSlab').classList.toggle('on', kind === 'slab');
-    doSearch(document.getElementById('searchBox').value);
-  }
-
   // ---------- 배치 목록(바구니) ----------
   function inLiveInventory(def) {
     return !!lastSnapshot && (lastSnapshot.items || []).some(i => i.assetName === def.v && i.y < lastSnapshot.height);
   }
 
+  // ---------- 내 가방: 아이템 목록 + 아티팩트별 최소 레벨·중요 설정(브라우저 저장) ----------
+  const PREFS_KEY = 'sephiria.bagPrefs';
+  let bagPrefs = {};
+  try { bagPrefs = JSON.parse(localStorage.getItem(PREFS_KEY) || '{}') || {}; } catch (e) { bagPrefs = {}; }
+  const savePrefs = () => { try { localStorage.setItem(PREFS_KEY, JSON.stringify(bagPrefs)); } catch (e) { /* 저장 불가 — 이번 화면에서만 유지 */ } };
+  const prefKey = it => it.instanceId != null ? 'i' + it.instanceId : 'a' + it.assetName + '@' + it.x + ',' + it.y;
+  const prefOf = it => bagPrefs[prefKey(it)] || {};
+
+  // 위치로 콤보가 정해지는 아티팩트의 목표 콤보 선택지(엔진 comboOf 와 같음)
+  function comboChoices(assetName) {
+    if (assetName === Engine.COMBO_BY_ROW) return Engine.ROW_COMBO;
+    if (assetName === Engine.COMBO_BY_SIDES) return Object.keys(TAG_KO);
+    return null;
+  }
+
+  function renderMyBag() {
+    const el = document.getElementById('myBag');
+    if (!lastSnapshot) { el.innerHTML = '<div class="empty-hint">게임에 연결하면(또는 데모 모드) 가방 아이템이 여기 나옵니다.</div>'; return; }
+    const inBag = (lastSnapshot.items || []).filter(i => i.y < lastSnapshot.height); // 포션 보관함(y=100) 제외
+    const arts = inBag.filter(i => i.itemType === 'Charm'), slabs = inBag.filter(i => i.isTablet), others = inBag.filter(i => i.itemType !== 'Charm' && !i.isTablet);
+    const byPos = (a, b) => (a.name || '').localeCompare(b.name || '', 'ko') || a.y - b.y || a.x - b.x; // 이름 가나다순
+    const icon = it => `<div class="ic" data-v="${esc(it.assetName)}" tabindex="0" aria-label="${esc(it.name)} 효과 보기">${iconHtml(defFor(it.assetName))}</div>`;
+    const artCard = it => {
+      const pr = prefOf(it), max = it.maxLevel ?? 0, min = Math.min(pr.min || 0, max), combos = comboChoices(it.assetName);
+      return `<div class="bag-card ${pr.important ? 'important' : ''}" data-k="${esc(prefKey(it))}" data-max="${max}">${icon(it)}`
+        + `<div class="nm" title="${esc(it.name)}">${esc(it.name)}</div>`
+        + `<div class="cur ${it.enabled === false ? 'off' : ''}">${it.enabled === false ? '꺼짐' : '지금 Lv ' + (it.level ?? 0)} / ${max}</div>`
+        + `<div class="stepper"><button class="dec" aria-label="${esc(it.name)} 최소 레벨 낮추기" ${min <= 0 ? 'disabled' : ''}>◀</button>`
+        + `<span class="val" aria-live="polite">${min}</span>`
+        + `<button class="inc" aria-label="${esc(it.name)} 최소 레벨 올리기" ${min >= max ? 'disabled' : ''}>▶</button></div>`
+        + `<div class="stepper-label">최소 레벨</div>`
+        + `<button class="star-btn ${pr.important ? 'on' : ''}" aria-pressed="${!!pr.important}" title="중요: 최소 레벨을 다 못 채울 때 먼저 채우고, 남는 레벨을 먼저 받음">★ 중요</button>`
+        + (combos ? `<select class="combo-sel" aria-label="${esc(it.name)} 목표 콤보"><option value="">목표 콤보: 상관없음</option>`
+            + combos.map(c => `<option value="${esc(c)}" ${pr.combo === c ? 'selected' : ''}>${esc(TAG_KO[c] || c)}</option>`).join('') + '</select>' : '')
+        + '</div>';
+    };
+    const plainCard = (it, extra) => `<div class="bag-card">${icon(it)}<div class="nm" title="${esc(it.name)}">${esc(it.name)}</div><div class="cur">${extra}</div></div>`;
+    const group = (title, list, card) => `<div class="bag-group"><div class="gh">${title} ${list.length}</div>`
+      + (list.length ? `<div class="bag-cards">${list.sort(byPos).map(card).join('')}</div>` : '<div class="empty-hint">없음</div>') + '</div>';
+    el.innerHTML = group('아티팩트', arts, artCard)
+      + group('석판', slabs, it => plainCard(it, it.rotatable ? '회전 가능' : '회전 고정'))
+      + (others.length ? group('기타', others, it => plainCard(it, it.itemType || '')) : '');
+    el.querySelectorAll('.bag-card[data-k]').forEach(card => {
+      const k = card.dataset.k, max = Number(card.dataset.max) || 0;
+      const set = patch => {
+        bagPrefs[k] = { ...(bagPrefs[k] || {}), ...patch };
+        if (!bagPrefs[k].min && !bagPrefs[k].important && !bagPrefs[k].combo) delete bagPrefs[k];
+        savePrefs();
+        if (!lastPlan) renderCurrentBag(); // 미리보기가 없을 때만 현황 표시(최소 레벨 충족 여부) 갱신
+      };
+      const val = card.querySelector('.val'), dec = card.querySelector('.dec'), inc = card.querySelector('.inc');
+      const step = d => {
+        const v = Math.max(0, Math.min(max, (Number(val.textContent) || 0) + d));
+        val.textContent = v; dec.disabled = v <= 0; inc.disabled = v >= max; set({ min: v });
+      };
+      dec.addEventListener('click', () => step(-1));
+      inc.addEventListener('click', () => step(1));
+      const star = card.querySelector('.star-btn');
+      star.addEventListener('click', () => {
+        const on = !star.classList.contains('on');
+        star.classList.toggle('on', on); card.classList.toggle('important', on); star.setAttribute('aria-pressed', String(on)); set({ important: on });
+      });
+      const sel = card.querySelector('.combo-sel');
+      if (sel) sel.addEventListener('change', () => set({ combo: sel.value || undefined }));
+    });
+  }
+
+  // ---------- 아이콘 툴팁: 게임과 같은 효과 문장(키워드 색·아이콘 포함) ----------
+  const tipEl = document.getElementById('itemTip');
+  function showTip(target) {
+    const v = target.dataset.v, def = defFor(v);
+    if (!def) return;
+    const body = byValue.has(v) ? richText(def.c || '') : esc(slabSummary(def));
+    const tags = (def.s || []).map(t => TAG_KO[t] || t).join(' · ');
+    tipEl.innerHTML = `<div class="tt">${esc(def.k)}</div>${tags ? `<div class="tg">${esc(tags)}</div>` : ''}<div>${body || '효과 정보 없음'}</div>`;
+    tipEl.hidden = false;
+    const r = target.getBoundingClientRect(), tw = tipEl.offsetWidth, th = tipEl.offsetHeight;
+    let x = r.right + 8, y = r.top;
+    if (x + tw > innerWidth - 8) x = Math.max(8, r.left - tw - 8);
+    if (y + th > innerHeight - 8) y = Math.max(8, innerHeight - th - 8);
+    tipEl.style.left = x + 'px'; tipEl.style.top = y + 'px';
+  }
+  const hideTip = () => { tipEl.hidden = true; };
+  document.addEventListener('mouseover', e => { const t = e.target.closest && e.target.closest('[data-v]'); t ? showTip(t) : hideTip(); });
+  document.addEventListener('focusin', e => { const t = e.target.closest && e.target.closest('[data-v]'); t ? showTip(t) : hideTip(); });
+  document.addEventListener('focusout', hideTip);
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') hideTip(); });
+
   function renderBasket() {
     const el = document.getElementById('basketList');
+    if (!el) return; // 담기 목록 제거됨
     el.innerHTML = basket.map((b, i) => {
       const missing = !inLiveInventory(b.def);
       const title = missing ? '지금 가방에 없음 — 계산에서는 빈 칸에 새로 넣는다고 가정합니다' : '가방에 있음';
@@ -791,10 +881,47 @@ __SEPHIRIA_ENGINE_JS__
   }
 
   // ---------- 배치 계산 ----------
+  // 지금 가방 + 내 가방 설정(최소 레벨·중요·목표 콤보)을 엔진 보드로
+  function currentBoard() {
+    if (!lastSnapshot) return null;
+    const board = Engine.boardFromSnapshot(lastSnapshot, PLACEMENT.slabs, ARTIFACTS);
+    for (const it of board.items) if (it.kind === 'artifact') {
+      const pr = prefOf(it);
+      if (pr.min) it.minLevel = pr.min;
+      if (pr.important) it.priority = 1;
+      if (pr.combo) it.comboTarget = pr.combo;
+    }
+    return board;
+  }
+
+  function unmetHtml(unmet, board) {
+    if (unmet && unmet.length) return `<br><span style="color:var(--warn)">⚠ 못 맞춘 설정: ${unmet.map(u => u.combo
+      ? `${esc(u.item.name)}(목표 콤보 ${esc(TAG_KO[u.combo] || u.combo)} — 지금 ${esc(TAG_KO[u.got] || u.got || '없음')})`
+      : `${esc(u.item.name)}(Lv ${u.level}/최소 ${u.need})`).join(', ')}</span>`;
+    return board.items.some(i => i.minLevel || i.comboTarget) ? '<br>✓ 설정한 최소 레벨·목표 콤보를 모두 맞췄습니다' : '';
+  }
+
+  // 위 패널: 지금 게임 가방 그대로(미리보기 계산 결과가 없을 때)
+  function renderCurrentBag() {
+    document.getElementById('bagViewTitle').textContent = '현재 가방 배치 현황';
+    document.getElementById('cancelPlanBtn').hidden = true;
+    const status = document.getElementById('placementStatus');
+    const board = currentBoard();
+    if (!board) {
+      status.textContent = '게임에 연결하면(또는 데모 모드) 지금 가방 배치가 여기 나옵니다.';
+      document.getElementById('placementGrid').innerHTML = ''; document.getElementById('placementMoves').innerHTML = '';
+      updateApplyBtn(); return;
+    }
+    const ev = Engine.evaluate(board);
+    status.innerHTML = `지금 켜진 아티팩트 레벨 합 <b>${ev.levelSum}</b>` + unmetHtml(ev.unmet, board);
+    renderPlacementGrid({ board, placements: [] });
+    updateApplyBtn();
+  }
+
   function runPlacement() {
     const status = document.getElementById('placementStatus');
-    const useLive = document.getElementById('includeLiveInv').checked && !!lastSnapshot;
-    const board = useLive ? Engine.boardFromSnapshot(lastSnapshot, PLACEMENT.slabs, ARTIFACTS) : { w: 6, h: 5, storage: 30, items: [] };
+    const useLive = !!lastSnapshot;
+    const board = currentBoard() || { w: 6, h: 5, storage: 30, items: [] };
 
     // 가방에 없는 담은 아이템은 빈 칸에 "가상"으로 넣는다(적용은 불가). 잠긴 칸(칸 번호 ≥ storage)은 빼고.
     const occupied = new Set(board.items.map(i => i.x + ',' + i.y));
@@ -815,7 +942,7 @@ __SEPHIRIA_ENGINE_JS__
     }
 
     if (!board.items.some(i => i.y < board.h)) {
-      status.innerHTML = '배치할 아이템이 없습니다. 게임에 연결하거나(데모 모드도 가능) 후보를 담아보세요.';
+      status.innerHTML = '배치할 아이템이 없습니다. 게임에 연결하거나 데모 모드를 쓰세요.';
       document.getElementById('placementGrid').innerHTML = ''; document.getElementById('placementMoves').innerHTML = '';
       lastPlan = null; updateApplyBtn(); return;
     }
@@ -836,7 +963,10 @@ __SEPHIRIA_ENGINE_JS__
         ` · 이동/회전 ${result.placements.length}건 · ${ms}ms` +
         (virtualCount ? ` · 점선 칸은 가방에 없는 담은 아이템(가정)` : '') +
         (noRoom ? ` · 빈 칸이 없어 ${noRoom}개는 넣지 못함` : '') +
-        (useLive ? '' : ' · 현재 인벤토리 미포함');
+        (useLive ? '' : ' · 현재 인벤토리 미포함') + unmetHtml(result.unmet, board) +
+        (result.placements.length ? '<br>아래가 계산된 배치입니다(아직 게임에 적용 안 됨). 괜찮으면 <b>게임에 적용</b>을 누르세요.' : '');
+      document.getElementById('bagViewTitle').textContent = result.placements.length ? '최적 배치 미리보기 (적용 전)' : '현재 가방 배치 현황';
+      document.getElementById('cancelPlanBtn').hidden = !result.placements.length;
       renderPlacementGrid(result);
       updateApplyBtn();
     }, 10);
@@ -848,7 +978,7 @@ __SEPHIRIA_ENGINE_JS__
     const levelOf = new Map();
     items.forEach((it, i) => { if (ev.perItem[i] != null) levelOf.set(it, ev.perItem[i]); });
     const at = new Map(items.filter(i => i.y < h).map(i => [i.x + ',' + i.y, i]));
-    let html = `<div class="grid-view" style="grid-template-columns:repeat(${w},66px)" role="grid" aria-label="배치 결과">`;
+    let html = `<div class="grid-view" style="grid-template-columns:repeat(${w},96px)" role="grid" aria-label="배치 결과">`;
     for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
       const it = at.get(x + ',' + y);
       if (!it) {
@@ -858,18 +988,25 @@ __SEPHIRIA_ENGINE_JS__
       }
       const def = defFor(it.assetName);
       const moved = it.origin && (it.origin[0] !== it.x || it.origin[1] !== it.y);
-      const cls = ['grid-cell', it.kind === 'tablet' ? 'slab' : '', it.virtual ? 'virtual' : '', moved ? 'moved' : ''].join(' ');
+      const cls = ['grid-cell', it.kind === 'tablet' ? 'slab' : '', it.virtual ? 'virtual' : '', moved ? 'moved' : '', it.priority ? 'important' : ''].join(' ');
       let extra = '';
       if (it.kind === 'artifact') {
         const lv = levelOf.get(it) ?? 0;
         const on = ev.enabled[items.indexOf(it)];
         extra = on ? `<span class="lv ${lv === 0 ? 'low' : ''}">Lv ${lv}/${it.maxLevel}</span>`
           : `<span class="lv off" title="발동 조건 불만족 또는 비활성 — 레벨 합에서 빠짐">꺼짐</span>`;
+        const need = Math.min(it.minLevel || 0, it.maxLevel ?? 0);
+        if (need) extra += `<span class="need ${lv >= need ? 'ok' : 'bad'}">최소 ${need} ${lv >= need ? '✓' : '미달'}</span>`;
+        if (it.priority) extra += '<span class="imp" title="중요">★</span>';
+        if (it.comboTarget) {
+          const got = Engine.comboOf(it, new Map(items.map(o => [o.x + ',' + o.y, o])));
+          extra += `<span class="combo ${got === it.comboTarget ? '' : 'bad'}">${esc(TAG_KO[it.comboTarget] || it.comboTarget)} ${got === it.comboTarget ? '✓' : '✗'}</span>`;
+        }
       } else if (it.kind === 'tablet') {
         const engineRot = (4 - (it.rotation || 0)) % 4;
         extra = `<span class="rot" title="시계 방향 ${engineRot * 90}°">${['↑', '→', '↓', '←'][engineRot]}</span>`;
       }
-      html += `<div class="${cls}" role="gridcell" title="${esc(it.name)}">${iconHtml(def)}<span class="nm">${esc(it.name)}</span>${extra}</div>`;
+      html += `<div class="${cls}" role="gridcell" data-v="${esc(it.assetName)}" tabindex="0" aria-label="${esc(it.name)}">${iconHtml(def)}<span class="nm">${esc(it.name)}</span>${extra}</div>`;
     }
     html += '</div>';
     document.getElementById('placementGrid').innerHTML = html;
@@ -909,7 +1046,7 @@ __SEPHIRIA_ENGINE_JS__
       toast(res.ok ? `적용 완료 — 이동 ${res.moved}건, 회전 ${res.rotated}건` : '적용 중 오류: ' + (res.errors || [res.message || res.error]).join(' / '));
       lastPlan = null;
       await tryConnect();
-      runPlacement();
+      renderCurrentBag(); // 적용된 지금 가방을 보여 줌
     } catch (e) {
       toast('적용 요청 실패: ' + e.message);
       updateApplyBtn();
@@ -931,16 +1068,20 @@ __SEPHIRIA_ENGINE_JS__
   // ---------- 이벤트 ----------
   const debounce = (fn, ms = 120) => { let t; return v => { clearTimeout(t); t = setTimeout(() => fn(v), ms); }; };
   document.getElementById('anchorSearch').addEventListener('input', debounce(e => doAnchorSearch(e.target.value)));
-  document.getElementById('searchBox').addEventListener('input', debounce(e => doSearch(e.target.value)));
-  document.getElementById('kindArtifact').addEventListener('click', () => setKind('artifact'));
-  document.getElementById('kindSlab').addEventListener('click', () => setKind('slab'));
   document.getElementById('demoBtn').addEventListener('click', () => setDemo(!demoMode));
   document.getElementById('refreshBtn').addEventListener('click', () => demoMode ? onSnapshot(demoSnapshot()) : tryConnect());
-  document.getElementById('computeBtn').addEventListener('click', runPlacement);
+  // 계산 직전에 게임 가방을 다시 읽어 지금 상태로 배치(게임에서 아이템을 바꾼 뒤 새로고침을 따로 안 눌러도 됨)
+  document.getElementById('computeBtn').addEventListener('click', async () => {
+    if (!demoMode) {
+      document.getElementById('placementStatus').textContent = '게임 가방 읽는 중…';
+      await tryConnect();
+    }
+    runPlacement();
+  });
   document.getElementById('applyBtn').addEventListener('click', applyPlan);
-  document.getElementById('includeLiveInv').addEventListener('change', () => { lastPlan = null; updateApplyBtn(); });
+  document.getElementById('cancelPlanBtn').addEventListener('click', () => { lastPlan = null; renderCurrentBag(); });
 
-  renderWeaponBox(); renderWeaponPicker(); renderDamageList(); renderAnchorChips(); renderBuildTags(); renderCandidates(); renderBasket(); renderSlabConfidenceNote(); updateApplyBtn();
+  renderWeaponBox(); renderWeaponPicker(); renderDamageList(); renderAnchorChips(); renderBuildTags(); renderCandidates(); renderBasket(); renderMyBag(); renderCurrentBag(); renderSlabConfidenceNote(); updateApplyBtn();
   tryConnect();
   setInterval(() => { if (!demoMode) tryConnect(); }, POLL_MS);
 })();

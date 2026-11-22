@@ -144,18 +144,47 @@
     });
     const score = levelSum * 10000 + onCount * 1000 + rawSum * 10 + overflow - offCount * 750 - negative * 250;
 
-    // 사용자 설정(아이템별 minLevel·priority): 1순위 최소 레벨 부족분 없애기, 2순위 우선도×레벨, 3순위 게임 점수.
+    // 사용자 설정(아이템별 minLevel·priority>0 = 중요): 0순위 중요 아티팩트의 최소 레벨(전부는 못 채울 때 중요한 것부터),
+    // 1순위 전체 최소 레벨 부족분, 2순위 우선도×레벨(남는 레벨은 중요 아티팩트로), 3순위 게임 점수.
     // 가중치를 크게 벌려서 앞 순위가 항상 이기게 한다(레벨 1 = 게임 점수 10000).
-    let shortfall = 0, prioSum = 0;
+    let shortfall = 0, importantShortfall = 0, prioSum = 0;
     const unmet = [];
     items.forEach((it, i) => {
       if (it.kind !== 'artifact') return;
       const need = Math.min(it.minLevel || 0, it.maxLevel ?? 0);
-      if (perItem[i] < need) { shortfall += need - perItem[i]; unmet.push({ item: it, level: perItem[i], need }); }
+      if (perItem[i] < need) {
+        shortfall += need - perItem[i];
+        if ((it.priority || 0) > 0) importantShortfall += need - perItem[i];
+        unmet.push({ item: it, level: perItem[i], need });
+      }
       prioSum += (it.priority || 0) * perItem[i];
     });
-    const objective = score - shortfall * 1e8 + prioSum * 1e6;
-    return { score, objective, levelSum, shortfall, prioSum, unmet, levels: level, disabled, ignore, enabled, perItem };
+    // 콤보 목표(위치로 콤보가 정해지는 아티팩트): 못 맞추면 최소 레벨 미달보다 무겁게(중요 아티팩트 최소 레벨 다음)
+    let comboMiss = 0;
+    items.forEach(it => {
+      if (it.kind !== 'artifact' || !it.comboTarget || comboOf(it, at) === it.comboTarget) return;
+      comboMiss++;
+      unmet.push({ item: it, combo: it.comboTarget, got: comboOf(it, at) });
+    });
+    const objective = score - importantShortfall * 1e10 - comboMiss * 1e9 - shortfall * 1e8 + prioSum * 1e6;
+    return { score, objective, levelSum, shortfall, comboMiss, prioSum, unmet, levels: level, disabled, ignore, enabled, perItem };
+  }
+
+  // ---------- 위치로 콤보가 정해지는 아티팩트 ----------
+  // 캘세더니 열쇠(Charm_3Elemental_ByRow): lineCategory[y % 4]. 순서는 툴팁 "견고, 잉걸불, 빙하, 마법공학" 순.
+  // shortcut: lineCategory 값은 프리팹에 있어 게임 툴팁 순서로 가정 — 실게임 줄별 콤보와 다르면 /items 덤프로 확인해 고칠 것
+  const ROW_COMBO = ['STURDY', 'EMBER', 'GLACIER', 'MAGITECH'];
+  const COMBO_BY_ROW = '1067_Lightning_Damage', COMBO_BY_SIDES = '1258_WhitePaper';
+  // 하얀 종이(Charm_WhitePaper): 양옆 아티팩트가 같은 콤보면 그 콤보(+1). 겹치는 콤보가 여럿이면 목표가 그중 하나인지만 본다.
+  function comboOf(it, at) {
+    if (it.assetName === COMBO_BY_ROW) return ROW_COMBO[((it.y % 4) + 4) % 4];
+    if (it.assetName === COMBO_BY_SIDES) {
+      const l = at.get(key(it.x - 1, it.y)), r = at.get(key(it.x + 1, it.y));
+      if (!l || !r || l.kind !== 'artifact' || r.kind !== 'artifact') return null;
+      const both = (l.tags || []).filter(t => (r.tags || []).includes(t));
+      return it.comboTarget && both.includes(it.comboTarget) ? it.comboTarget : (both[0] || null);
+    }
+    return null;
   }
 
   // ---------- 아티팩트 발동 조건 (CharmActivateCriteria_XXX.GetCriteria) ----------
@@ -290,12 +319,12 @@
       }
       if (it.itemType === 'Charm') {
         const a = artByV.get(it.assetName) || {};
-        return { x: it.x, y: it.y, kind: 'artifact', name: it.name, assetName: it.assetName, instanceId: it.instanceId, maxLevel: it.maxLevel ?? 0, criteria: a.cr || null, magicBook: !!a.mb };
+        return { x: it.x, y: it.y, kind: 'artifact', name: it.name, assetName: it.assetName, instanceId: it.instanceId, maxLevel: it.maxLevel ?? 0, criteria: a.cr || null, magicBook: !!a.mb, tags: a.s || [] };
       }
       return { x: it.x, y: it.y, kind: 'other', name: it.name, assetName: it.assetName };
     });
     return { w: snapshot.width, h: snapshot.height, storage: snapshot.storage ?? snapshot.width * snapshot.height, items };
   }
 
-  return { parseQuery, evaluate, optimize, boardFromSnapshot, criteriaMet, rotate: rot };
+  return { parseQuery, evaluate, optimize, boardFromSnapshot, criteriaMet, rotate: rot, comboOf, ROW_COMBO, COMBO_BY_ROW, COMBO_BY_SIDES };
 });

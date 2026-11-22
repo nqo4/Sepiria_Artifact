@@ -136,6 +136,22 @@ check('X 는 비활성(점수 0)',
   check('최소 레벨이 우선도보다 먼저', lvOf(o2, 'A') === 2 && lvOf(o2, 'B') === 1 && o2.shortfall === 0, JSON.stringify(o2.placements));
   const o3 = E.optimize(board({ A: { minLevel: 3 } }), { iterations: 3000, seed: 1 });
   check('못 맞추는 최소 레벨은 미달로 보고', o3.shortfall === 1 && o3.unmet.length === 1 && o3.unmet[0].item.name === 'A' && o3.unmet[0].need === 3);
+  const o4 = E.optimize(board({ A: { minLevel: 2 }, B: { minLevel: 2, priority: 1 } }), { iterations: 3000, seed: 1 });
+  check('최소 레벨을 다 못 채우면 중요 아티팩트 것부터', lvOf(o4, 'B') === 2 && o4.unmet.length === 1 && o4.unmet[0].item.name === 'A', JSON.stringify(o4.placements));
+  // 콤보 목표: 캘세더니 열쇠는 줄(y%4)로, 하얀 종이는 양옆 공통 콤보로 — 엔진이 맞는 자리로 옮긴다
+  const key2 = { w: 2, h: 4, storage: 8, items: [{ x: 0, y: 0, kind: 'artifact', maxLevel: 1, name: 'K', assetName: E.COMBO_BY_ROW, comboTarget: 'GLACIER' }] };
+  const ok2 = E.optimize(key2, { iterations: 2000, seed: 1 });
+  const k2 = ok2.board.items.find(i => i.name === 'K');
+  check('콤보 목표: 캘세더니 열쇠를 빙하 줄(y=2)로 옮김', k2.y === 2 && ok2.unmet.length === 0, JSON.stringify(ok2.placements));
+  const paper = { w: 3, h: 2, storage: 6, items: [
+    { x: 0, y: 0, kind: 'artifact', maxLevel: 1, name: 'P', assetName: E.COMBO_BY_SIDES, comboTarget: 'EMBER' },
+    { x: 1, y: 0, kind: 'artifact', maxLevel: 1, name: 'E1', tags: ['EMBER'] },
+    { x: 0, y: 1, kind: 'artifact', maxLevel: 1, name: 'E2', tags: ['EMBER', 'STURDY'] },
+    { x: 2, y: 1, kind: 'artifact', maxLevel: 1, name: 'S', tags: ['STURDY'] } ] };
+  const op = E.optimize(paper, { iterations: 4000, seed: 1 });
+  const pAt = new Map(op.board.items.map(i => [i.x + ',' + i.y, i]));
+  const P = op.board.items.find(i => i.name === 'P');
+  check('콤보 목표: 하얀 종이 양옆을 잉걸불 아티팩트로', E.comboOf(P, pAt) === 'EMBER' && op.unmet.length === 0, JSON.stringify(op.placements));
   const ev = E.evaluate({ w: 1, h: 1, items: [{ x: 0, y: 0, kind: 'artifact', maxLevel: 2, minLevel: 5 }] });
   check('최소 레벨은 최대 레벨을 넘지 않게 잘림', ev.unmet[0].need === 2);
 }
