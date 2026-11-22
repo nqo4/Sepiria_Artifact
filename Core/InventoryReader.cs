@@ -203,6 +203,15 @@ namespace SephiriaLive.Core
             {
                 o["rotation"] = ReadInt(tablet, InventoryWriter.RotationNames);
                 o["rotatable"] = ReflectionFinder.GetMember(tablet, "isRotatable");
+                // 이 석판의 실제 효과 범위: StoneTablet.GetQuery(instanceID) — 커스텀 석판(isCustomTablet)은 DungeonManager 에 저장된 것을 돌려줌.
+                // 엔진이 프리팹 DB 보다 우선 사용(커스텀 석판은 프리팹 query 가 비어 있음)
+                var tabletId = ReflectionFinder.GetMember(tablet, "instanceID") ?? ReflectionFinder.GetMember(item, "InstanceID");
+                foreach (var (method, field, key) in new[] { ("GetQuery", "query", "query"), ("GetConditionQuery", "conditionQuery", "conditionQuery") })
+                {
+                    var m = ReflectionFinder.FindMethod(tablet.GetType(), method, 1);
+                    if (m != null && tabletId != null && ReflectionFinder.TryInvoke(tablet, m, new[] { tabletId }, out var r, out _) && r is string rs) o[key] = rs;
+                    else if (ReflectionFinder.GetMember(tablet, field) is string fs) o[key] = fs;
+                }
             }
             return o;
         }

@@ -67,6 +67,15 @@ for (const f of fs.readdirSync(FX).filter(f => /^inv_.*\.json$/.test(f))) {
 }
 
 // 단위 검사
+// 실게임(2026-11-22) 커스텀 석판: 6열·34칸 가방에서 BOTTOM = 칸 번호 28~33 → (4,4)(5,4)(0..3,5). (5,4) 석판의 "BOTTOM PLACED" 충족
+{
+  const cells = E.parseQuery('BOTTOM 1', 6, 6, 5, 4, 0, 34).map(c => c.x + ',' + c.y).sort().join(' ');
+  check('BOTTOM 은 쓸 수 있는 마지막 w칸(덜 찬 마지막 줄)', cells === '0,5 1,5 2,5 3,5 4,4 5,4', cells);
+  const ev = E.evaluate({ w: 6, h: 6, storage: 34, items: [
+    { x: 5, y: 4, kind: 'tablet', query: ['UP 5', 'DOWN -1', 'LEFT -1', 'RIGHT -1', 'TOP 1'].join('\n'), cond: 'BOTTOM PLACED' },
+    { x: 5, y: 3, kind: 'artifact', maxLevel: 7 }, { x: 0, y: 0, kind: 'artifact', maxLevel: 3 } ] });
+  check('커스텀 석판(실게임): 위 +5, 맨 위 줄 +1', ev.perItem[1] === 5 && ev.perItem[2] === 1, JSON.stringify(ev.perItem));
+}
 check('회전: 게임 rotation 1 은 UP→LEFT', JSON.stringify(E.parseQuery('UP 1', 6, 5, 2, 2, 1)) === JSON.stringify([{ x: 1, y: 2, value: '1' }]));
 check('조건 PLACED: 맨 윗줄이 아니면 효과 없음',
   E.evaluate({ w: 3, h: 3, items: [{ x: 1, y: 1, kind: 'tablet', query: 'LEFT 1', cond: 'TOP PLACED' }, { x: 0, y: 1, kind: 'artifact', maxLevel: 3 }] }).levelSum === 0);

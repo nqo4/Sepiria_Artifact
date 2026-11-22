@@ -53,7 +53,7 @@
   }
 
   /** query 한 덩어리 → [{x, y, value}] (절대 좌표). 고정 칸은 보드 밖도 그대로 둔다(게임과 동일). */
-  function parseQuery(query, w, h, x, y, r) {
+  function parseQuery(query, w, h, x, y, r, storage = w * h) {
     const out = [];
     for (const line of String(query || '').split('\n')) {
       const parts = line.trim().split(/\s+/);
@@ -70,9 +70,13 @@
           for (let cx = x + dx, cy = y + dy; cx >= 0 && cy >= 0 && cx < w && cy < h; cx += dx, cy += dy) out.push({ x: cx, y: cy, value });
         }
       } else if (EDGES.includes(kw)) {
+        // 게임 ParseQuery 처럼 칸 번호(y×w+x) 기준: BOTTOM = 쓸 수 있는 마지막 w칸(마지막 줄이 덜 차면 그 위 줄 끝도 포함),
+        // TOP = 처음 w칸, LEFTEND/RIGHTEND = 그 열에서 쓸 수 있는 칸(번호 < storage)
         const edge = EDGES[(EDGES.indexOf(kw) + r) % 4];
         for (let cy = 0; cy < h; cy++) for (let cx = 0; cx < w; cx++) {
-          if ((edge === 'TOP' && cy === 0) || (edge === 'BOTTOM' && cy === h - 1) ||
+          const idx = cy * w + cx;
+          if (idx >= storage) continue;
+          if ((edge === 'TOP' && idx < w) || (edge === 'BOTTOM' && idx >= storage - w) ||
               (edge === 'LEFTEND' && cx === 0) || (edge === 'RIGHTEND' && cx === w - 1)) out.push({ x: cx, y: cy, value });
         }
       } else if (kw === 'CHECKERBOARD' || kw === 'CHECKERBOARD2') {
@@ -104,7 +108,7 @@
     for (const t of items) {
       if (t.kind !== 'tablet') continue;
       const r = t.rotation || 0;
-      const crit = t.cond ? parseQuery(t.cond, w, h, t.x, t.y, r) : [];
+      const crit = t.cond ? parseQuery(t.cond, w, h, t.x, t.y, r, board.storage ?? w * h) : [];
       if (crit.length) {
         let allHit = true, anyPlaced = false, hasPlaced = false;
         for (const c of crit) {
@@ -113,7 +117,7 @@
         }
         if (!allHit || (hasPlaced && !anyPlaced)) continue;
       }
-      for (const c of parseQuery(t.query, w, h, t.x, t.y, r)) {
+      for (const c of parseQuery(t.query, w, h, t.x, t.y, r, board.storage ?? w * h)) {
         const k = key(c.x, c.y);
         const n = Number(c.value);
         if (c.value !== '' && !Number.isNaN(n)) level.set(k, (level.get(k) || 0) + n);
@@ -343,7 +347,8 @@
       if (it.isTablet) {
         const s = byAsset.get(it.assetName) || {};
         return { x: it.x, y: it.y, kind: 'tablet', name: it.name, assetName: it.assetName, rotation: it.rotation || 0,
-                 rotatable: !!it.rotatable, query: s.query || '', cond: s.conditionQuery || '' };
+                 // 가방 속 석판의 query 우선(커스텀 석판은 프리팹 DB 에 효과가 없음), 없으면 DB
+                 rotatable: !!it.rotatable, query: it.query ?? s.query ?? '', cond: it.conditionQuery ?? s.conditionQuery ?? '' };
       }
       if (it.itemType === 'Charm') {
         const a = artByV.get(it.assetName) || {};
