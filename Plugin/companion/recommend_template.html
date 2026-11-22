@@ -147,6 +147,7 @@
   .stepper-label{font-size:9px;color:var(--muted);margin-top:-2px}
   .star-btn{background:none;border:1px solid var(--border);border-radius:4px;color:var(--muted);cursor:pointer;padding:2px 6px;font-size:10px;min-height:22px}
   .star-btn.on{color:#ffd23f;border-color:#ffd23f}
+  .goal-btn{width:100%;font-size:9px;line-height:1.25;white-space:normal}
   .combo-sel{width:100%;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:4px;padding:2px;font-size:9.5px;min-height:22px}
   .plan-actions{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}
   .item-tip{position:fixed;z-index:50;max-width:320px;background:#120a19;border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-size:12px;line-height:1.55;color:var(--text);box-shadow:0 6px 20px rgba(0,0,0,.5);pointer-events:none;white-space:pre-line}
@@ -163,6 +164,7 @@
   .placement-summary{font-size:12.5px;color:var(--muted);margin-bottom:10px}
   .placement-summary b{color:var(--text)}
   .moves{font-size:11.5px;color:var(--muted);margin:8px 0;line-height:1.6}
+  .moves summary{cursor:pointer;color:var(--text);width:max-content}
   .confidence-note{font-size:11px;color:var(--warn);margin-top:8px}
   .toast{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);background:var(--panel2);border:1px solid var(--accent);border-radius:8px;padding:8px 14px;font-size:12.5px;display:none;max-width:calc(100% - 32px)}
 </style>
@@ -801,7 +803,7 @@ __SEPHIRIA_ENGINE_JS__
     const byPos = (a, b) => (a.name || '').localeCompare(b.name || '', 'ko') || a.y - b.y || a.x - b.x; // 이름 가나다순
     const icon = it => `<div class="ic" data-v="${esc(it.assetName)}" tabindex="0" aria-label="${esc(it.name)} 효과 보기">${iconHtml(defFor(it.assetName))}</div>`;
     const artCard = it => {
-      const pr = prefOf(it), max = it.maxLevel ?? 0, min = Math.min(pr.min || 0, max), combos = comboChoices(it.assetName);
+      const pr = prefOf(it), max = it.maxLevel ?? 0, min = Math.min(pr.min || 0, max), combos = comboChoices(it.assetName), goal = Engine.GOALS[it.assetName];
       return `<div class="bag-card ${pr.important ? 'important' : ''}" data-k="${esc(prefKey(it))}" data-max="${max}">${icon(it)}`
         + `<div class="nm" title="${esc(it.name)}">${esc(it.name)}</div>`
         + `<div class="cur ${it.enabled === false ? 'off' : ''}">${it.enabled === false ? '꺼짐' : '지금 Lv ' + (it.level ?? 0)} / ${max}</div>`
@@ -812,6 +814,7 @@ __SEPHIRIA_ENGINE_JS__
         + `<button class="star-btn ${pr.important ? 'on' : ''}" aria-pressed="${!!pr.important}" title="중요: 최소 레벨을 다 못 채울 때 먼저 채우고, 남는 레벨을 먼저 받음">★ 중요</button>`
         + (combos ? `<select class="combo-sel" aria-label="${esc(it.name)} 목표 콤보"><option value="">목표 콤보: 상관없음</option>`
             + combos.map(c => `<option value="${esc(c)}" ${pr.combo === c ? 'selected' : ''}>${esc(TAG_KO[c] || c)}</option>`).join('') + '</select>' : '')
+        + (goal ? `<button class="star-btn goal-btn ${pr.goal ? 'on' : ''}" aria-pressed="${!!pr.goal}" title="자동 배치가 이 위치 조건을 맞춤">목표: ${esc(goal.label)}</button>` : '')
         + '</div>';
     };
     const plainCard = (it, extra) => `<div class="bag-card">${icon(it)}<div class="nm" title="${esc(it.name)}">${esc(it.name)}</div><div class="cur">${extra}</div></div>`;
@@ -824,7 +827,7 @@ __SEPHIRIA_ENGINE_JS__
       const k = card.dataset.k, max = Number(card.dataset.max) || 0;
       const set = patch => {
         bagPrefs[k] = { ...(bagPrefs[k] || {}), ...patch };
-        if (!bagPrefs[k].min && !bagPrefs[k].important && !bagPrefs[k].combo) delete bagPrefs[k];
+        if (!bagPrefs[k].min && !bagPrefs[k].important && !bagPrefs[k].combo && !bagPrefs[k].goal) delete bagPrefs[k];
         savePrefs();
         if (!lastPlan) renderCurrentBag(); // 미리보기가 없을 때만 현황 표시(최소 레벨 충족 여부) 갱신
       };
@@ -835,7 +838,12 @@ __SEPHIRIA_ENGINE_JS__
       };
       dec.addEventListener('click', () => step(-1));
       inc.addEventListener('click', () => step(1));
-      const star = card.querySelector('.star-btn');
+      const star = card.querySelector('.star-btn:not(.goal-btn)');
+      const goalBtn = card.querySelector('.goal-btn');
+      if (goalBtn) goalBtn.addEventListener('click', () => {
+        const on = !goalBtn.classList.contains('on');
+        goalBtn.classList.toggle('on', on); goalBtn.setAttribute('aria-pressed', String(on)); set({ goal: on });
+      });
       star.addEventListener('click', () => {
         const on = !star.classList.contains('on');
         star.classList.toggle('on', on); card.classList.toggle('important', on); star.setAttribute('aria-pressed', String(on)); set({ important: on });
@@ -890,15 +898,17 @@ __SEPHIRIA_ENGINE_JS__
       if (pr.min) it.minLevel = pr.min;
       if (pr.important) it.priority = 1;
       if (pr.combo) it.comboTarget = pr.combo;
+      if (pr.goal && Engine.GOALS[it.assetName]) it.goal = true;
     }
     return board;
   }
 
   function unmetHtml(unmet, board) {
-    if (unmet && unmet.length) return `<br><span style="color:var(--warn)">⚠ 못 맞춘 설정: ${unmet.map(u => u.combo
+    if (unmet && unmet.length) return `<br><span style="color:var(--warn)">⚠ 못 맞춘 설정: ${unmet.map(u => u.goal ? `${esc(u.item.name)}(목표: ${esc(u.goal)})` : u.combo
       ? `${esc(u.item.name)}(목표 콤보 ${esc(TAG_KO[u.combo] || u.combo)} — 지금 ${esc(TAG_KO[u.got] || u.got || '없음')})`
       : `${esc(u.item.name)}(Lv ${u.level}/최소 ${u.need})`).join(', ')}</span>`;
-    return board.items.some(i => i.minLevel || i.comboTarget) ? '<br>✓ 설정한 최소 레벨·목표 콤보를 모두 맞췄습니다' : '';
+    return board.items.some(i => i.minLevel || i.comboTarget || (i.goal && Engine.GOALS[i.assetName].kind === 'bool'))
+      ? '<br>✓ 설정한 최소 레벨·목표 콤보·위치 목표를 모두 맞췄습니다' : '';
   }
 
   // 위 패널: 지금 게임 가방 그대로(미리보기 계산 결과가 없을 때)
@@ -998,6 +1008,13 @@ __SEPHIRIA_ENGINE_JS__
         const need = Math.min(it.minLevel || 0, it.maxLevel ?? 0);
         if (need) extra += `<span class="need ${lv >= need ? 'ok' : 'bad'}">최소 ${need} ${lv >= need ? '✓' : '미달'}</span>`;
         if (it.priority) extra += '<span class="imp" title="중요">★</span>';
+        if (it.goal) {
+          const g = Engine.GOALS[it.assetName];
+          const lvAt = new Map(); items.forEach(o => { if (levelOf.has(o)) lvAt.set(o.x + ',' + o.y, levelOf.get(o)); });
+          const v = Engine.goalValue(it, new Map(items.map(o => [o.x + ',' + o.y, o])), lvAt);
+          extra += g.kind === 'count' ? `<span class="combo" title="${esc(g.label)}">목표 ${v}</span>`
+            : `<span class="combo ${v ? '' : 'bad'}" title="${esc(g.label)}">목표 ${v ? '✓' : '✗'}</span>`;
+        }
         if (it.comboTarget) {
           const got = Engine.comboOf(it, new Map(items.map(o => [o.x + ',' + o.y, o])));
           extra += `<span class="combo ${got === it.comboTarget ? '' : 'bad'}">${esc(TAG_KO[it.comboTarget] || it.comboTarget)} ${got === it.comboTarget ? '✓' : '✗'}</span>`;
@@ -1013,12 +1030,12 @@ __SEPHIRIA_ENGINE_JS__
 
     const nameAt = (x, y) => (result.board.items.find(i => i.origin && i.origin[0] === x && i.origin[1] === y) || {}).name || '?';
     document.getElementById('placementMoves').innerHTML = result.placements.length
-      ? '<b>바꿀 것</b><br>' + result.placements.map(p => {
+      ? `<details><summary>바꿀 것 ${result.placements.length}건 보기</summary>` + result.placements.map(p => {
           // p.rotation 은 "돌릴 양"이 아니라 목표 방향(기본 방향에서 시계 방향 몇 번)
           const rot = p.rotation != null ? ` · 방향 ${['↑', '→', '↓', '←'][p.rotation]} (기본에서 시계 방향 ${p.rotation * 90}°)` : '';
           const mv = p.fromX !== p.toX || p.fromY !== p.toY ? `(${p.fromX},${p.fromY}) → (${p.toX},${p.toY})` : '제자리';
           return `${esc(nameAt(p.fromX, p.fromY))}: ${mv}${rot}`;
-        }).join('<br>')
+        }).join('<br>') + '</details>'
       : '';
   }
 

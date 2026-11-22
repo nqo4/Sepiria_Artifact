@@ -152,6 +152,21 @@ check('X 는 비활성(점수 0)',
   const pAt = new Map(op.board.items.map(i => [i.x + ',' + i.y, i]));
   const P = op.board.items.find(i => i.name === 'P');
   check('콤보 목표: 하얀 종이 양옆을 잉걸불 아티팩트로', E.comboOf(P, pAt) === 'EMBER' && op.unmet.length === 0, JSON.stringify(op.placements));
+  // 위치 목표: 조건형(레이에 별조각 = 왼쪽 칸 마법서), 개수형(거대 망원경 = 주변 8칸 행성 수)
+  const star = E.optimize({ w: 3, h: 1, storage: 3, items: [
+    { x: 0, y: 0, kind: 'artifact', maxLevel: 1, name: 'R', assetName: '1069_DoubleMagic', goal: true },
+    { x: 1, y: 0, kind: 'artifact', maxLevel: 1, name: 'X' },
+    { x: 2, y: 0, kind: 'artifact', maxLevel: 1, name: 'MB', magicBook: true } ] }, { iterations: 3000, seed: 1 });
+  const sAt = new Map(star.board.items.map(i => [i.x + ',' + i.y, i]));
+  const R = star.board.items.find(i => i.name === 'R');
+  check('위치 목표(조건형): 레이에 별조각 왼쪽에 마법서', E.goalValue(R, sAt) === 1 && star.unmet.length === 0, JSON.stringify(star.placements));
+  const tele = E.optimize({ w: 4, h: 3, storage: 12, items: [
+    { x: 0, y: 0, kind: 'artifact', maxLevel: 1, name: 'T', assetName: '1108_PlanetModule', goal: true },
+    { x: 3, y: 2, kind: 'artifact', maxLevel: 1, name: 'P1', tags: ['PLANET'] },
+    { x: 3, y: 0, kind: 'artifact', maxLevel: 1, name: 'P2', tags: ['PLANET'] },
+    { x: 0, y: 2, kind: 'artifact', maxLevel: 1, name: 'P3', tags: ['PLANET'] } ] }, { iterations: 6000, seed: 1 });
+  const tAt = new Map(tele.board.items.map(i => [i.x + ',' + i.y, i]));
+  check('위치 목표(개수형): 거대 망원경 주변 8칸에 행성 3개', E.goalValue(tele.board.items.find(i => i.name === 'T'), tAt) === 3, JSON.stringify(tele.placements));
   const ev = E.evaluate({ w: 1, h: 1, items: [{ x: 0, y: 0, kind: 'artifact', maxLevel: 2, minLevel: 5 }] });
   check('최소 레벨은 최대 레벨을 넘지 않게 잘림', ev.unmet[0].need === 2);
 }

@@ -150,7 +150,14 @@ namespace SephiriaLive.Core
                 {
                     var o = DescribeItem(kv.Key.x, kv.Key.y, kv.Value, levels, maxLevels, tablets);
                     // 아티팩트 효과가 켜졌는지(Charm_Basic.IsEffectEnabled: 비활성·발동 조건 반영) — 엔진 검증용
-                    if (charms.TryGetValue(kv.Key, out var charm) && charm != null) o["enabled"] = ReflectionFinder.GetMember(charm, "IsEffectEnabled");
+                    if (charms.TryGetValue(kv.Key, out var charm) && charm != null)
+                    {
+                        o["enabled"] = ReflectionFinder.GetMember(charm, "IsEffectEnabled");
+                        // 위치로 콤보가 정해지는 아티팩트(캘세더니 열쇠 Charm_3Elemental_ByRow: string, 하얀 종이 Charm_WhitePaper: 집합)의 지금 콤보 — 엔진 규칙 검증용
+                        var cat = ReflectionFinder.GetMember(charm, "assignedCategory");
+                        if (cat is string cs) { if (cs.Length > 0) o["assignedCategory"] = cs; }
+                        else if (cat != null) o["assignedCategory"] = string.Join(",", ReflectionFinder.EnumerateValues(cat).OfType<string>());
+                    }
                     itemList.Add(o);
                 }
                 catch (Exception ex) { errors.Add($"아이템 ({kv.Key.x},{kv.Key.y}) 읽기 실패: {ex.Message}"); }

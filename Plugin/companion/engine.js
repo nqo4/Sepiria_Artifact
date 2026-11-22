@@ -166,13 +166,24 @@
       comboMiss++;
       unmet.push({ item: it, combo: it.comboTarget, got: comboOf(it, at) });
     });
-    const objective = score - importantShortfall * 1e10 - comboMiss * 1e9 - shortfall * 1e8 + prioSum * 1e6;
-    return { score, objective, levelSum, shortfall, comboMiss, prioSum, unmet, levels: level, disabled, ignore, enabled, perItem };
+    // 위치 목표(카드에서 켠 것): 조건형은 콤보와 같은 무게로 반드시, 개수형은 최소 레벨 다음 순위로 최대화
+    const lvAt = new Map();
+    items.forEach((it, i) => { if (perItem[i] != null) lvAt.set(key(it.x, it.y), perItem[i]); });
+    let goalCount = 0;
+    items.forEach(it => {
+      const g = it.kind === 'artifact' && it.goal && GOALS[it.assetName];
+      if (!g) return;
+      const v = goalValue(it, at, lvAt);
+      if (g.kind === 'count') goalCount += v;
+      else if (!v) { comboMiss++; unmet.push({ item: it, goal: g.label }); }
+    });
+    const objective = score - importantShortfall * 1e10 - comboMiss * 1e9 - shortfall * 1e8 + goalCount * 1e7 + prioSum * 1e6;
+    return { score, objective, levelSum, shortfall, comboMiss, goalCount, prioSum, unmet, levels: level, disabled, ignore, enabled, perItem };
   }
 
   // ---------- 위치로 콤보가 정해지는 아티팩트 ----------
-  // 캘세더니 열쇠(Charm_3Elemental_ByRow): lineCategory[y % 4]. 순서는 툴팁 "견고, 잉걸불, 빙하, 마법공학" 순.
-  // shortcut: lineCategory 값은 프리팹에 있어 게임 툴팁 순서로 가정 — 실게임 줄별 콤보와 다르면 /items 덤프로 확인해 고칠 것
+  // 캘세더니 열쇠(Charm_3Elemental_ByRow): lineCategory[y % 4] = 견고, 잉걸불, 빙하, 마법공학.
+  // 실게임 확인(2026-11-22, /inv assignedCategory): y=0 STURDY, 1 EMBER, 2 GLACIER, 3 MAGITECH, 4 STURDY, 5 EMBER
   const ROW_COMBO = ['STURDY', 'EMBER', 'GLACIER', 'MAGITECH'];
   const COMBO_BY_ROW = '1067_Lightning_Damage', COMBO_BY_SIDES = '1258_WhitePaper';
   // 하얀 종이(Charm_WhitePaper): 양옆 아티팩트가 같은 콤보면 그 콤보(+1). 겹치는 콤보가 여럿이면 목표가 그중 하나인지만 본다.
@@ -185,6 +196,23 @@
       return it.comboTarget && both.includes(it.comboTarget) ? it.comboTarget : (both[0] || null);
     }
     return null;
+  }
+
+  // ---------- 위치 목표: 주변 칸에 따라 효과가 달라지는 아티팩트(카드에서 목표를 켜면 엔진이 맞춤) ----------
+  // bool = 조건을 맞추면 1, count = 클수록 좋음. 효과 문장 기준(data.json c).
+  const art = n => !!n && n.kind === 'artifact';
+  const GOALS = {
+    '1069_DoubleMagic': { label: '왼쪽 칸에 마법서', kind: 'bool', value: (it, at) => +(art(at.get(key(it.x - 1, it.y))) && !!at.get(key(it.x - 1, it.y)).magicBook) },
+    '1168_RightSpellCooldownHelper': { label: '오른쪽 칸에 마법서', kind: 'bool', value: (it, at) => +(art(at.get(key(it.x + 1, it.y))) && !!at.get(key(it.x + 1, it.y)).magicBook) },
+    '1039_AutoMagic': { label: '아래 칸에 볼트 마법서', kind: 'bool', value: (it, at) => +(art(at.get(key(it.x, it.y + 1))) && !!at.get(key(it.x, it.y + 1)).bolt) },
+    '1108_PlanetModule': { label: '주변 8칸 행성 최대', kind: 'count', value: (it, at) => N8.filter(([dx, dy]) => { const n = at.get(key(it.x + dx, it.y + dy)); return art(n) && (n.tags || []).includes('PLANET'); }).length },
+    '1270_NearLevelDamage': { label: '주변 8칸 아티팩트 레벨 최대', kind: 'count', value: (it, at, lvAt) => N8.reduce((sum, [dx, dy]) => sum + (art(at.get(key(it.x + dx, it.y + dy))) ? lvAt.get(key(it.x + dx, it.y + dy)) || 0 : 0), 0) },
+    '1264_CompanionChaos': { label: '같은 가로줄 동료 최대', kind: 'count', value: (it, at) => [...at.values()].filter(n => n !== it && art(n) && n.y === it.y && (n.tags || []).includes('COMPANION')).length },
+    '1030_MultipurposeBelt': { label: '맨 위 줄 아티팩트 최대', kind: 'count', value: (it, at) => [...at.values()].filter(n => n !== it && art(n) && n.y === 0).length },
+  };
+  function goalValue(it, at, lvAt) {
+    const g = GOALS[it.assetName];
+    return g ? g.value(it, at, lvAt || new Map()) : 0;
   }
 
   // ---------- 아티팩트 발동 조건 (CharmActivateCriteria_XXX.GetCriteria) ----------
@@ -319,12 +347,12 @@
       }
       if (it.itemType === 'Charm') {
         const a = artByV.get(it.assetName) || {};
-        return { x: it.x, y: it.y, kind: 'artifact', name: it.name, assetName: it.assetName, instanceId: it.instanceId, maxLevel: it.maxLevel ?? 0, criteria: a.cr || null, magicBook: !!a.mb, tags: a.s || [] };
+        return { x: it.x, y: it.y, kind: 'artifact', name: it.name, assetName: it.assetName, instanceId: it.instanceId, maxLevel: it.maxLevel ?? 0, criteria: a.cr || null, magicBook: !!a.mb, bolt: !!a.mb && /볼트/.test(a.k || ''), tags: a.s || [] };
       }
       return { x: it.x, y: it.y, kind: 'other', name: it.name, assetName: it.assetName };
     });
     return { w: snapshot.width, h: snapshot.height, storage: snapshot.storage ?? snapshot.width * snapshot.height, items };
   }
 
-  return { parseQuery, evaluate, optimize, boardFromSnapshot, criteriaMet, rotate: rot, comboOf, ROW_COMBO, COMBO_BY_ROW, COMBO_BY_SIDES };
+  return { parseQuery, evaluate, optimize, boardFromSnapshot, criteriaMet, rotate: rot, comboOf, ROW_COMBO, COMBO_BY_ROW, COMBO_BY_SIDES, GOALS, goalValue };
 });
